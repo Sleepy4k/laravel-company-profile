@@ -1,7 +1,8 @@
-import { PageProps } from '@/types';
-import { Head, router } from '@inertiajs/react';
-import InstallationLayout from '@/Layouts/InstallationLayout';
+import axios from 'axios';
 import { useEffect } from 'react';
+import { PageProps } from '@/types';
+import { Head } from '@inertiajs/react';
+import InstallationLayout from '@/Layouts/InstallationLayout';
 
 interface FinishProps extends PageProps {
     phpExecutable: string;
@@ -27,15 +28,7 @@ export default function Finish({
     const redirectHome = () => window.location.href = base_url;
 
     useEffect(() => {
-        router.get(link_url, {}, {
-            preserveScroll: true,
-            onSuccess: () => {
-                console.log('Installation link generated');
-            },
-            onError: () => {
-                console.log('Failed to generate installation link');
-            }
-        });
+        axios.post(link_url, { step: 5 }).then(() => {}).catch(() => {});
     }, []);
 
     return (
