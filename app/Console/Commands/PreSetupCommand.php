@@ -304,5 +304,12 @@ class PreSetupCommand extends Command
         $this->clearConfigCache();
 
         $this->info('Project has been pre setup.');
+
+        $this->info('Clearing application cache');
+
+        // Clear the application cache
+        $this->call('optimize:clear');
+
+        $this->info('Application cache has been cleared.');
     }
 }

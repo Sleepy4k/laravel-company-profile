@@ -47,13 +47,13 @@ class SetupStoreRequest extends Request
     public function attributes(): array
     {
         return [
-            'app_url' => __('App URL'),
-            'app_name' => __('App Name'),
-            'database_hostname' => __('Database Hostname'),
-            'database_port' => __('Database Port'),
-            'database_name' => __('Database Name'),
-            'database_username' => __('Database Username'),
-            'database_password' => __('Database Password'),
+            'app_url' => 'App URL',
+            'app_name' => 'App Name',
+            'database_hostname' => 'Database Hostname',
+            'database_port' => 'Database Port',
+            'database_name' => 'Database Name',
+            'database_username' => 'Database Username',
+            'database_password' => 'Database Password',
         ];
     }
 }

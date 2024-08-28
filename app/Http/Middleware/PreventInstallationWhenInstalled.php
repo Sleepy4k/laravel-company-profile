@@ -15,17 +15,17 @@ class PreventInstallationWhenInstalled
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->route()->getName() === 'install.finished') {
+        if ($request->route()->getName() === 'install.finished' || $request->route()->getName() === 'install.link') {
             /**
              * Uses signed URL Laravel feature as when the installation
              * is finished the installed file will be created and if this action
              * is in the PreventInstallationWhenInstalled middleware, it will show 404 error as the installed
              * file will exists but we need to show the user that the installation is finished
              */
-            // if (! $request->hasValidSignature()) {
-            //     if ($request->expectsJson()) return response()->json(['message' => 'Not Found'], 404);
-            //     abort(404);
-            // }
+            if (!$request->hasValidSignature()) {
+                if ($request->expectsJson()) return response()->json(['message' => 'Not Found'], 404);
+                abort(404);
+            }
         } elseif (file_exists(storage_path('.installed')) && $request->is('install*') ) {
             if ($request->expectsJson()) return response()->json(['message' => 'Not Found'], 404);
             abort(404);

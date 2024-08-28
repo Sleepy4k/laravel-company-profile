@@ -3,7 +3,6 @@
 namespace App\Trait;
 
 use App\Enum\ReportLogType;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use App\Exceptions\FailedToFinalizeInstallationException;
 
@@ -11,6 +10,11 @@ trait FinishesInstallation
 {
     use SystemLog;
 
+    /**
+     * Mark the application as installed.
+     *
+     * @return bool
+     */
     private function markAsInstalled(): bool
     {
         $path = storage_path('.installed');
@@ -25,30 +29,18 @@ trait FinishesInstallation
 
     /**
      * Finish the installation process.
+     * 
+     * @throws FailedToFinalizeInstallationException
+     * 
+     * @return void
      */
-    protected function finishInstallation()
+    protected function finishInstallation(): void
     {
         $errors = '';
-
-        try {
-            Artisan::call('storage:link');
-        } catch (\Exception) {
-            $errors .= 'Unable to create storage symbolic link.\n';
-        }
-
-        // Ensure database already migrated
-        try {
-            // Query to table migrations to check if already migrated
-            DB::table('migrations')->first();
-        } catch (\Exception) {
-            $errors .= 'Database is not yet migrated, please run `php artisan migrate` first.\n';
-        }
 
         if (!$this->markAsInstalled()) {
             $errors .= 'Unable to create installed file. Please try installation again.\n';
         }
-
-        Artisan::call('optimize');
 
         if ($errors !== '') {
             $this->sendReportLog(ReportLogType::ERROR, $errors);
@@ -58,6 +50,8 @@ trait FinishesInstallation
 
     /**
      * Migrate the database
+     * 
+     * @return void
      */
     protected function migrate(): void
     {

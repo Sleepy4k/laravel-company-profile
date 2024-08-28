@@ -42,10 +42,10 @@ trait DatabaseTest
     {
         $params = [
             'driver' => 'mysql',
-            'host' => $request->database_hostname,
-            'database' => $request->database_name,
-            'username' => $request->database_username,
-            'password' => $request->database_password,
+            'host' => $request['database_hostname'],
+            'database' => $request['database_name'],
+            'username' => $request['database_username'],
+            'password' => $request['database_password'],
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',

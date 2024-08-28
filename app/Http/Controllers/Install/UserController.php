@@ -34,11 +34,13 @@ class UserController extends Controller
     public function store(UserStoreRequest $request): RedirectResponse
     {
         try {
-            User::unguarded(function () use ($request) {
+            $data = $request->validated();
+
+            User::unguarded(function () use ($data) {
                 $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password)
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make($data['password'])
                 ]);
 
                 $roleCount = Role::count();
@@ -60,9 +62,6 @@ class UserController extends Controller
 
                 $user->assignRole($role->name);
             });
-
-            // Clear the cache
-            Artisan::call('cache:clear');
 
             return redirect()->back();
         } catch (\Throwable $th) {

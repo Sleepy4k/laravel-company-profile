@@ -50,7 +50,7 @@ class SetupController extends Controller
     public function store(SetupStoreRequest $request, EnvironmentManager $environmentManager): RedirectResponse
     {
         try {
-            $connection = $this->testDatabaseConnection($request);
+            $connection = $this->testDatabaseConnection($request->validated());
             (new PrivilegesChecker($connection))->check();
         } catch (\Exception $e) {
             $validator = Validator::make([], []);
