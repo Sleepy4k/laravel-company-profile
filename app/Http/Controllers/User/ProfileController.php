@@ -1,20 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Http\Requests\Profile\UpdateRequest;
 use App\Http\Requests\Profile\DestroyRequest;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function edit(Request $request): Response
     {

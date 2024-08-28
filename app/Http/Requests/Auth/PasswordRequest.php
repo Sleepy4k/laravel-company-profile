@@ -27,4 +27,17 @@ class PasswordRequest extends Request
             'password' => ['required', Password::defaults(), 'confirmed'],
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            'current_password' => __('Current password'),
+            'password' => __('New password'),
+        ];
+    }
 }

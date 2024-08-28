@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Trait;
 
 use App\Enum\ReportLogType;
 use Illuminate\Support\Facades\Log;
