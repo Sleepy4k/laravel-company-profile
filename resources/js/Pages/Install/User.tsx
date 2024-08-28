@@ -16,7 +16,7 @@ export default function User({ auth, errors }: PageProps) {
 
         post(route('install.user.store'), {
             preserveScroll: true,
-            onSuccess: () => window.location.href = route('install.finalize'),
+            onSuccess: () => window.location.replace(route('install.finalize')),
             onFinish: () => {
                 reset('password');
                 reset('password_confirmation');

@@ -1,11 +1,13 @@
 import { PageProps } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
+import { useEffect } from 'react';
 
 interface FinishProps extends PageProps {
     phpExecutable: string;
     base_url: string;
     base_path: string;
+    link_url: string;
     minPhpVersion: string;
     user: {
         name: string;
@@ -18,10 +20,23 @@ export default function Finish({
     errors,
     base_url,
     base_path,
+    link_url,
     phpExecutable,
     minPhpVersion,
 }: FinishProps) {
     const redirectHome = () => window.location.href = base_url;
+
+    useEffect(() => {
+        router.get(link_url, {}, {
+            preserveScroll: true,
+            onSuccess: () => {
+                console.log('Installation link generated');
+            },
+            onError: () => {
+                console.log('Failed to generate installation link');
+            }
+        });
+    }, []);
 
     return (
         <InstallationLayout step={5} errors={errors}>
@@ -50,7 +65,7 @@ export default function Finish({
                     <span className="font-semibold text-neutral-700">
                         {'Name: '}
                     </span>
-                    <span className="select-all">{ user.name }</span>
+                    <span className="select-all">{ user.name || '-' }</span>
                     <br />
                     <span className="font-semibold text-neutral-700">
                         {'Role: '}
