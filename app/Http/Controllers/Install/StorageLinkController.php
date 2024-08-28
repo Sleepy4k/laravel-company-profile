@@ -14,14 +14,15 @@ class StorageLinkController extends Controller
     public function __invoke(): RedirectResponse
     {
         try {
+            // Clear the cache
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+
             // Create a symbolic link from "public/storage" to "storage/app/public"
             Artisan::call('storage:link');
-
-            // Clear the cache
-            Artisan::call('optimize:clear');
-
+            
             // Redirect to the next step
-            return redirect()->route('');
+            return redirect()->back();
         } catch (\Throwable $th) {
             return redirect()->back()
                 ->withErrors([
