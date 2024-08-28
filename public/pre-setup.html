@@ -32,28 +32,30 @@
                 margin-top: 20px;
                 display: block;
             }
+            button {
+                padding: 10px 20px;
+                background-color: #333;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                margin-top: 10px;
+            }
         </style>
     </head>
     <body>
         <h1>The project has not been pre setup yet.</h1>
         <p>Projects require an environment that is important for running the program, therefore pre-setup needs to be done.</p>
         <span>Please run the command `php artisan naka:pre-setup` on your console, if so, run the program again to continue.</span>
+        <br>
+        <span>
+            Click button to back
+            <button type="button" onclick="backHome()">Home</button>
+            after running the command.
+        </span>
 
         <script>
-            // Check if page visited without query string
-            // If not, redirect to base url
-            if (window.location.search === '') {
+            function backHome() {
                 window.location.href = '/';
-            } else {
-                // Get query string
-                const queryString = window.location.search;
-                const urlParams = new URLSearchParams(queryString);
-                const message = urlParams.get('auth');
-
-                // If message is not null, alert the message
-                if (message === null || message !== 'system') {
-                    window.location.href = '/';
-                }
             }
         </script>
     </body>

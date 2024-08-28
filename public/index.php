@@ -9,14 +9,16 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
     require $maintenance;
 }
 
-// Register the Composer autoloader...
-require __DIR__.'/../vendor/autoload.php';
-
 // Check if environment is missing
 if (!file_exists(__DIR__.'/../.env')) {
-    header('Location: /pre-setup.html?auth=system');
-    exit;
+    if (!strpos($_SERVER['REQUEST_URI'], 'pre-setup') !== false) {
+        header('Location: /pre-setup.html');
+        exit;
+    }
 }
+
+// Register the Composer autoloader...
+require __DIR__.'/../vendor/autoload.php';
 
 // Check if the application is requiring installation
 if (!file_exists(__DIR__.'/../storage/.installed')) {
