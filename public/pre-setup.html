@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pre Setup - Laravel</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f3f3f3;
+                color: #333;
+            }
+            h1 {
+                margin: 0;
+                padding: 20px;
+                background-color: #333;
+                color: #fff;
+                text-align: center;
+            }
+            p {
+                font-size: 1.2em;
+                color: #333;
+                text-align: center;
+                margin-top: 20px;
+            }
+            span {
+                font-size: 1em;
+                color: #333;
+                text-align: center;
+                margin-top: 20px;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>The project has not been pre setup yet.</h1>
+        <p>Projects require an environment that is important for running the program, therefore pre-setup needs to be done.</p>
+        <span>Please run the command `php artisan naka:pre-setup` on your console, if so, run the program again to continue.</span>
+
+        <script>
+            // Check if page visited without query string
+            // If not, redirect to base url
+            if (window.location.search === '') {
+                window.location.href = '/';
+            } else {
+                // Get query string
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const message = urlParams.get('auth');
+
+                // If message is not null, alert the message
+                if (message === null || message !== 'system') {
+                    window.location.href = '/';
+                }
+            }
+        </script>
+    </body>
+</html>
