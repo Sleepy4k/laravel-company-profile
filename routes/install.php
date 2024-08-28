@@ -28,5 +28,5 @@ Route::prefix('install')->group(function () {
 
     Route::get('finalize', FinalizeController::class)->name('install.finalize');
     Route::get('finish', FinishedController::class)->name('install.finished');
-    Route::get('link', StorageLinkController::class)->name('install.link');
+    Route::post('link', StorageLinkController::class)->name('install.link');
 });
