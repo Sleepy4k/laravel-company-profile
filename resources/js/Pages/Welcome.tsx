@@ -1,7 +1,7 @@
 import { Link, Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import IWelcomeProps from '@/Interfaces/WelcomeInterface';
 
-export default function Welcome({ auth, laravelVersion, phpVersion }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
+export default function Welcome({ auth, laravelVersion, phpVersion }: IWelcomeProps) {
     const handleImageError = () => {
         document.getElementById('screenshot-container')?.classList.add('!hidden');
         document.getElementById('docs-card')?.classList.add('!row-span-1');
