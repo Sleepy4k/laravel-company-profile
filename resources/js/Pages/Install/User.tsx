@@ -3,7 +3,7 @@ import { FormEventHandler } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 
-export default function User({ auth, errors }: PageProps) {
+export default function User({ errors }: PageProps) {
     const { data, setData, post, get, processing, reset } = useForm({
         name: '',
         email: '',
@@ -18,8 +18,7 @@ export default function User({ auth, errors }: PageProps) {
             preserveScroll: true,
             onSuccess: () => window.location.replace(route('install.finalize')),
             onFinish: () => {
-                reset('password');
-                reset('password_confirmation');
+                reset('password', 'password_confirmation');
             }
         });
     };

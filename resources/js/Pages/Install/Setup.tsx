@@ -4,8 +4,8 @@ import { Head, useForm } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 import IDefaultConfigProps from '@/Interfaces/Install/DefaultConfigInterface';
 
-export default function Setup({ auth, guessedUrl, defaultConfig, errors }: PageProps<{ guessedUrl: string, defaultConfig: IDefaultConfigProps }>) {
-    const { data, setData, post, processing, reset, wasSuccessful } = useForm({
+export default function Setup({ guessedUrl, defaultConfig, errors }: PageProps<{ guessedUrl: string, defaultConfig: IDefaultConfigProps }>) {
+    const { data, setData, post, processing, reset } = useForm({
         app_url: guessedUrl,
         app_name: defaultConfig.app_name,
         database_hostname: defaultConfig.database_hostname,

@@ -5,7 +5,7 @@ import InstallationLayout from '@/Layouts/InstallationLayout';
 import IPHPDataListProps from '@/Interfaces/Install/PhpDataInterface';
 import IRequirementsProps from '@/Interfaces/Install/RequirementInterface';
 
-export default function Requirements({ auth, errors, php, requirements }: PageProps<{ php: IPHPDataListProps, requirements: IRequirementsProps }>) {
+export default function Requirements({ errors, php, requirements }: PageProps<{ php: IPHPDataListProps, requirements: IRequirementsProps }>) {
     return (
         <InstallationLayout step={1} errors={errors}>
             <Head title="Requirements" />
@@ -18,24 +18,28 @@ export default function Requirements({ auth, errors, php, requirements }: PagePr
                             <div className="overflow-hidden border border-neutral-200 shadow-sm sm:rounded-lg">
                                 <table className="min-w-full divide-y divide-neutral-200">
                                     <thead className="bg-neutral-50">
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Required PHP Version
-                                        </th>
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Current
-                                        </th>
+                                        <tr>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Required PHP Version
+                                            </th>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Current
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody className="divide-y divide-neutral-200 bg-white">
-                                        <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-neutral-900">
-                                            {`${php['minimum']} or higher`}
-                                        </td>
-                                        <td className="whitespace-nowrap px-4 py-2 text-sm text-neutral-900">
-                                            <span className="{{ $php['supported'] ? 'text-success-500' : 'text-danger-500' }} inline-flex">
-                                                {php['supported'] && <PassesIcon />}
+                                        <tr>
+                                            <td className="whitespace-nowrap px-4 py-2 text-sm font-medium text-neutral-900">
+                                                {`${php['minimum']} or higher`}
+                                            </td>
+                                            <td className="whitespace-nowrap px-4 py-2 text-sm text-neutral-900">
+                                                <span className="{{ $php['supported'] ? 'text-success-500' : 'text-danger-500' }} inline-flex">
+                                                    {php['supported'] && <PassesIcon />}
 
-                                                {php['current']}
-                                            </span>
-                                        </td>
+                                                    {php['current']}
+                                                </span>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -51,12 +55,14 @@ export default function Requirements({ auth, errors, php, requirements }: PagePr
                             <div className="overflow-hidden border border-neutral-200 shadow-sm sm:rounded-lg">
                                 <table className="min-w-full divide-y divide-neutral-200">
                                     <thead className="bg-neutral-50">
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Extension
-                                        </th>
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Enabled
-                                        </th>
+                                        <tr>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Extension
+                                            </th>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Enabled
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {Object.entries(requirements['results']['php']).map(([requirement, enabled]) => (
@@ -88,12 +94,14 @@ export default function Requirements({ auth, errors, php, requirements }: PagePr
                             <div className="overflow-hidden border border-neutral-200 shadow-sm sm:rounded-lg">
                                 <table className="min-w-full divide-y divide-neutral-200">
                                     <thead className="bg-neutral-50">
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Function
-                                        </th>
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Enabled
-                                        </th>
+                                        <tr>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Function
+                                            </th>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Enabled
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {Object.entries(requirements['results']['functions']).map(([func, enabled]) => (
@@ -125,12 +133,14 @@ export default function Requirements({ auth, errors, php, requirements }: PagePr
                             <div className="overflow-hidden border border-neutral-200 shadow-sm sm:rounded-lg">
                                 <table className="min-w-full divide-y divide-neutral-200">
                                     <thead className="bg-neutral-50">
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Requirement
-                                        </th>
-                                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
-                                            Enabled
-                                        </th>
+                                        <tr>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Requirement
+                                            </th>
+                                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-neutral-500">
+                                                Enabled
+                                            </th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {Object.entries(requirements['recommended']['php']).map(([requirement, enabled]) => (

@@ -4,7 +4,11 @@ import PassesIcon from '@/Components/Installer/PassesIcon';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 import IPermissionProps from '@/Interfaces/Install/PermissionInterface';
 
-export default function Permissions({ auth, errors, permissions, process_user }: PageProps<{ permissions: IPermissionProps, process_user: string }>) {
+export default function Permissions({
+    errors,
+    permissions,
+    process_user
+}: PageProps<{ permissions: IPermissionProps, process_user: string }>) {
     return (
         <InstallationLayout step={2} errors={errors}>
             <Head title="Permissions" />
