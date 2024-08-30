@@ -13,6 +13,8 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         if (Role::count() == 0) {
+            app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
             $roles = config()->get('permission.seeder.role');
             $permissions = config()->get('permission.seeder.permission.admin');
 
@@ -27,7 +29,9 @@ class RoleSeeder extends Seeder
 
                 Role::create([
                     'name' => $role,
-                    'guard_name' => 'web'
+                    'guard_name' => 'web',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ])->syncPermissions($permissions);
             }
         }

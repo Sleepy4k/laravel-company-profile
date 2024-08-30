@@ -25,7 +25,9 @@ class PermissionSeeder extends Seeder
             $permission = collect($permissions)->map(function ($name) {
                 return [
                     'name' => $name,
-                    'guard_name' => 'web'
+                    'guard_name' => 'web',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             });
 
