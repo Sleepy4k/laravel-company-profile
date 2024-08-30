@@ -58,6 +58,37 @@ class EloquentRepository implements EloquentInterface
     }
 
     /**
+     * Get all models.
+     *
+     * @param  array  $columns
+     * @param  bool  $first
+     * @param  array  $relations
+     * @param  array  $wheres
+     * @param  string  $orderBy
+     * @param  bool  $latest
+     * @param  array  $roles
+     * @return Collection|Model
+     */
+    public function get(array $columns = ['*'], bool $first, array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection|Model
+    {
+        try {
+            $model = $this->model->with($relations);
+
+            if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
+
+            if (!empty($wheres)) $model->where($wheres);
+
+            if (!empty($roles)) $model->role($roles);
+
+            return $first ? $model->select($columns)->first() : $model->select($columns)->get();
+        } catch (\Throwable $th) {
+            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
      * Get all in pagination models.
      *
      * @param  int  $paginate
@@ -69,7 +100,7 @@ class EloquentRepository implements EloquentInterface
      * @param  array  $roles
      * @return Collection
      */
-    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = [])
+    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection
     {
         try {
             $model = $this->model->with($relations);
@@ -223,8 +254,11 @@ class EloquentRepository implements EloquentInterface
         try {
             $model = $this->model->create($payload);
 
-            return $model->fresh();
+            return $model;
         } catch (\Throwable $th) {
+            // If there is an error, and data is created, then delete the created data
+            if (isset($model)) $model->delete();
+
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 
             return false;
@@ -245,6 +279,9 @@ class EloquentRepository implements EloquentInterface
 
             return $model->update($payload);
         } catch (\Throwable $th) {
+            // If there is an error, and data is updated, then rollback the updated data
+            if (isset($model)) $model->rollback();
+
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 
             return false;
@@ -299,6 +336,22 @@ class EloquentRepository implements EloquentInterface
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 
             return false;
+        }
+    }
+
+    /**
+     * Get all models count.
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        try {
+            return $this->model->count();
+        } catch (\Throwable $th) {
+            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+
+            return 0;
         }
     }
 }

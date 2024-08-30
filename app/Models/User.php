@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\UserObserver;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, LogsActivity;
@@ -117,7 +120,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'id' => 'integer',
+            'id' => 'string',
             'name' => 'string',
             'email' => 'string',
             'password' => 'hashed',
@@ -135,7 +138,6 @@ class User extends Authenticatable
     {
         return LogOptions::defaults()
             ->logOnly($this->fillable)
-            ->logOnlyDirty()
             ->useLogName('model')
             ->setDescriptionForEvent(fn (string $eventName) => trans('model.activity.description', ['model' => $this->table, 'event' => $eventName]))
             ->dontSubmitEmptyLogs();

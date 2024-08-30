@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers\Install;
 
-use App\Trait\FinishesInstallation;
-use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use App\Services\Install\FinalizeService;
 
 class FinalizeController extends Controller
 {
-    use FinishesInstallation;
+    /**
+     * @var FinalizeService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(FinalizeService $service)
+    {
+        $this->service = $service;
+    }
 
     /**
      * Finalize the installation with redirect
@@ -18,9 +28,10 @@ class FinalizeController extends Controller
      */
     public function __invoke(): RedirectResponse
     {
-        $route = URL::temporarySignedRoute('install.finished', now()->addMinutes(60));
-
-        // Redirect to url with signed route
-        return redirect($route);
+        try {
+            return redirect($this->service->invoke());
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 }

@@ -2,13 +2,24 @@
 
 namespace App\Http\Controllers\Install;
 
-use App\Trait\FinishesInstallation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use App\Services\Install\DatabaseService;
 
 class DatabaseController extends Controller
 {
-    use FinishesInstallation;
+    /**
+     * @var DatabaseService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(DatabaseService $service)
+    {
+        $this->service = $service;
+    }
 
     /**
      * Migrate the database
@@ -18,15 +29,11 @@ class DatabaseController extends Controller
     public function __invoke(): RedirectResponse
     {
         try {
-            // if not already migrated then migrate
-            if (!$this->isAlreadyMigrated()) $this->migrate();
+            $this->service->invoke();
 
             return to_route('install.user');
-        } catch (\Exception $e) {
-            return to_route('install.setup')
-                ->withErrors([
-                    'general' => 'Could not migrate database: '.$e->getMessage(),
-                ]);
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
         }
     }
 }

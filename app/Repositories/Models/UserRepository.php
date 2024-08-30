@@ -43,8 +43,12 @@ class UserRepository extends EloquentRepository implements UserInterface
 
             !empty($role) ? $model->assignRole($role) : $model->assignRole(config('permission.role.default'));
 
-            return $model->fresh();
+            return $model;
         } catch (\Throwable $th) {
+            // If the user already created, delete the user
+            $user = $this->findByCustomId(['email' => $payload['email']], ['id']);
+            if ($user) $user->delete();
+
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 
             return false;

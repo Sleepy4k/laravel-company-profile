@@ -22,6 +22,21 @@ interface EloquentInterface
     public function all(array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection;
 
     /**
+     * Get all models.
+     *
+     * @param  array  $columns
+     * @param  bool  $first
+     * @param  array  $relations
+     * @param  array  $wheres
+     * @param  string  $orderBy
+     * @param  bool  $latest
+     * @param  array  $roles
+     *
+     * @return Collection|Model
+     */
+    public function get(array $columns = ['*'], bool $first, array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection|Model;
+
+    /**
      * Get all in pagination models.
      *
      * @param  int  $paginate
@@ -34,7 +49,7 @@ interface EloquentInterface
      *
      * @return Collection
      */
-    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []);
+    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection;
 
     /**
      * Get all trashed models.
@@ -144,8 +159,15 @@ interface EloquentInterface
      * Permanently delete model by id.
      *
      * @param  int  $modelId
-     * 
+     *
      * @return Model
      */
     public function permanentlyDeleteById(int $modelId): bool;
+
+    /**
+     * Get all models count.
+     *
+     * @return int
+     */
+    public function count(): int;
 }

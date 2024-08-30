@@ -4,30 +4,34 @@ namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Artisan;
+use App\Services\Install\StorageService;
 
 class StorageLinkController extends Controller
 {
+    /**
+     * @var StorageService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(StorageService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * Handle the incoming request.
      */
     public function __invoke(): RedirectResponse
     {
         try {
-            // Clear the cache
-            Artisan::call('cache:clear');
-            Artisan::call('config:clear');
+            $this->service->invoke();
 
-            // Create a symbolic link from "public/storage" to "storage/app/public"
-            Artisan::call('storage:link');
-            
-            // Redirect to the next step
-            return redirect()->back();
+            return back();
         } catch (\Throwable $th) {
-            return redirect()->back()
-                ->withErrors([
-                    'message' => 'Failed to create symbolic link.'
-                ]);
+            return $this->redirectError($th);
         }
     }
 }

@@ -3,18 +3,25 @@
 namespace App\Http\Controllers\Install;
 
 use Inertia\Inertia;
-use App\Models\User;
 use Inertia\Response;
-use App\Trait\FinishesInstallation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Symfony\Component\Process\PhpExecutableFinder;
-use App\Exceptions\FailedToFinalizeInstallationException;
-use Illuminate\Support\Facades\URL;
+use App\Services\Install\FinishedService;
 
 class FinishedController extends Controller
 {
-    use FinishesInstallation;
+    /**
+     * @var FinishedService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(FinishedService $service)
+    {
+        $this->service = $service;
+    }
 
     /**
      * Display the finish step or apply patches
@@ -24,24 +31,9 @@ class FinishedController extends Controller
     public function __invoke(): Response|RedirectResponse
     {
         try {
-            // Write the installed file
-            $this->finishInstallation();
-        } catch (FailedToFinalizeInstallationException $e) {
-            //
+            return Inertia::render('Install/Finish', $this->service->invoke());
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
         }
-
-        $user = User::first() ?? new User;
-        $phpFinder = new PhpExecutableFinder;
-        $phpExecutable = $phpFinder->find(false);
-        $link_url = URL::temporarySignedRoute('install.link', now()->addMinutes(10));
-        
-        return Inertia::render('Install/Finish', [
-            'user' => $user,
-            'base_url' => url('/'),
-            'base_path' => base_path(),
-            'link_url' => $link_url,
-            'phpExecutable' => $phpExecutable,
-            'minPhpVersion' => config('installer.core.minPhpVersion'),
-        ]);
     }
 }

@@ -308,7 +308,7 @@ class PreSetupCommand extends Command
         $this->info('Clearing application cache');
 
         // Clear the application cache
-        $this->call('optimize:clear');
+        $this->call('optimize');
 
         $this->info('Application cache has been cleared.');
     }

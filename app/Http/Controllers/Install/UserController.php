@@ -3,25 +3,39 @@
 namespace App\Http\Controllers\Install;
 
 use Inertia\Inertia;
-use App\Models\User;
 use Inertia\Response;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Artisan;
+use App\Services\Install\UserService;
 use App\Http\Requests\Install\UserStoreRequest;
 
 class UserController extends Controller
 {
     /**
+     * @var UserService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(UserService $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
      * Display the user step
      *
-     * @return Response
+     * @return Response|RedirectResponse
      */
     public function index(): Response|RedirectResponse
     {
-        return Inertia::render('Install/User');
+        try {
+            return Inertia::render('Install/User', $this->service->index());
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 
     /**
@@ -34,41 +48,11 @@ class UserController extends Controller
     public function store(UserStoreRequest $request): RedirectResponse
     {
         try {
-            $data = $request->validated();
+            $this->service->store($request->validated());
 
-            User::unguarded(function () use ($data) {
-                $user = User::create([
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'password' => Hash::make($data['password'])
-                ]);
-
-                $roleCount = Role::count();
-
-                if ($roleCount === 0) {
-                    Artisan::call('db:seed', [
-                        '--class' => 'PermissionSeeder'
-                    ]);
-                    Artisan::call('db:seed', [
-                        '--class' => 'RoleSeeder'
-                    ]);
-                }
-
-                // Check if role superadmin exists
-                $role = Role::where('name', 'superadmin')->first();
-
-                // If role superadmin does not exist, create it
-                if (!$role) $role = Role::create(['name' => 'superadmin']);
-
-                $user->assignRole($role->name);
-            });
-
-            return redirect()->back();
+            return back();
         } catch (\Throwable $th) {
-            return to_route('install.user')
-                ->withErrors([
-                    'general' => 'Could not create the user: '.$th->getMessage(),
-                ]);
+            return $this->redirectError($th);
         }
     }
 }

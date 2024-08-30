@@ -3,6 +3,7 @@
 namespace App\Trait;
 
 use App\Enum\ReportLogType;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use App\Exceptions\FailedToFinalizeInstallationException;
 
@@ -29,14 +30,22 @@ trait FinishesInstallation
 
     /**
      * Finish the installation process.
-     * 
+     *
      * @throws FailedToFinalizeInstallationException
-     * 
+     *
      * @return void
      */
     protected function finishInstallation(): void
     {
         $errors = '';
+
+        // Ensure database already migrated
+        try {
+            // Query to table migrations to check if already migrated
+            DB::table('migrations')->first();
+        } catch (\Exception) {
+            $errors .= 'Database is not yet migrated, please run `php artisan migrate` first.\n';
+        }
 
         if (!$this->markAsInstalled()) {
             $errors .= 'Unable to create installed file. Please try installation again.\n';
@@ -50,7 +59,7 @@ trait FinishesInstallation
 
     /**
      * Migrate the database
-     * 
+     *
      * @return void
      */
     protected function migrate(): void
