@@ -2,19 +2,15 @@
 
 namespace App\Models;
 
-use App\Observers\UserObserver;
 use Spatie\Activitylog\LogOptions;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-#[ObservedBy([UserObserver::class])]
-class User extends Authenticatable
+class ApplicationSettingType extends Model
 {
-    use HasFactory, Notifiable, HasRoles, LogsActivity;
+    use HasFactory, LogsActivity;
 
     /**
      * The table associated with created data.
@@ -42,7 +38,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'application_setting_types';
 
     /**
      * The primary key associated with the table.
@@ -79,8 +75,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'description',
     ];
 
     /**
@@ -97,10 +92,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = [];
 
     /**
      * The attributes that aren't mass assignable to determine if this is a date.
@@ -122,8 +114,7 @@ class User extends Authenticatable
         return [
             'id' => 'int',
             'name' => 'string',
-            'email' => 'string',
-            'password' => 'hashed',
+            'description' => 'string',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];
@@ -141,5 +132,15 @@ class User extends Authenticatable
             ->useLogName('model')
             ->setDescriptionForEvent(fn (string $eventName) => trans('model.activity.description', ['model' => $this->table, 'event' => $eventName]))
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Get the application settings for the type.
+     *
+     * @return HasMany
+     */
+    public function applicationSettings(): HasMany
+    {
+        return $this->hasMany(ApplicationSetting::class, 'type_id', 'id');
     }
 }

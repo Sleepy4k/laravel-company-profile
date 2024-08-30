@@ -27,9 +27,6 @@ class UserService extends Service
     public function store(array $request): void
     {
         try {
-            // Create the user
-            $user = $this->userInterface->create($request);
-
             // Check total roles
             $roles = $this->roleInterface->count();
 
@@ -49,8 +46,11 @@ class UserService extends Service
             // If role super admin does not exist, create it
             if (!$role) $role = $this->roleInterface->create(['name' => $superAdminRole, 'guard_name' => 'web']);
 
-            // Attach the super admin role to the user
-            $user->assignRole($role->name);
+            // Add role to payload
+            $request['role'] = $role->name;
+
+            // Create the user
+            $user = $this->userInterface->create($request);
         } catch (\Exception $e) {
             // Check if the user already created
             $user = $this->userInterface->findByCustomId(['email' => $request['email']], ['id']);

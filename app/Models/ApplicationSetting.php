@@ -2,19 +2,15 @@
 
 namespace App\Models;
 
-use App\Observers\UserObserver;
 use Spatie\Activitylog\LogOptions;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[ObservedBy([UserObserver::class])]
-class User extends Authenticatable
+class ApplicationSetting extends Model
 {
-    use HasFactory, Notifiable, HasRoles, LogsActivity;
+    use HasFactory, LogsActivity;
 
     /**
      * The table associated with created data.
@@ -42,7 +38,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'application_setting_types';
 
     /**
      * The primary key associated with the table.
@@ -78,9 +74,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'key',
+        'display',
+        'value',
+        'description',
+        'type_id',
     ];
 
     /**
@@ -97,10 +95,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = [];
 
     /**
      * The attributes that aren't mass assignable to determine if this is a date.
@@ -121,9 +116,11 @@ class User extends Authenticatable
     {
         return [
             'id' => 'int',
-            'name' => 'string',
-            'email' => 'string',
-            'password' => 'hashed',
+            'key' => 'string',
+            'display' => 'string',
+            'value' => 'string',
+            'description' => 'string',
+            'type_id' => 'int',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];
@@ -141,5 +138,15 @@ class User extends Authenticatable
             ->useLogName('model')
             ->setDescriptionForEvent(fn (string $eventName) => trans('model.activity.description', ['model' => $this->table, 'event' => $eventName]))
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Get the application settings that owns the application setting type.
+     * 
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(ApplicationSettingType::class, 'type_id', 'id');
     }
 }
