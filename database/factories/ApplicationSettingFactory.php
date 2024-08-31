@@ -34,12 +34,14 @@ class ApplicationSettingFactory extends Factory
             [
                 'key' => 'app_logo',
                 'display' => 'Application Logo',
+                'value' => '',
                 'description' => 'Application logo',
                 'type_id' => 1
             ],
             [
                 'key' => 'app_favicon',
                 'display' => 'Application Favicon',
+                'value' => '',
                 'description' => 'Application favicon',
                 'type_id' => 1
             ],
