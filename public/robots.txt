@@ -1,2 +1,4 @@
 User-agent: *
-Disallow:
+Disallow: /install
+Disallow: /install/*
+Disallow: /pre-setup.html
