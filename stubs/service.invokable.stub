@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Services\Service;
+
+class {{ class }} extends Service
+{
+    /**
+     * Handle the incoming request.
+     *
+     * @return void
+     */
+    public function invoke(): void
+    {
+        try {
+            // Your Best Logic
+        } catch (\Exception $e) {
+            throw new \Exception('Something went wrong');
+        }
+    }
+}
