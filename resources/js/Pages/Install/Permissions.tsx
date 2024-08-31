@@ -1,18 +1,17 @@
 import { PageProps } from '@/types';
-import { Link, Head } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import PassesIcon from '@/Components/Installer/PassesIcon';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 import IPermissionProps from '@/Interfaces/Install/PermissionInterface';
 
 export default function Permissions({
+    app,
     errors,
     permissions,
     process_user
 }: PageProps<{ permissions: IPermissionProps, process_user: string }>) {
     return (
-        <InstallationLayout step={2} errors={errors}>
-            <Head title="Permissions" />
-
+        <InstallationLayout step={2} errors={errors} title="Permissions" app={app}>
             <div className="p-3">
                 <h4 className="my-5 text-lg font-semibold text-neutral-800">Files and folders permissions</h4>
                 <p className="text-neutral-700">

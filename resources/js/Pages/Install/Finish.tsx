@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { PageProps } from '@/types';
-import { Head } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 
 interface FinishProps extends PageProps {
@@ -16,7 +15,7 @@ interface FinishProps extends PageProps {
 }
 
 export default function Finish({
-    auth,
+    app,
     user,
     errors,
     base_url,
@@ -32,9 +31,7 @@ export default function Finish({
     }, []);
 
     return (
-        <InstallationLayout step={5} errors={errors}>
-            <Head title="Finish" />
-
+        <InstallationLayout step={5} errors={errors} title="Finish" app={app}>
             <div className="p-3">
                 <h4 className="my-5 text-lg font-semibold text-neutral-800">Installation Successfull</h4>
 

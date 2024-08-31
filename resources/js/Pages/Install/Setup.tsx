@@ -1,10 +1,10 @@
 import { PageProps } from '@/types';
 import { FormEventHandler } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 import IDefaultConfigProps from '@/Interfaces/Install/DefaultConfigInterface';
 
-export default function Setup({ guessedUrl, defaultConfig, errors }: PageProps<{ guessedUrl: string, defaultConfig: IDefaultConfigProps }>) {
+export default function Setup({ app, guessedUrl, defaultConfig, errors }: PageProps<{ guessedUrl: string, defaultConfig: IDefaultConfigProps }>) {
     const { data, setData, post, processing, reset } = useForm({
         app_url: guessedUrl,
         app_name: defaultConfig.app_name,
@@ -26,9 +26,7 @@ export default function Setup({ guessedUrl, defaultConfig, errors }: PageProps<{
     };
 
     return (
-        <InstallationLayout step={3} errors={errors}>
-            <Head title="Setup" />
-
+        <InstallationLayout step={3} errors={errors} title="Setup" app={app}>
             <div className="mt-5 rounded-md bg-warning-50 p-4">
                 <div className="flex">
                     <div className="shrink-0">
