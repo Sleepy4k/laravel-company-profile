@@ -20,6 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        $middleware->alias([
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        ]);
+
         //
         $middleware->redirectGuestsTo('/');
         $middleware->redirectUsersTo(function () {
@@ -31,7 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
             if (!$request->inertia()) return $response;
 
-            if (!app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [500, 503, 404, 403])) {
+            if (!app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [500, 503, 429, 404, 403])) {
                 return Inertia::render('Error', ['status' => $response->getStatusCode()])
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
