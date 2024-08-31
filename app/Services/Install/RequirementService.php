@@ -3,25 +3,25 @@
 namespace App\Services\Install;
 
 use App\Services\Service;
-use App\Support\InstallationRequirementsChecker;
+use App\Support\RequirementsChecker;
 
 class RequirementService extends Service
 {
     /**
      * The installation requirements checker.
      *
-     * @var InstallationRequirementsChecker
+     * @var RequirementsChecker
      */
     protected $checker;
 
     /**
      * Create a new service instance.
      *
-     * @param InstallationRequirementsChecker $checker
+     * @param RequirementsChecker $checker
      *
      * @return void
      */
-    public function __construct(InstallationRequirementsChecker $checker)
+    public function __construct(RequirementsChecker $checker)
     {
         $this->checker = $checker;
     }

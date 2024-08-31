@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-class InstallationPermissionsChecker
+class PermissionsChecker
 {
     /**
      * The results array.

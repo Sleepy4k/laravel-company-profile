@@ -38,7 +38,7 @@ class ApplicationSetting extends Model
      *
      * @var string
      */
-    protected $table = 'application_setting_types';
+    protected $table = 'application_settings';
 
     /**
      * The primary key associated with the table.
@@ -142,7 +142,7 @@ class ApplicationSetting extends Model
 
     /**
      * Get the application settings that owns the application setting type.
-     * 
+     *
      * @return BelongsTo
      */
     public function type(): BelongsTo

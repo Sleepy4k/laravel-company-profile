@@ -3,7 +3,7 @@
 namespace App\Repositories\Models;
 
 use App\Models\User;
-use App\Trait\SystemLog;
+use App\Traits\SystemLog;
 use App\Enum\ReportLogType;
 use App\Contracts\Models\UserInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -43,7 +43,7 @@ class UserRepository extends EloquentRepository implements UserInterface
 
             !empty($role) ? $model->assignRole($role) : $model->assignRole(config('permission.role.default'));
 
-            return $model;
+            return $model->fresh();
         } catch (\Throwable $th) {
             // If the user already created, delete the user
             $user = $this->findByCustomId(['email' => $payload['email']], ['id']);

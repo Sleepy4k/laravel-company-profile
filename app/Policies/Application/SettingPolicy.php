@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Application;
 
-use App\Models\ApplicationSetting;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\ApplicationSetting;
 
-class ApplicationSettingPolicy
+class SettingPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('application.index');
     }
 
     /**
@@ -21,7 +20,7 @@ class ApplicationSettingPolicy
      */
     public function view(User $user, ApplicationSetting $applicationSetting): bool
     {
-        //
+        return $user->hasPermissionTo('application.show');
     }
 
     /**
@@ -29,7 +28,7 @@ class ApplicationSettingPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('application.create');
     }
 
     /**
@@ -37,7 +36,7 @@ class ApplicationSettingPolicy
      */
     public function update(User $user, ApplicationSetting $applicationSetting): bool
     {
-        //
+        return $user->hasPermissionTo('application.update');
     }
 
     /**
@@ -45,22 +44,6 @@ class ApplicationSettingPolicy
      */
     public function delete(User $user, ApplicationSetting $applicationSetting): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, ApplicationSetting $applicationSetting): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, ApplicationSetting $applicationSetting): bool
-    {
-        //
+        return $user->hasPermissionTo('application.delete');
     }
 }

@@ -3,7 +3,8 @@
 namespace App\Services\Install;
 
 use App\Services\Service;
-use App\Trait\FinishesInstallation;
+use App\Traits\FinishesInstallation;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseService extends Service
 {
@@ -19,6 +20,9 @@ class DatabaseService extends Service
         try {
             // if not already migrated then migrate
             if (!$this->isAlreadyMigrated()) $this->migrate();
+
+            Artisan::call('db:seed', ['--class' => 'ApplicationSettingTypeSeeder']);
+            Artisan::call('db:seed', ['--class' => 'ApplicationSettingSeeder']);
         } catch (\Exception $e) {
             throw new \Exception('Could not migrate database: '.$e->getMessage());
         }

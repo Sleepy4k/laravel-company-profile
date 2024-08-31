@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Trait\SystemLog;
+use App\Traits\SystemLog;
 use App\Enum\ReportLogType;
 
 abstract class Controller

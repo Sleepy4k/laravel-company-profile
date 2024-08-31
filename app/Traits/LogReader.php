@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Trait;
+namespace App\Traits;
 
 use App\Enum\LogReaderType;
 use App\Enum\ReportLogType;

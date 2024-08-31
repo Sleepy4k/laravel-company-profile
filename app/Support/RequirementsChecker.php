@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-class InstallationRequirementsChecker
+class RequirementsChecker
 {
     /**
      * Create empty result set

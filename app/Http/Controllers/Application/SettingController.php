@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Application;
 
 use App\Models\ApplicationSetting;
-use App\Http\Requests\StoreApplicationSettingRequest;
-use App\Http\Requests\UpdateApplicationSettingRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\Application\StoreSettingRequest;
+use App\Http\Requests\Application\UpdateSettingRequest;
 
-class ApplicationSettingController extends Controller
+class SettingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        Gate::authorize('viewAny', ApplicationSetting::class);
     }
 
     /**
@@ -21,15 +23,15 @@ class ApplicationSettingController extends Controller
      */
     public function create()
     {
-        //
+        Gate::authorize('create', ApplicationSetting::class);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreApplicationSettingRequest $request)
+    public function store(StoreSettingRequest $request)
     {
-        //
+        Gate::authorize('create', ApplicationSetting::class);
     }
 
     /**
@@ -37,7 +39,7 @@ class ApplicationSettingController extends Controller
      */
     public function show(ApplicationSetting $applicationSetting)
     {
-        //
+        Gate::authorize('view', $applicationSetting);
     }
 
     /**
@@ -45,15 +47,15 @@ class ApplicationSettingController extends Controller
      */
     public function edit(ApplicationSetting $applicationSetting)
     {
-        //
+        Gate::authorize('update', $applicationSetting);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateApplicationSettingRequest $request, ApplicationSetting $applicationSetting)
+    public function update(UpdateSettingRequest $request, ApplicationSetting $applicationSetting)
     {
-        //
+        Gate::authorize('update', $applicationSetting);
     }
 
     /**
@@ -61,6 +63,6 @@ class ApplicationSettingController extends Controller
      */
     public function destroy(ApplicationSetting $applicationSetting)
     {
-        //
+        Gate::authorize('delete', $applicationSetting);
     }
 }

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Application;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
 
-class UpdateApplicationSettingTypeRequest extends FormRequest
+class StoreSettingTypeRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return auth('web')->check();
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateApplicationSettingTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255', 'unique:application_setting_types,name'],
+            'description' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

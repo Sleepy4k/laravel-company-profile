@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Models;
 
-use App\Trait\SystemLog;
+use App\Traits\SystemLog;
 use App\Enum\ReportLogType;
 use Spatie\Permission\Models\Role;
 use App\Contracts\Models\RoleInterface;

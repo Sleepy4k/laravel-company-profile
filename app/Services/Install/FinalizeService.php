@@ -3,7 +3,7 @@
 namespace App\Services\Install;
 
 use App\Services\Service;
-use App\Trait\FinishesInstallation;
+use App\Traits\FinishesInstallation;
 use Illuminate\Support\Facades\URL;
 
 class FinalizeService extends Service

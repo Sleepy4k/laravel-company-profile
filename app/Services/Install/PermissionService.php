@@ -3,25 +3,25 @@
 namespace App\Services\Install;
 
 use App\Services\Service;
-use App\Support\InstallationPermissionsChecker;
+use App\Support\PermissionsChecker;
 
 class PermissionService extends Service
 {
     /**
      * The installation requirements checker.
      *
-     * @var InstallationPermissionsChecker
+     * @var PermissionsChecker
      */
     protected $checker;
 
     /**
      * Create a new service instance.
      *
-     * @param InstallationPermissionsChecker $checker
+     * @param PermissionsChecker $checker
      *
      * @return void
      */
-    public function __construct(InstallationPermissionsChecker $checker)
+    public function __construct(PermissionsChecker $checker)
     {
         $this->checker = $checker;
     }

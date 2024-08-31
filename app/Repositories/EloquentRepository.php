@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Trait\SystemLog;
+use App\Traits\SystemLog;
 use App\Enum\ReportLogType;
 use App\Contracts\EloquentInterface;
 use Illuminate\Database\Eloquent\Model;

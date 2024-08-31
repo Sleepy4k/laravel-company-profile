@@ -3,7 +3,7 @@
 namespace App\Services\Install;
 
 use App\Services\Service;
-use App\Trait\DatabaseTest;
+use App\Traits\DatabaseTest;
 use App\Support\Environment;
 use App\Support\PrivilegesChecker;
 use App\Support\EnvironmentManager;

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -14,11 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('App\Contracts\EloquentInterface', 'App\Repositories\EloquentRepository');
-        $this->app->bind('App\Contracts\Models\RoleInterface', 'App\Repositories\Models\RoleRepository');
-        $this->app->bind('App\Contracts\Models\UserInterface', 'App\Repositories\Models\UserRepository');
-        $this->app->bind('App\Contracts\Models\LanguageInterface', 'App\Repositories\Models\LanguageRepository');
-        $this->app->bind('App\Contracts\Models\PermissionInterface', 'App\Repositories\Models\PermissionRepository');
+        // 
     }
 
     /**
@@ -27,7 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('web', function (Request $request) {
-            return Limit::perMinute(30)->by(optional($request->user())->id ?: $request->ip())->response(function () {
+            return Limit::perMinute(30)->by(optional($request->user())->id ?: $request->ip())->response(function () use ($request) {
+                if ($request->inertia()) return Inertia::render('Error', ['status' => 429])
+                    ->toResponse($request)
+                    ->setStatusCode(429);
+
                 abort(429, 'Too Many Requests');
             });
         });

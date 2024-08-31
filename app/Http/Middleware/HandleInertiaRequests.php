@@ -2,11 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Traits\AppSetting;
+use Illuminate\Http\Request;
 
 class HandleInertiaRequests extends Middleware
 {
+    use AppSetting;
+
     /**
      * The root template that is loaded on the first page visit.
      *
@@ -31,6 +34,12 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'app' => [
+                'name' => $this->getAppSetting('app_name'),
+                'description' => $this->getAppSetting('app_description'),
+                'logo' => $this->getAppSetting('app_logo'),
+                'favicon' => $this->getAppSetting('app_favicon'),
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],
