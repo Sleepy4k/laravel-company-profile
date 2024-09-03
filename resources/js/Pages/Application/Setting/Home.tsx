@@ -3,26 +3,20 @@ import { useEffect, useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Link, router } from '@inertiajs/react';
 
-interface BoxData {
-    type: string;
-    data: {
-        title: string;
-        value: string;
-    }[];
-}
-
 export default function Home({ auth, app, data }: PageProps<{ data: any }>) {
-    const [mode, setMode] = useState<'table' | 'box'>('table');
-    const [mappedBoxData, setMappedBoxData] = useState<BoxData[]>(data);
+    const [mode, setMode] = useState<'table' | 'box' | null>(null);
 
     useEffect(() => {
-        // if change mode from table to box, then change the data
-        if (mode === 'box') {
-            router.visit(route('application.index') + '?type=box');
-        } else {
-            router.visit(route('application.index'));
-        }
-    }, [mode]);
+        // Get mode from url, if last url is /application/mode then set mode to box
+        const url = window.location.href;
+        const mode = url.split('/')[url.split('/').length - 1];
+
+        mode === 'box' ? setMode('box') : setMode('table');
+    }, []);
+
+    const handleChangeMode = () => {
+        router.visit(route('application.index', { type: mode == 'box' ? 'table' : 'box' }));
+    }
 
     const disableNext = data.current_page === data.last_page || data.next_page_url === null;
 
@@ -49,7 +43,7 @@ export default function Home({ auth, app, data }: PageProps<{ data: any }>) {
             <div className="flex justify-end">
                 <label className="btn btn-circle swap swap-rotate me-5 mt-3 relative">
                     {/* this hidden checkbox controls the state */}
-                    <input type="checkbox" className='hidden' onChange={() => setMode(mode == 'box' ? 'table' : 'box')} />
+                    <input type="checkbox" className='hidden' onChange={handleChangeMode} />
 
                     {/* hamburger icon */}
                     <svg
@@ -77,10 +71,10 @@ export default function Home({ auth, app, data }: PageProps<{ data: any }>) {
             </div>
 
             {/* Render data here */}
-            {mode === 'table' && (
+            {mode && mode === 'table' && (
                 <div>
                     <div className='flex justify-center'>
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-auto w-[85%]">
                             <div className='flex justify-start mb-4 ms-4 lg:ms-1'>
                                 <Link href={route('application.create')} className='btn btn-primary'>
                                     Create New
@@ -115,10 +109,10 @@ export default function Home({ auth, app, data }: PageProps<{ data: any }>) {
                                                 <Link href={`${route('application.show', item.id)}`} className='btn btn-sm btn-neutral'>
                                                     View
                                                 </Link>
-                                                <Link href={`${route('application.edit', item.id)}`} className='btn btn-sm btn-primary ms-2'>
+                                                <Link href={`${route('application.edit', item.id)}`} className='btn btn-sm btn-primary lg:ms-2 lg:mt-0 ms-0 mt-2'>
                                                     Edit
                                                 </Link>
-                                                <Link href={`${route('application.destroy', item.id)}`} className='btn btn-sm btn-error ms-2'>
+                                                <Link href={`${route('application.destroy', item.id)}`} className='btn btn-sm btn-error lg:ms-2 lg:mt-0 md:ms-0 mt-2'>
                                                     Delete
                                                 </Link>
                                             </td>
@@ -154,22 +148,33 @@ export default function Home({ auth, app, data }: PageProps<{ data: any }>) {
             )}
 
             {/* Make responsive box, with 2 box in a row and make it center */}
-            {mode === 'box' && (
+            {mode && mode === 'box' && (
                 <div className='flex flex-col lg:flex-row justify-center gap-[2vw]'>
-                    {mappedBoxData.map((box, index) => (
-                        <div key={index} className='lg:w-[40%] m-2 bg-white shadow-md rounded-3xl shadow-2xl'>
+                    {data && data.map((item: any, index: number) => (
+                        <div key={index} className='lg:w-[40%] m-2 bg-white shadow-md rounded-3xl shadow-2xl mb-[6vh]'>
                             {/* Add title from box.type */}
                             <div className='p-4 font-semibold text-center'>
-                                <h2 className='text-2xl'>{box.type}</h2>
-                                <span className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
+                                <h2 className='text-2xl'>{item.name}</h2>
+                                <span className='text-sm'>{item.description}</span>
                             </div>
                             {/* Render box.data here */}
                             <div className='flex flex-wrap justify-center gap-[2vw] mb-8'>
-                                {box.data.map((data, index) => (
-                                    <div key={index} className='card bg-neutral-100 w-[65vw] lg:w-[17vw] shadow-xl'>
+                                {item && item?.settings.map((setting: any, id: number) => (
+                                    <div key={id} className='card bg-neutral-100 w-[90%] shadow-xl'>
                                         <div className='card-body'>
-                                            <h2 className='card-title'>{data.title}</h2>
-                                            <p>{data.value}</p>
+                                            <h2 className='card-title text-sm'>{setting.name}</h2>
+                                            <p className='text-xs'>{setting.value.length > 65 ? setting.value.substring(0, 65) + '...' : setting.value || '-'}</p>
+                                        </div>
+                                        <div className='card-footer mb-4 ms-4'>
+                                            <Link href={`${route('application.show', setting.id)}`} className='btn btn-sm btn-neutral'>
+                                                View
+                                            </Link>
+                                            <Link href={`${route('application.edit', setting.id)}`} className='btn btn-sm btn-primary ms-2'>
+                                                Edit
+                                            </Link>
+                                            <Link href={`${route('application.destroy', setting.id)}`} className='btn btn-sm btn-error ms-2'>
+                                                Delete
+                                            </Link>
                                         </div>
                                     </div>
                                 ))}

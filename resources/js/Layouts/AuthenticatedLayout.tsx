@@ -33,7 +33,7 @@ export default function Authenticated({ user, title, app, children }: PropsWithC
                                 <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('application.index')} active={route().current('application.index')}>
+                                <NavLink href={route('application.index', { type: 'table' })} active={route().current('application.index', { type: 'table' }) || route().current('application.index', { type: 'box' })}>
                                     Application
                                 </NavLink>
                             </div>
@@ -109,7 +109,7 @@ export default function Authenticated({ user, title, app, children }: PropsWithC
                         <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('application.index')} active={route().current('application.index')}>
+                        <ResponsiveNavLink href={route('application.index', { type: 'table' })} active={route().current('application.index', { type: 'table' }) || route().current('application.index', { type: 'box' })}>
                             Application
                         </ResponsiveNavLink>
                     </div>
@@ -137,16 +137,16 @@ export default function Authenticated({ user, title, app, children }: PropsWithC
                     <ul>
                         {breadcrumbs.map((breadcrumb, index) => {
                             const isLast = index === breadcrumbs.length - 1;
+                            const isFirst = index === 0;
                             const isNameNotWord = typeof breadcrumb !== 'string' || !/^[a-zA-Z]+$/.test(breadcrumb);
                             const name = isNameNotWord ? breadcrumb : breadcrumb.charAt(0).toUpperCase() + breadcrumb.slice(1);
-                            const url = isNameNotWord ? '' : route(`${breadcrumb}.index`);
 
                             return (
                                 <li key={index} className="inline">
-                                    {isLast ? (
-                                        <span>{name}</span>
+                                    {isFirst ? (
+                                        <Link href={route('dashboard.index')}>{name}</Link>
                                     ) : (
-                                        <Link href={url}>{name}</Link>
+                                        <span>{name}</span>
                                     )}
                                 </li>
                             )
