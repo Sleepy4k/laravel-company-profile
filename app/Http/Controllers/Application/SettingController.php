@@ -29,11 +29,11 @@ class SettingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(string $type)
     {
         Gate::authorize('viewAny', ApplicationSetting::class);
 
-        return Inertia::render('Application/Setting/Home', $this->service->index($request->all()));
+        return Inertia::render('Application/Setting/Home', $this->service->index($type));
     }
 
     /**

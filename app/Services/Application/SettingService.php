@@ -11,13 +11,11 @@ class SettingService extends Service
      *
      * @return array
      */
-    public function index(array $request): array
+    public function index(string $type): array
     {
         // if request had key 'type' with value 'box' or 'table'
         // then return the data in the format of box or table
         $data = null;
-
-        $type = isset($request['type']) ? $request['type'] : null;
 
         switch ($type) {
         case 'box':
