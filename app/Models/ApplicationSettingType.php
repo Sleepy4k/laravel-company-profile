@@ -5,12 +5,13 @@ namespace App\Models;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use ElipZis\Cacheable\Models\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ApplicationSettingType extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, Cacheable;
 
     /**
      * The table associated with created data.
@@ -135,11 +136,32 @@ class ApplicationSettingType extends Model
     }
 
     /**
+     * The cacheable properties that should be cached.
+     *
+     * @return array
+     */
+    public function getCacheableProperties(): array {
+        return [
+            //How long should cache last in general?
+            'ttl' => 300,
+            //By what should cache entries be prefixed?
+            'prefix' => 'settingtypecache',
+            //What is the identifying, unique column name?
+            'identifier' => 'id',
+            //Do you need logging?
+            'logging' => [
+                'enabled' => false,
+                'level' => 'debug',
+            ],
+        ];
+    }
+
+    /**
      * Get the application settings for the type.
      *
      * @return HasMany
      */
-    public function applicationSettings(): HasMany
+    public function settings(): HasMany
     {
         return $this->hasMany(ApplicationSetting::class, 'type_id', 'id');
     }

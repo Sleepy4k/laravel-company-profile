@@ -2,20 +2,38 @@
 
 namespace App\Http\Controllers\Application;
 
+use Inertia\Inertia;
+use Illuminate\Http\Request;
 use App\Models\ApplicationSetting;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Services\Application\SettingService;
 use App\Http\Requests\Application\StoreSettingRequest;
 use App\Http\Requests\Application\UpdateSettingRequest;
 
 class SettingController extends Controller
 {
     /**
+     * @var SettingService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(SettingService $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         Gate::authorize('viewAny', ApplicationSetting::class);
+
+        return Inertia::render('Application/Setting/Home', $this->service->index($request->all()));
     }
 
     /**

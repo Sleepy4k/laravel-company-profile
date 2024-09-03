@@ -5,12 +5,13 @@ namespace App\Models;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use ElipZis\Cacheable\Models\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ApplicationSetting extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, Cacheable;
 
     /**
      * The table associated with created data.
@@ -138,6 +139,27 @@ class ApplicationSetting extends Model
             ->useLogName('model')
             ->setDescriptionForEvent(fn (string $eventName) => trans('model.activity.description', ['model' => $this->table, 'event' => $eventName]))
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * The cacheable properties that should be cached.
+     *
+     * @return array
+     */
+    public function getCacheableProperties(): array {
+        return [
+            //How long should cache last in general?
+            'ttl' => 300,
+            //By what should cache entries be prefixed?
+            'prefix' => 'settingcache',
+            //What is the identifying, unique column name?
+            'identifier' => 'id',
+            //Do you need logging?
+            'logging' => [
+                'enabled' => false,
+                'level' => 'debug',
+            ],
+        ];
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Enum\ReportLogType;
 use App\Contracts\EloquentInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class EloquentRepository implements EloquentInterface
 {
@@ -98,9 +99,9 @@ class EloquentRepository implements EloquentInterface
      * @param  string  $orderBy
      * @param  bool  $latest
      * @param  array  $roles
-     * @return Collection
+     * @return Collection|LengthAwarePaginator
      */
-    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection
+    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection|LengthAwarePaginator
     {
         try {
             $model = $this->model->with($relations);
@@ -115,7 +116,7 @@ class EloquentRepository implements EloquentInterface
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 
-            return false;
+            abort(500, $th->getMessage());
         }
     }
 

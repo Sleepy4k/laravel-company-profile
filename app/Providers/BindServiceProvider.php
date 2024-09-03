@@ -16,6 +16,8 @@ class BindServiceProvider extends ServiceProvider
         $this->app->bind('App\Contracts\Models\UserInterface', 'App\Repositories\Models\UserRepository');
         $this->app->bind('App\Contracts\Models\LanguageInterface', 'App\Repositories\Models\LanguageRepository');
         $this->app->bind('App\Contracts\Models\PermissionInterface', 'App\Repositories\Models\PermissionRepository');
+        $this->app->bind('App\Contracts\Models\ApplicationSettingInterface', 'App\Repositories\Models\ApplicationSettingRepository');
+        $this->app->bind('App\Contracts\Models\ApplicationSettingTypeInterface', 'App\Repositories\Models\ApplicationSettingTypeRepository');
     }
 
     /**

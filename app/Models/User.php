@@ -7,6 +7,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
+use ElipZis\Cacheable\Models\Traits\Cacheable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, LogsActivity;
+    use HasFactory, Notifiable, HasRoles, LogsActivity, Cacheable;
 
     /**
      * The table associated with created data.
@@ -141,5 +142,26 @@ class User extends Authenticatable
             ->useLogName('model')
             ->setDescriptionForEvent(fn (string $eventName) => trans('model.activity.description', ['model' => $this->table, 'event' => $eventName]))
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * The cacheable properties that should be cached.
+     *
+     * @return array
+     */
+    public function getCacheableProperties(): array {
+        return [
+            //How long should cache last in general?
+            'ttl' => 300,
+            //By what should cache entries be prefixed?
+            'prefix' => 'usercache',
+            //What is the identifying, unique column name?
+            'identifier' => 'id',
+            //Do you need logging?
+            'logging' => [
+                'enabled' => false,
+                'level' => 'debug',
+            ],
+        ];
     }
 }

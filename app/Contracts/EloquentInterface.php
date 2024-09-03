@@ -4,6 +4,7 @@ namespace App\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface EloquentInterface
 {
@@ -47,9 +48,9 @@ interface EloquentInterface
      * @param  bool  $latest
      * @param  array  $roles
      *
-     * @return Collection
+     * @return Collection|LengthAwarePaginator
      */
-    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection;
+    public function paginate(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true, array $roles = []): Collection|LengthAwarePaginator;
 
     /**
      * Get all trashed models.
