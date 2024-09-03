@@ -33,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->redirectGuestsTo('/');
         $middleware->redirectUsersTo(function () {
-            return route('dashboard');
+            return route('dashboard.index');
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
