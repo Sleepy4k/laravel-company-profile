@@ -19,11 +19,15 @@ class ApplicationSettingTypeFactory extends Factory
         return [
             [
                 'name' => 'Default',
-                'description' => 'Default application setting'
+                'description' => 'Default application setting',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'name' => 'Meta Tag',
-                'description' => 'Application meta tag setting'
+                'description' => 'Application meta tag setting',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ];
     }
