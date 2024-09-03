@@ -20,7 +20,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard.index');
 
     Route::prefix('application')->group(function () {
-        Route::resource('/', SettingController::class)->names('application')->parameter('', 'application');
+        Route::get('/{type}', [SettingController::class, 'index'])->name('application.index')->where('type', 'box|table');
+        Route::resource('/', SettingController::class)->except('index')->names('application')->parameter('', 'application');
         Route::resource('/type', SettingTypePolicy::class)->names('application.type');
     });
 
