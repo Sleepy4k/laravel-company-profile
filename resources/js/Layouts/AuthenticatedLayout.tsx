@@ -1,16 +1,24 @@
-import { useState, PropsWithChildren, ReactNode } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
+import { AppSetting, User } from '@/types';
+import Dropdown from '@/Components/Dropdown';
+import { Head, Link } from '@inertiajs/react';
+import { useState, PropsWithChildren, useEffect } from 'react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
-import { User } from '@/types';
 
-export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
+export default function Authenticated({ user, title, app, children }: PropsWithChildren<{ user: User, title: string, app: AppSetting }>) {
+    const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const appName = app.name || import.meta.env.VITE_APP_NAME;
+
+    useEffect(() => {
+        setBreadcrumbs(window.location.pathname.split('/').filter(Boolean));
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-100">
+            <Head title={`${title} - ${appName}`} />
+
             <nav className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -22,8 +30,11 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                                     Dashboard
+                                </NavLink>
+                                <NavLink href={route('application.index')} active={route().current('application.index')}>
+                                    Application
                                 </NavLink>
                             </div>
                         </div>
@@ -95,8 +106,11 @@ export default function Authenticated({ user, header, children }: PropsWithChild
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('application.index')} active={route().current('application.index')}>
+                            Application
                         </ResponsiveNavLink>
                     </div>
 
@@ -118,11 +132,28 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
-                </header>
-            )}
+            <header className="bg-white shadow">
+                <div className="breadcrumbs text-sm max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <ul>
+                        {breadcrumbs.map((breadcrumb, index) => {
+                            const isLast = index === breadcrumbs.length - 1;
+                            const isNameNotWord = typeof breadcrumb !== 'string' || !/^[a-zA-Z]+$/.test(breadcrumb);
+                            const name = isNameNotWord ? breadcrumb : breadcrumb.charAt(0).toUpperCase() + breadcrumb.slice(1);
+                            const url = isNameNotWord ? '' : route(`${breadcrumb}.index`);
+
+                            return (
+                                <li key={index} className="inline">
+                                    {isLast ? (
+                                        <span>{name}</span>
+                                    ) : (
+                                        <Link href={url}>{name}</Link>
+                                    )}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </div>
+            </header>
 
             <main>{children}</main>
         </div>

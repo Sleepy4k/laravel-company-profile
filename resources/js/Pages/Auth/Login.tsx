@@ -1,13 +1,14 @@
+import { PageProps } from '@/types';
 import { FormEventHandler } from 'react';
 import Checkbox from '@/Components/Checkbox';
+import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import { Link, useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
+export default function Login({ app, status, canResetPassword }: PageProps<{ status?: string, canResetPassword: boolean }>) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -23,9 +24,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
     };
 
     return (
-        <GuestLayout>
-            <Head title="Log in" />
-
+        <GuestLayout app={app} title="Log in">
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
             <form onSubmit={submit}>
