@@ -2,18 +2,14 @@ import NavLink from '@/Components/NavLink';
 import { AppSetting, User } from '@/types';
 import Dropdown from '@/Components/Dropdown';
 import { Head, Link } from '@inertiajs/react';
-import { useState, PropsWithChildren, useEffect } from 'react';
+import BreadCrumbs from './../Components/BreadCrumbs';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
+import { useState, PropsWithChildren, ReactNode } from 'react';
 
-export default function Authenticated({ user, title, app, children }: PropsWithChildren<{ user: User, title: string, app: AppSetting }>) {
-    const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
+export default function Authenticated({ user, header, title, app, className = '', children }: PropsWithChildren<{ user: User, title: string, app: AppSetting, header?: ReactNode, className?: string }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const appName = app.name || import.meta.env.VITE_APP_NAME;
-
-    useEffect(() => {
-        setBreadcrumbs(window.location.pathname.split('/').filter(Boolean));
-    }, []);
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -32,6 +28,18 @@ export default function Authenticated({ user, title, app, children }: PropsWithC
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                                     Dashboard
+                                </NavLink>
+                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                    Gallery
+                                </NavLink>
+                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                    Blog
+                                </NavLink>
+                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                    Translate
+                                </NavLink>
+                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                    Log
                                 </NavLink>
                                 <NavLink href={route('application.index', { type: 'table' })} active={route().current('application.index', { type: 'table' }) || route().current('application.index', { type: 'box' })}>
                                     Application
@@ -109,6 +117,18 @@ export default function Authenticated({ user, title, app, children }: PropsWithC
                         <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                            Gallery
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                            Blog
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                            Translate
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                            Log
+                        </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('application.index', { type: 'table' })} active={route().current('application.index', { type: 'table' }) || route().current('application.index', { type: 'box' })}>
                             Application
                         </ResponsiveNavLink>
@@ -132,30 +152,23 @@ export default function Authenticated({ user, title, app, children }: PropsWithC
                 </div>
             </nav>
 
-            <header className="bg-white shadow">
-                <div className="breadcrumbs text-sm max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <ul>
-                        {breadcrumbs.map((breadcrumb, index) => {
-                            const isLast = index === breadcrumbs.length - 1;
-                            const isFirst = index === 0;
-                            const isNameNotWord = typeof breadcrumb !== 'string' || !/^[a-zA-Z]+$/.test(breadcrumb);
-                            const name = isNameNotWord ? breadcrumb : breadcrumb.charAt(0).toUpperCase() + breadcrumb.slice(1);
+            {header ? (
+                <header className="bg-white shadow">
+                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {header}
+                    </div>
+                </header>
+            ) : (
+                <header className="bg-white shadow">
+                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center">
+                            <BreadCrumbs />
+                        </div>
+                    </div>
+                </header>
+            )}
 
-                            return (
-                                <li key={index} className="inline">
-                                    {isFirst ? (
-                                        <Link href={route('dashboard.index')}>{name}</Link>
-                                    ) : (
-                                        <span>{name}</span>
-                                    )}
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </div>
-            </header>
-
-            <main>{children}</main>
+            <main className={`mt-[3vh] ${className}`}>{children}</main>
         </div>
     );
 }
