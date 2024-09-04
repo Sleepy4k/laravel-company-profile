@@ -21,8 +21,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 
     Route::prefix('application')->group(function () {
         Route::get('/{type}', [SettingController::class, 'index'])->name('application.index')->where('type', 'box|table');
-        Route::resource('/', SettingController::class)->except('index')->names('application')->parameter('', 'application');
-        Route::resource('/type', SettingTypePolicy::class)->names('application.type');
+        Route::resource('/', SettingController::class)->except('index')->names('application')->parameter('', 'applicationSetting');
+        Route::resource('/type', SettingTypePolicy::class)->names('application.type')->parameter('type', 'applicationSettingType');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
