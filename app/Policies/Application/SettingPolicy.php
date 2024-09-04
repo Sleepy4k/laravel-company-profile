@@ -32,6 +32,22 @@ class SettingPolicy
     }
 
     /**
+     * Determine whether the user can store models.
+     */
+    public function store(User $user): bool
+    {
+        return $user->hasPermissionTo('application.create');
+    }
+
+    /**
+     * Determine whether the user can edit models.
+     */
+    public function edit(User $user): bool
+    {
+        return $user->hasPermissionTo('application.update');
+    }
+
+    /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, ApplicationSetting $applicationSetting): bool

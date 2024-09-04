@@ -46,7 +46,11 @@ class EloquentRepository implements EloquentInterface
 
             if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
 
-            if (!empty($wheres)) $model->where($wheres);
+            if (!empty($wheres)) $model->where(function ($query) use ($wheres) {
+                foreach ($wheres as $where) {
+                    $query->orWhere($where[0], $where[1], '%' . $where[2] . '%');
+                }
+            });
 
             if (!empty($roles)) $model->role($roles);
 
@@ -77,7 +81,11 @@ class EloquentRepository implements EloquentInterface
 
             if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
 
-            if (!empty($wheres)) $model->where($wheres);
+            if (!empty($wheres)) $model->where(function ($query) use ($wheres) {
+                foreach ($wheres as $where) {
+                    $query->orWhere($where[0], $where[1], '%' . $where[2] . '%');
+                }
+            });
 
             if (!empty($roles)) $model->role($roles);
 
@@ -108,7 +116,11 @@ class EloquentRepository implements EloquentInterface
 
             if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
 
-            if (!empty($wheres)) $model->where($wheres);
+            if (!empty($wheres)) $model->where(function ($query) use ($wheres) {
+                foreach ($wheres as $where) {
+                    $query->orWhere($where[0], $where[1], '%' . $where[2] . '%');
+                }
+            });
 
             if (!empty($roles)) $model->role($roles);
 
@@ -253,7 +265,7 @@ class EloquentRepository implements EloquentInterface
     public function create(array $payload): ?Model
     {
         try {
-            $model = $this->model->create($payload);
+            $model = $this->model->query()->create($payload);
 
             return $model;
         } catch (\Throwable $th) {
@@ -277,8 +289,9 @@ class EloquentRepository implements EloquentInterface
     {
         try {
             $model = $this->findById($modelId);
+            $model->update($payload);
 
-            return $model->update($payload);
+            return $model;
         } catch (\Throwable $th) {
             // If there is an error, and data is updated, then rollback the updated data
             if (isset($model)) $model->rollback();
@@ -298,7 +311,10 @@ class EloquentRepository implements EloquentInterface
     public function deleteById(int $modelId): bool
     {
         try {
-            return $this->findById($modelId)->delete();
+            $model = $this->findById($modelId);
+            $model->delete();
+
+            return $model;
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 

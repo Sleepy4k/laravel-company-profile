@@ -40,12 +40,28 @@ class SettingService extends Service
             });
 
             break;
+        case 'table':
+            $search = request()->get('search') ?? [];
+            $sort_type = request()->get('sort_direction');
+            $sort_field = request()->get('sort_field') ?? 'created_at';
+
+            isset($search) && !empty($search) ? $search = [['key', 'like', $search], ['display', 'like', $search], ['value', 'like', $search], ['description', 'like', $search]] : $search = [];
+
+            if ($sort_field && isset($sort_type)) {
+                $data = $this->applicationSettingInterface->paginate(10, ['*'], ['type'], $search, $sort_field, $sort_type === 'desc' ? true : false);
+            } else {
+                $data = $this->applicationSettingInterface->paginate(10, ['*'], ['type'], $search);
+            }
+
+            break;
         default:
             $data = $this->applicationSettingInterface->paginate(10, ['*'], ['type']);
             break;
         }
 
-        return compact('data');
+        $queryParams = request()->query() ?: null;
+
+        return compact('data', 'queryParams');
     }
 
     /**
@@ -55,7 +71,9 @@ class SettingService extends Service
      */
     public function create(): array
     {
-        return [];
+        $type = $this->applicationSettingTypeInterface->all(['id', 'name']);
+
+        return compact('type');
     }
 
     /**
@@ -67,55 +85,72 @@ class SettingService extends Service
      */
     public function store(array $request): void
     {
-        //
+        try {
+            $this->applicationSettingInterface->create($request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param string $id
+     * @param int $id
      *
      * @return array
      */
-    public function show(string $id): array
+    public function show(int $id): array
     {
-        return [];
+        $data = $this->applicationSettingInterface->findById($id, ['*'], ['type']);
+
+        return compact('data');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param string $id
+     * @param int $id
      *
      * @return array
      */
-    public function edit(string $id): array
+    public function edit(int $id): array
     {
-        return [];
+        $type = $this->applicationSettingTypeInterface->all(['id', 'name']);
+        $setting = $this->applicationSettingInterface->findById($id, ['*'], ['type']);
+
+        return compact('type', 'setting');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param array $request
-     * @param string $id
+     * @param int $id
      *
      * @return void
      */
-    public function update(array $request, string $id): void
+    public function update(array $request, int $id): void
     {
-        //
+        try {
+            $this->applicationSettingInterface->update($id, $request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param string $id
+     * @param int $id
      *
      * @return void
      */
-    public function destroy(string $id): void
+    public function destroy(int $id): void
     {
-        //
+        try {
+            $this->applicationSettingInterface->deleteById($id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

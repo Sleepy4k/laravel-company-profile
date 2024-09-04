@@ -156,7 +156,7 @@ class ApplicationSetting extends Model
             'identifier' => 'id',
             //Do you need logging?
             'logging' => [
-                'enabled' => false,
+                'enabled' => true,
                 'level' => 'debug',
             ],
         ];

@@ -87,7 +87,7 @@ class ApplicationSettingRepository extends EloquentRepository implements Applica
     public function create(array $payload): ?Model
     {
         try {
-            $model = $this->model->create($payload);
+            $model = $this->model->query()->create($payload);
 
             if ($this->isAppSettingCached()) {
                 cache()->forget('app_settings');

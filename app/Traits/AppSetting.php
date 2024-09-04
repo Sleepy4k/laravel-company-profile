@@ -100,7 +100,7 @@ trait AppSetting
         if ($this->isFirstSetup()) return false;
 
         try {
-            $setting = ApplicationSetting::where('key', $key)->first();
+            $setting = ApplicationSetting::query()->where('key', $key)->first();
 
             if (!$setting) return false;
 
