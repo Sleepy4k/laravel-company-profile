@@ -16,7 +16,7 @@ class PermissionSeeder extends Seeder
         if (Permission::count() == 0) {
             app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-            $permissions = config()->get('permission.seeder.permission.list');
+            $permissions = config('permission.seeder.permission.list');
 
             if (empty($permissions)) {
                 throw new \Exception('Error: config/permission.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the tables manually.');

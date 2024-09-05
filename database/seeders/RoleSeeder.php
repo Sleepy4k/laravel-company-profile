@@ -15,8 +15,8 @@ class RoleSeeder extends Seeder
         if (Role::count() == 0) {
             app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-            $roles = config()->get('permission.seeder.role');
-            $permissions = config()->get('permission.seeder.permission.admin');
+            $roles = config('permission.seeder.role');
+            $permissions = config('permission.seeder.permission.admin');
 
             if (empty($roles)) {
                 throw new \Exception('Error: config/permission.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the tables manually.');
@@ -24,7 +24,11 @@ class RoleSeeder extends Seeder
 
             foreach ($roles as $role) {
                 if (config()->has('permission.seeder.permission.' . $role)) {
-                    $permissions = config()->get('permission.seeder.permission.' . $role);
+                    $permissions = config('permission.seeder.permission.' . $role);
+
+                    if ($permissions == 'all') {
+                        $permissions = config('permission.seeder.permission.list');
+                    }
                 }
 
                 Role::create([

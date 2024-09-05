@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     {
         if (User::count() == 0) {
             User::factory(25)->create()->each(function ($user) {
-                $role = fake()->randomElement(['superadmin', 'admin']);
+                $role = fake()->randomElement(config('permission.seeder.role'));
                 $user->assignRole($role);
             });
         }
