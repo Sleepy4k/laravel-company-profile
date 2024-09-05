@@ -41,8 +41,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
             if (!$request->inertia()) return $response;
 
-            if (!app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [500, 503, 429, 404, 403])) {
-                return Inertia::render('Error', ['status' => $response->getStatusCode()])
+            if (!app()->environment(['local', 'testing'])) {
+                return Inertia::render('Error', [
+                        'status' => $response->getStatusCode(),
+                        'title' => trans('error.'.$response->getStatusCode().'.title'),
+                        'description' => trans('error.'.$response->getStatusCode().'.description'),
+                        'home' => trans('error.back_home')
+                    ])
                     ->toResponse($request)
                     ->setStatusCode($response->getStatusCode());
             } elseif ($response->getStatusCode() === 419) {
