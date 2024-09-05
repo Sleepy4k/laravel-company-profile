@@ -16,8 +16,7 @@
         "spatie/laravel-sitemap": "^7.2",
         "spatie/laravel-translatable": "^6.8",
         "spatie/laravel-translation-loader": "^2.8",
-        "tightenco/ziggy": "^2.0",
-        "yajra/laravel-datatables-oracle": "^11.1"
+        "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
