@@ -13,7 +13,21 @@ class SettingTypeService extends Service
      */
     public function index(): array
     {
-        return [];
+        $search = request()->get('search') ?: [];
+        $sort_type = request()->get('sort_direction');
+        $sort_field = request()->get('sort_field') ?: 'created_at';
+
+        isset($search) && !empty($search) ? $search = [['name', 'like', $search], ['description', 'like', $search]] : $search = [];
+
+        if ($sort_field && isset($sort_type)) {
+            $data = $this->applicationSettingTypeInterface->paginate(10, ['*'], [], $search, $sort_field, $sort_type === 'desc' ? true : false);
+        } else {
+            $data = $this->applicationSettingTypeInterface->paginate(10, ['*'], [], $search);
+        }
+
+        $queryParams = request()->query() ?: null;
+
+        return compact('data', 'queryParams');
     }
 
     /**
@@ -35,55 +49,71 @@ class SettingTypeService extends Service
      */
     public function store(array $request): void
     {
-        //
+        try {
+            $this->applicationSettingTypeInterface->create($request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param string $id
+     * @param int $id
      *
      * @return array
      */
-    public function show(string $id): array
+    public function show(int $id): array
     {
-        return [];
+        $data = $this->applicationSettingTypeInterface->findById($id);
+
+        return compact('data');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param string $id
+     * @param int $id
      *
      * @return array
      */
-    public function edit(string $id): array
+    public function edit(int $id): array
     {
-        return [];
+        $setting = $this->applicationSettingTypeInterface->findById($id);
+
+        return compact('setting');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param array $request
-     * @param string $id
+     * @param int $id
      *
      * @return void
      */
-    public function update(array $request, string $id): void
+    public function update(array $request, int $id): void
     {
-        //
+        try {
+            $this->applicationSettingTypeInterface->update($id, $request);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param string $id
+     * @param int $id
      *
      * @return void
      */
-    public function destroy(string $id): void
+    public function destroy(int $id): void
     {
-        //
+        try {
+            $this->applicationSettingTypeInterface->deleteById($id);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

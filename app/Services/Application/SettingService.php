@@ -26,8 +26,11 @@ class SettingService extends Service
                 $settingType->settings = $settingType->settings->map(function ($setting) {
                     return [
                         'id' => $setting->id,
+                        'key' => $setting->key,
                         'name' => $setting->display,
+                        'description' => $setting->description,
                         'value' => $setting->value,
+                        'updated_at' => $setting->updated_at ? $setting->updated_at->diffForHumans() : now()->diffForHumans(),
                     ];
                 });
 

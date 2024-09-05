@@ -293,9 +293,6 @@ class EloquentRepository implements EloquentInterface
 
             return $model;
         } catch (\Throwable $th) {
-            // If there is an error, and data is updated, then rollback the updated data
-            if (isset($model)) $model->rollback();
-
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
 
             return false;

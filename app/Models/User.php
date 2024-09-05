@@ -124,7 +124,7 @@ class User extends Authenticatable
             'id' => 'int',
             'name' => 'string',
             'email' => 'string',
-            'password' => 'hashed',
+            'password' => 'string',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];

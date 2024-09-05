@@ -36,7 +36,7 @@ class SettingTypePolicy
      */
     public function store(User $user): bool
     {
-        return $user->hasPermissionTo('application.create');
+        return $user->hasPermissionTo('application.store');
     }
 
     /**
@@ -44,7 +44,7 @@ class SettingTypePolicy
      */
     public function edit(User $user): bool
     {
-        return $user->hasPermissionTo('application.update');
+        return $user->hasPermissionTo('application.edit');
     }
 
     /**
@@ -60,6 +60,6 @@ class SettingTypePolicy
      */
     public function delete(User $user, ApplicationSettingType $applicationSettingType): bool
     {
-        return $user->hasPermissionTo('application.destroy');
+        return $user->hasPermissionTo('application.delete');
     }
 }

@@ -36,7 +36,7 @@ class SettingPolicy
      */
     public function store(User $user): bool
     {
-        return $user->hasPermissionTo('application.create');
+        return $user->hasPermissionTo('application.store');
     }
 
     /**
@@ -44,7 +44,7 @@ class SettingPolicy
      */
     public function edit(User $user): bool
     {
-        return $user->hasPermissionTo('application.update');
+        return $user->hasPermissionTo('application.edit');
     }
 
     /**

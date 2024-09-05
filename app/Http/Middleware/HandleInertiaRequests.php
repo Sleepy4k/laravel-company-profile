@@ -34,6 +34,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            // Share translationa
             'app' => [
                 'name' => $this->getAppSetting('app_name'),
                 'description' => $this->getAppSetting('app_description'),

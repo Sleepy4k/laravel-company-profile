@@ -20,9 +20,9 @@ class GateServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::before(function ($user, $ability) {
-            return $user->hasRole('superadmin') ? true : null;
-        });
+        // Gate::before(function ($user, $ability) {
+        //     return $user->hasRole('superadmin') ? true : null;
+        // });
 
         Gate::policy(\App\Models\ApplicationSetting::class, \App\Policies\Application\SettingPolicy::class);
         Gate::policy(\App\Models\ApplicationSettingType::class, \App\Policies\Application\SettingTypePolicy::class);

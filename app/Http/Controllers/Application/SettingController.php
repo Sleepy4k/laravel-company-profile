@@ -28,12 +28,12 @@ class SettingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $type)
+    public function index(string $mode)
     {
         Gate::authorize('viewAny', ApplicationSetting::class);
 
         try {
-            return Inertia::render('Application/Setting/Home', $this->service->index($type));
+            return Inertia::render('Application/Setting/Home', $this->service->index($mode));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -58,7 +58,7 @@ class SettingController extends Controller
      */
     public function store(StoreSettingRequest $request)
     {
-        Gate::authorize('create', ApplicationSetting::class);
+        Gate::authorize('store', ApplicationSetting::class);
 
         try {
             $this->service->store($request->validated());
@@ -88,7 +88,7 @@ class SettingController extends Controller
      */
     public function edit(ApplicationSetting $applicationSetting)
     {
-        Gate::authorize('update', $applicationSetting);
+        Gate::authorize('edit', $applicationSetting);
 
         try {
             return Inertia::render('Application/Setting/Edit', $this->service->edit($applicationSetting->id));

@@ -21,6 +21,7 @@ class DatabaseService extends Service
             // if not already migrated then migrate
             if (!$this->isAlreadyMigrated()) $this->migrate();
 
+            Artisan::call('db:seed', ['--class' => 'TranslateSeeder']);
             Artisan::call('db:seed', ['--class' => 'ApplicationSettingTypeSeeder']);
             Artisan::call('db:seed', ['--class' => 'ApplicationSettingSeeder']);
         } catch (\Exception $e) {
