@@ -194,34 +194,73 @@ return [
 
     'seeder' => [
         'role' => [
+            'banned',
+            'blogger',
+            'designer',
             'admin',
             'superadmin',
         ],
         'permission' => [
             'list' => [
+                'dashboard.index',
+
+                'user.index',
+                'user.create',
+                'user.store',
+                'user.show',
+                'user.edit',
+                'user.update',
+                'user.delete',
+
                 'permission.index',
                 'permission.create',
+                'permission.store',
                 'permission.show',
+                'permission.edit',
                 'permission.update',
                 'permission.delete',
 
                 'role.index',
                 'role.create',
+                'role.store',
                 'role.show',
+                'role.edit',
                 'role.update',
                 'role.delete',
 
                 'translate.index',
                 'translate.create',
+                'translate.store',
                 'translate.show',
+                'translate.edit',
                 'translate.update',
                 'translate.delete',
 
                 'application.index',
                 'application.create',
+                'application.store',
                 'application.show',
+                'application.edit',
                 'application.update',
                 'application.delete',
+
+                'blog.index',
+                'blog.create',
+                'blog.store',
+                'blog.show',
+                'blog.edit',
+                'blog.update',
+                'blog.delete',
+
+                'gallery.index',
+                'gallery.create',
+                'gallery.store',
+                'gallery.show',
+                'gallery.edit',
+                'gallery.update',
+                'gallery.delete',
+
+                'log.index',
 
                 'log.auth.index',
                 'log.auth.show',
@@ -235,53 +274,66 @@ return [
                 'log.system.index',
                 'log.system.show',
             ],
-            'superadmin' => [
-                'permission.index',
-                'permission.create',
-                'permission.show',
-                'permission.update',
-                'permission.delete',
-
-                'role.index',
-                'role.create',
-                'role.show',
-                'role.update',
-                'role.delete',
-
-                'translate.index',
-                'translate.create',
-                'translate.show',
-                'translate.update',
-                'translate.delete',
-
-                'application.index',
-                'application.create',
-                'application.show',
-                'application.update',
-                'application.delete',
-
-                'log.auth.index',
-                'log.auth.show',
-
-                'log.model.index',
-                'log.model.show',
-
-                'log.query.index',
-                'log.query.show',
-
-                'log.system.index',
-                'log.system.show',
-            ],
+            'superadmin' => 'all',
             'admin' => [
+                'dashboard.index',
+
+                'user.index',
+                'user.create',
+                'user.store',
+                'user.show',
+                'user.edit',
+                'user.update',
+                'user.delete',
+
                 'translate.index',
-                'translate.create',
                 'translate.show',
                 'translate.update',
-                'translate.delete',
 
                 'application.index',
                 'application.show',
                 'application.update',
+
+                'gallery.index',
+                'gallery.create',
+                'gallery.store',
+                'gallery.show',
+                'gallery.edit',
+                'gallery.update',
+                'gallery.delete',
+
+                'blog.index',
+                'blog.create',
+                'blog.store',
+                'blog.show',
+                'blog.edit',
+                'blog.update',
+                'blog.delete',
+            ],
+            'blogger' => [
+                'dashboard.index',
+
+                'blog.index',
+                'blog.create',
+                'blog.store',
+                'blog.show',
+                'blog.edit',
+                'blog.update',
+                'blog.delete',
+            ],
+            'designer' => [
+                'dashboard.index',
+
+                'gallery.index',
+                'gallery.create',
+                'gallery.store',
+                'gallery.show',
+                'gallery.edit',
+                'gallery.update',
+                'gallery.delete',
+            ],
+            'banned' => [
+                'dashboard.index',
             ],
         ]
     ],
