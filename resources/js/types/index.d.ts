@@ -17,6 +17,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
+    trans: (key: string) => string;
     app: AppSetting;
     // Record object or empty object
     errors: Record<string, any>|null;

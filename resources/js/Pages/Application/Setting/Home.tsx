@@ -1,12 +1,10 @@
+import BoxMode from './BoxMode';
+import TableMode from './TableMode';
 import { PageProps } from '@/types';
 import Modal from '@/Components/Modal';
-import debounce from 'lodash.debounce';
 import alert from '@/utils/sweet.alert';
 import { useEffect, useState } from 'react';
-import DataTable from '@/Components/DataTable';
-import TextInput from '@/Components/TextInput';
 import { Link, router } from '@inertiajs/react';
-import TableHeading from '@/Components/DataTable/Heading';
 import ResponsiveHeader from '@/Components/ResponsiveHeader';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
@@ -32,13 +30,13 @@ export default function Home({ auth, app, data, queryParams = null }: PageProps<
     }, []);
 
     const handleChangeMode = () => {
-        router.visit(route('application.index', { type: mode == 'box' ? 'table' : 'box' }));
+        router.visit(route('application.index', { displayMode: mode == 'box' ? 'table' : 'box' }));
     }
 
     const searchFieldChanged = (name: string, value: any) => {
         value ? queryParams[name] = value : delete queryParams[name];
 
-        router.get(route("application.index", { type: mode == 'box' ? 'box' : 'table' }), queryParams);
+        router.get(route("application.index", { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
     };
 
     const sortChanged = (name: string) => {
@@ -53,7 +51,7 @@ export default function Home({ auth, app, data, queryParams = null }: PageProps<
             queryParams.sort_direction = "asc";
         }
 
-        router.get(route("application.index", { type: mode == 'box' ? 'box' : 'table' }), queryParams);
+        router.get(route("application.index", { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
     };
 
     const deleteSetting = (data: any) => {
@@ -96,6 +94,19 @@ export default function Home({ auth, app, data, queryParams = null }: PageProps<
         closeModal();
     }
 
+    const isQueryParamEmpty = () => {
+        return !queryParams || Object.keys(queryParams).length === 0;
+    }
+
+    const handleReset = () => {
+        // If query params is empty, do nothing
+        if (isQueryParamEmpty()) return;
+
+        router.get(route('application.index', { displayMode: mode == 'box' ? 'box' : 'table' }));
+    }
+
+    const handleReload = () => router.get(route('application.index', { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
+
     return (
         <AuthenticatedLayout
             app={app}
@@ -104,7 +115,7 @@ export default function Home({ auth, app, data, queryParams = null }: PageProps<
             className={mode == 'box' ? 'max-w-full flex overflow-x-scroll' : ''}
             header={
                 <ResponsiveHeader>
-                    <label className="swap swap-rotate relative">
+                    <label className="swap swap-rotate relative lg:py-2 py-1 lg:px-3 px-1">
                         <input type="checkbox" title='change mode for display data' className='hidden' onChange={handleChangeMode} checked={mode == 'box'} />
                         <svg
                             className="swap-off fill-current"
@@ -126,159 +137,28 @@ export default function Home({ auth, app, data, queryParams = null }: PageProps<
                             d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                         </svg>
                     </label>
-                    <Link href={route('application.create')} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('application.type.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
+                        Application Type
+                    </Link>
+                    <Link href={route('application.create')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Create New
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            {/* Render data here */}
-            {mode && mode === 'table' && (
-                <div className='max-w-[85%] mx-auto'>
-                    <DataTable
-                        links={data.links}
-                        search={<>
-                            <TextInput
-                                type="text"
-                                name="search"
-                                placeholder="Search"
-                                className="mt-4 ms-4 block lg:w-1/4"
-                                onChange={debounce((e) => searchFieldChanged('search', e.target.value), 500)}
-                            />
-                            <div className="flex justify-end">
-                                <button
-                                    type='button'
-                                    className="btn btn-neutral ms-4 mt-4"
-                                    onClick={() => searchFieldChanged('search', '')}
-                                >
-                                    Reset
-                                </button>
-                            </div>
-                        </>}
-                        header={<>
-                            <TableHeading
-                                name="id"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                ID
-                            </TableHeading>
-                            <TableHeading
-                                name="key"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                Key
-                            </TableHeading>
-                            <TableHeading
-                                name="display"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                Display As
-                            </TableHeading>
-                            <TableHeading
-                                name="value"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                Value
-                            </TableHeading>
-                            <TableHeading
-                                name="description"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                Description
-                            </TableHeading>
-                            <th className="px-3 py-2">Type</th>
-                            <TableHeading
-                                name="created_at"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                Created At
-                            </TableHeading>
-                            <TableHeading
-                                name="updated_at"
-                                sort_field={queryParams.sort_field}
-                                sort_direction={queryParams.sort_direction}
-                                sortChanged={sortChanged}
-                            >
-                                Updated At
-                            </TableHeading>
-                            <th className="px-3 py-2">Actions</th>
-                        </>}
-                    >
-                        {data && data.data.map((item: any, index: number) => (
-                            <tr key={index}>
-                                <td className="px-3 py-2">{item.id}</td>
-                                <td className="px-3 py-2">{item.key}</td>
-                                <td className="px-3 py-2">{item.display || '-'}</td>
-                                <td className="px-3 py-2">{item.value || '-'}</td>
-                                <td className="px-3 py-2">{item.description || '-'}</td>
-                                <td className="px-3 py-2">{item.type.name || '-'}</td>
-                                <td className="px-3 py-2">{item.created_at || '-'}</td>
-                                <td className="px-3 py-2">{item.updated_at || '-'}</td>
-                                <td className="px-3 py-2 text-nowrap">
-                                    <Link
-                                        href={route('application.show', item.id)}
-                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
-                                    >
-                                        View
-                                    </Link>
-                                    <Link
-                                        href={route('application.edit', item.id)}
-                                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
-                                    >
-                                        Edit
-                                    </Link>
-                                    <button
-                                        type='button'
-                                        onClick={(e) => deleteSetting(item)}
-                                        className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </DataTable>
-                </div>
-            )}
+            <TableMode
+                data={data}
+                mode={mode}
+                isQueryParamEmpty={isQueryParamEmpty}
+                handleReset={handleReset}
+                searchFieldChanged={searchFieldChanged}
+                sortChanged={sortChanged}
+                deleteSetting={deleteSetting}
+                queryParams={queryParams}
+                handleReload={handleReload}
+            />
 
-            {mode && mode === 'box' && (
-                <div className="flex justify-start px-4 pb-2 sm:px-6 ms-8 me-8 mb-5 space-x-8">
-                    {data && data.map((item: any, col: number) => (
-                        <div key={col} className='inline-flex h-[calc(100vh-15rem)] lg:w-[20vw] w-[30vw] flex-col overflow-x-hidden overflow-y-hidden rounded-lg bg-neutral-400/40 border border-neutral-300/40 align-top shadow '>
-                            <div className='px-3 py-2.5'>
-                                <div className='flex items-center'>
-                                    <h5 className='mr-auto font-medium text-neutral-800 text-sm'>{item.name}</h5>
-                                </div>
-                                <div className='flex lg:flex-row flex-col items-center text-sm'>
-                                    <span className='text-neutral-600'>{item.description}</span>
-                                    <span className='mx-1 text-neutral-900'>-</span>
-                                    <span className='text-neutral-700'>{item.settings.length} setting</span>
-                                </div>
-                            </div>
-                            <div className='overflow-x-hidden overflow-y-auto'>
-                                {item && item.settings.length > 0 && item.settings.map((setting: any, row: number) => (
-                                    <div key={row} className='m-3 overflow-hidden whitespace-normal rounded-md bg-white shadow px-3 py-2.5'>
-                                        <h3 className='text-lg'>{setting.name}</h3>
-                                        <p>{setting.value || '-'}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+            <BoxMode data={data} mode={mode} deleteSetting={deleteSetting} />
 
             <Modal show={confirmingSettingDeletion} onClose={closeModal}>
                 <form className="p-6" onSubmit={handleDeleteSetting}>

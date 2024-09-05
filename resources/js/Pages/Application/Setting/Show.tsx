@@ -4,7 +4,7 @@ import TextInput from "@/Components/TextInput";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Show({ auth, data, app, errors }: PageProps<{ data: any, success?: string }>) {
+export default function Show({ auth, data, app }: PageProps<{ data: any }>) {
     return (
         <AuthenticatedLayout
             app={app}
@@ -15,13 +15,13 @@ export default function Show({ auth, data, app, errors }: PageProps<{ data: any,
                     <Link href={route('application.edit', data?.id || 0)} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Edit
                     </Link>
-                    <Link href={route('application.index', { type: 'table' })} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('application.index', { displayMode: 'table' })} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Back
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            <div className="bg-white max-w-[35%] mx-auto px-6 py-4">
+            <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <div>
                     <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
                     <TextInput

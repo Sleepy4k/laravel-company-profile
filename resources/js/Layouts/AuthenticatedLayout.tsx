@@ -41,7 +41,7 @@ export default function Authenticated({ user, header, title, app, className = ''
                                 <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                                     Log
                                 </NavLink>
-                                <NavLink href={route('application.index', { type: 'table' })} active={route().current('application.index', { type: 'table' }) || route().current('application.index', { type: 'box' })}>
+                                <NavLink href={route('application.index', { displayMode: 'table' })} active={route().current('application.index', { displayMode: 'table' }) || route().current('application.index', { displayMode: 'box' }) || route().current('application.type.index')}>
                                     Application
                                 </NavLink>
                             </div>
@@ -129,7 +129,7 @@ export default function Authenticated({ user, header, title, app, className = ''
                         <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                             Log
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('application.index', { type: 'table' })} active={route().current('application.index', { type: 'table' }) || route().current('application.index', { type: 'box' })}>
+                        <ResponsiveNavLink href={route('application.index', { displayMode: 'table' })} active={route().current('application.index', { displayMode: 'table' }) || route().current('application.index', { displayMode: 'box' }) || route().current('application.type.index')}>
                             Application
                         </ResponsiveNavLink>
                     </div>
