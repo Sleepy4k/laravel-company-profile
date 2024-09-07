@@ -57,6 +57,12 @@ Install node dependencies
 npm install
 ~~~
 
+Build frontend page
+
+~~~bash
+npm run build
+~~~
+
 Run pre-setup command
 
 ~~~bash
