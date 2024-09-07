@@ -1,4 +1,8 @@
 User-agent: *
+Disallow: /build
+Disallow: /build/*
+Disallow: /storage
+Disallow: /storage/*
 Disallow: /install
 Disallow: /install/*
 Disallow: /pre-setup.html
