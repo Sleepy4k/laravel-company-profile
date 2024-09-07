@@ -12,6 +12,7 @@
         "laravel/sanctum": "4.0",
         "laravel/tinker": "2.9",
         "spatie/laravel-activitylog": "^4.8",
+        "spatie/laravel-image-optimizer": "^1.8",
         "spatie/laravel-permission": "^6.9",
         "spatie/laravel-sitemap": "^7.2",
         "spatie/laravel-translatable": "^6.8",
