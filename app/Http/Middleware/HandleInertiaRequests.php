@@ -37,9 +37,9 @@ class HandleInertiaRequests extends Middleware
             // Share translationa
             'app' => [
                 'name' => $this->getAppSetting('app_name'),
-                'description' => $this->getAppSetting('app_description'),
                 'logo' => $this->getAppSetting('app_logo'),
                 'favicon' => $this->getAppSetting('app_favicon'),
+                'description' => $this->getAppSetting('app_meta_description'),
             ],
             'auth' => [
                 'user' => $request->user(),

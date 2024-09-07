@@ -77,6 +77,7 @@ class ApplicationSettingType extends Model
     protected $fillable = [
         'name',
         'description',
+        'category',
     ];
 
     /**
@@ -106,6 +107,28 @@ class ApplicationSettingType extends Model
     ];
 
     /**
+     * The attributes that should be searchable.
+     *
+     * @var array<int, string>
+     */
+    protected $searchable = [
+        'id',
+        'name',
+        'description',
+        'category',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    public function getSearchableFields(): array
+    {
+        return $this->searchable;
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -116,6 +139,7 @@ class ApplicationSettingType extends Model
             'id' => 'int',
             'name' => 'string',
             'description' => 'string',
+            'category' => 'string',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];

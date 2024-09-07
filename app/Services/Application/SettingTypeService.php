@@ -3,6 +3,8 @@
 namespace App\Services\Application;
 
 use App\Services\Service;
+use App\Enum\SettingTypeCategory;
+use App\DataTables\Application\SettingTypeDataTable;
 
 class SettingTypeService extends Service
 {
@@ -13,18 +15,8 @@ class SettingTypeService extends Service
      */
     public function index(): array
     {
-        $search = request()->get('search') ?: [];
-        $sort_type = request()->get('sort_direction');
-        $sort_field = request()->get('sort_field') ?: 'created_at';
-
-        isset($search) && !empty($search) ? $search = [['name', 'like', $search], ['description', 'like', $search]] : $search = [];
-
-        if ($sort_field && isset($sort_type)) {
-            $data = $this->applicationSettingTypeInterface->paginate(10, ['*'], [], $search, $sort_field, $sort_type === 'desc' ? true : false);
-        } else {
-            $data = $this->applicationSettingTypeInterface->paginate(10, ['*'], [], $search);
-        }
-
+        $dataTable = new SettingTypeDataTable($this->applicationSettingTypeInterface);
+        $data = $dataTable->getData();
         $queryParams = request()->query() ?: null;
 
         return compact('data', 'queryParams');
@@ -37,7 +29,9 @@ class SettingTypeService extends Service
      */
     public function create(): array
     {
-        return [];
+        $categories = SettingTypeCategory::toArray();
+
+        return compact('categories');
     }
 
     /**
@@ -50,6 +44,8 @@ class SettingTypeService extends Service
     public function store(array $request): void
     {
         try {
+            $request['category'] = SettingTypeCategory::fromValue($request['category'])->value;
+
             $this->applicationSettingTypeInterface->create($request);
         } catch (\Throwable $th) {
             throw $th;
@@ -79,9 +75,10 @@ class SettingTypeService extends Service
      */
     public function edit(int $id): array
     {
+        $categories = SettingTypeCategory::toArray();
         $setting = $this->applicationSettingTypeInterface->findById($id);
 
-        return compact('setting');
+        return compact('setting', 'categories');
     }
 
     /**

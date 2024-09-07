@@ -3,9 +3,10 @@
 namespace App\Rules;
 
 use Closure;
+use App\Enum\SettingTypeCategory;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class ApplicationSettingKey implements ValidationRule
+class ApplicationSettingTypeCategory implements ValidationRule
 {
     /**
      * Run the validation rule.
@@ -14,9 +15,9 @@ class ApplicationSettingKey implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        // Make sure the key does not contain any spaces or special characters
-        if (preg_match('/[^A-Za-z_]/', $value)) {
-            $fail("The $attribute may only contain letters, and underscores.");
+        // Check if the value is in the SettingTypeCategory enum
+        if (!in_array($value, SettingTypeCategory::toArray(), true)) {
+            $fail("The $attribute must be one of the following: " . implode(', ', SettingTypeCategory::toArray()));
         }
     }
 }

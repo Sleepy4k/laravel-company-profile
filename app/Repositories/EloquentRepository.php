@@ -368,4 +368,19 @@ class EloquentRepository implements EloquentInterface
             return 0;
         }
     }
+
+    /**
+     * Get all searchable fields.
+     *
+     * @return int
+     */
+    public function getSearchableFields(): array
+    {
+        // Check if the model has searchable fields method
+        if (method_exists($this->model, 'getSearchableFields')) {
+            return $this->model->getSearchableFields();
+        }
+
+        return [];
+    }
 }

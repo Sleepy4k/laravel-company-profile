@@ -2,13 +2,9 @@
 
 namespace App\Enum;
 
-enum ReportLogType: string
+enum UploadFileType: string
 {
-    case DEBUG = 'debug';
-    case ERROR = 'error';
-    case ALERT = 'alert';
-    case INFO = 'info';
-    case WARNING = 'warning';
+    case IMAGE = 'images';
 
     /**
      * Get all the values from the enum

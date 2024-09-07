@@ -171,4 +171,11 @@ interface EloquentInterface
      * @return int
      */
     public function count(): int;
+
+    /**
+     * Get all searchable fields.
+     *
+     * @return int
+     */
+    public function getSearchableFields(): array;
 }

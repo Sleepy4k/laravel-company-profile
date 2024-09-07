@@ -2,84 +2,79 @@
 
 namespace App\DataTables;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\SystemLog;
+use App\Enum\ReportLogType;
+use App\Contracts\EloquentInterface;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class DataTable
 {
-    /**
-     * Datatable Columns Array
-     *
-     * @var Array
-     */
-    protected $datatableColumns;
+    use SystemLog;
 
     /**
-     * Datatable Headers Array
+     * The model interface instance for handling the data.
      *
-     * @var Array
+     * @var EloquentInterface
      */
-    protected $datatableHeaders;
+    protected $interface;
 
     /**
-     * Datatables Data URL
+     * Create a new DataTable instance.
      *
-     * @var String
-     */
-    protected $datatableUrl;
-
-    /**
-     * Datatable Model
-     *
-     * @var Model
-     */
-    protected $model;
-
-    /**
-     * Data Table constructor
+     * @param  EloquentInterface  $interface
      *
      * @return void
      */
-    public function __construct(
-        array $datatableColumns,
-        array $datatableHeaders,
-        string $datatableUrl,
-        Model $model
-    ) {
-        $this->datatableColumns = $datatableColumns;
-        $this->datatableHeaders = $datatableHeaders;
-        $this->datatableUrl = $datatableUrl;
-        $this->model = $model;
+    public function __construct(EloquentInterface $interface)
+    {
+        $this->interface = $interface;
     }
 
     /**
-     * Get Datatable Data
+     * Convert the sort direction.
      *
-     * @return Array
+     * @param  string  $sort_type
+     *
+     * @return bool
      */
-    public function getData() {
-        return [
-            'columns' => $this->datatableColumns,
-            'headers' => $this->datatableHeaders,
-            'url' => $this->datatableUrl,
-        ];
+    protected function convertSortDirection(string $sort_type): bool
+    {
+        return $sort_type === 'desc';
     }
 
     /**
-     * Get datatables JSON Response
+     * Get the data for the DataTable.
      *
-     * @return \Illuminate\Http\Response
+     * @return Collection|LengthAwarePaginator
      */
-    public function datatables() {
-        $datatables = datatables()
-            ->of($this->model->query())
-            ->addIndexColumn()
-            ->addColumn('action', function($row) {
-                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">Edit</a>';
-                $btn = $btn . ' <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
-                return $btn;
-            })
-            ->toArray();
+    public function getData(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true): Collection|LengthAwarePaginator
+    {
+        try {
+            $search_data = request()->get('search') ?? [];
+            $sort_type = request()->get('sort_direction') ?? 'desc';
+            $sort_field = request()->get('sort_field') ?? 'created_at';
 
-        return response()->json($datatables);
+            if (isset($search_data) && !empty($search_data)) {
+                $filteredSearch = [];
+
+                foreach ((array) $this->interface->getSearchableFields() as $field) {
+                    $filteredSearch[] = [$field, 'like', $search_data];
+                }
+
+                $search_data = $filteredSearch;
+            } else {
+                $search_data = [];
+            }
+
+            if ($sort_field && isset($sort_type)) {
+                return $this->interface->paginate($paginate, $columns, $relations, $search_data, $sort_field, $this->convertSortDirection($sort_type));
+            }
+
+            return $this->interface->paginate($paginate, $columns, $relations, $wheres, $orderBy, $latest);
+        } catch (\Throwable $th) {
+            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+            return collect();
+        }
     }
 }

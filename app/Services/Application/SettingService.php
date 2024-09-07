@@ -3,6 +3,9 @@
 namespace App\Services\Application;
 
 use App\Services\Service;
+use Illuminate\Support\Facades\Storage;
+use App\DataTables\Application\SettingDataTable;
+use App\Http\Resources\Application\SettingTypeBoxResource;
 
 class SettingService extends Service
 {
@@ -13,58 +16,35 @@ class SettingService extends Service
      */
     public function index(string $type): array
     {
-        // if request had key 'type' with value 'box' or 'table'
-        // then return the data in the format of box or table
-        $data = null;
+        try {
+            // if request had key 'type' with value 'box' or 'table'
+            // then return the data in the format of box or table
+            $data = null;
 
-        switch ($type) {
-        case 'box':
-            $data = $this->applicationSettingTypeInterface->all(['*'], ['settings']);
-
-            // Map the data to each setting type
-            $data = $data->map(function ($settingType) {
-                $settingType->settings = $settingType->settings->map(function ($setting) {
-                    return [
-                        'id' => $setting->id,
-                        'key' => $setting->key,
-                        'name' => $setting->display,
-                        'description' => $setting->description,
-                        'value' => $setting->value,
-                        'updated_at' => $setting->updated_at ? $setting->updated_at->diffForHumans() : now()->diffForHumans(),
-                    ];
-                });
-
-                return [
-                    'id' => $settingType->id,
-                    'name' => $settingType->name,
-                    'description' => $settingType->description,
-                    'settings' => $settingType->settings,
-                ];
-            });
-
-            break;
-        case 'table':
-            $search = request()->get('search') ?? [];
-            $sort_type = request()->get('sort_direction');
-            $sort_field = request()->get('sort_field') ?? 'created_at';
-
-            isset($search) && !empty($search) ? $search = [['key', 'like', $search], ['display', 'like', $search], ['value', 'like', $search], ['description', 'like', $search]] : $search = [];
-
-            if ($sort_field && isset($sort_type)) {
-                $data = $this->applicationSettingInterface->paginate(10, ['*'], ['type'], $search, $sort_field, $sort_type === 'desc' ? true : false);
-            } else {
-                $data = $this->applicationSettingInterface->paginate(10, ['*'], ['type'], $search);
+            // Set the data table if the type is not box
+            if ($type !== 'box') {
+                $dataTable = new SettingDataTable($this->applicationSettingInterface);
             }
 
-            break;
-        default:
-            $data = $this->applicationSettingInterface->paginate(10, ['*'], ['type']);
-            break;
+            switch ($type) {
+            case 'box':
+                $data = $this->applicationSettingTypeInterface->all(['*'], ['settings']);
+                $data = SettingTypeBoxResource::collection($data);
+                break;
+            case 'table':
+                $data = $dataTable->getData(10, ['*'], ['type']);
+                break;
+            default:
+                $data = $dataTable->getData(10, ['*'], ['type']);
+                break;
+            }
+
+            $queryParams = request()->query() ?: null;
+
+            return compact('data', 'queryParams');
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        $queryParams = request()->query() ?: null;
-
-        return compact('data', 'queryParams');
     }
 
     /**
@@ -74,9 +54,9 @@ class SettingService extends Service
      */
     public function create(): array
     {
-        $type = $this->applicationSettingTypeInterface->all(['id', 'name']);
+        $types = $this->applicationSettingTypeInterface->all(['id', 'name', 'category']);
 
-        return compact('type');
+        return compact('types');
     }
 
     /**
@@ -91,6 +71,11 @@ class SettingService extends Service
         try {
             $this->applicationSettingInterface->create($request);
         } catch (\Throwable $th) {
+            // Remove the file if there is an error
+            if (isset($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+
             throw $th;
         }
     }
@@ -118,10 +103,10 @@ class SettingService extends Service
      */
     public function edit(int $id): array
     {
-        $type = $this->applicationSettingTypeInterface->all(['id', 'name']);
+        $types = $this->applicationSettingTypeInterface->all(['id', 'name', 'category']);
         $setting = $this->applicationSettingInterface->findById($id, ['*'], ['type']);
 
-        return compact('type', 'setting');
+        return compact('types', 'setting');
     }
 
     /**

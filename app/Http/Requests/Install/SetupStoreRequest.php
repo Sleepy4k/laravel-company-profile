@@ -56,4 +56,28 @@ class SetupStoreRequest extends Request
             'database_password' => 'Database Password',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'app_url.required' => 'The :attribute field is required.',
+            'app_url.url' => 'The :attribute must be a valid URL.',
+            'app_name.required' => 'The :attribute field is required.',
+            'app_name.string' => 'The :attribute must be a string.',
+            'database_hostname.required' => 'The :attribute field is required.',
+            'database_hostname.string' => 'The :attribute must be a string.',
+            'database_port.required' => 'The :attribute field is required.',
+            'database_port.string' => 'The :attribute must be a string.',
+            'database_name.required' => 'The :attribute field is required.',
+            'database_name.string' => 'The :attribute must be a string.',
+            'database_username.required' => 'The :attribute field is required.',
+            'database_username.string' => 'The :attribute must be a string.',
+            'database_password.string' => 'The :attribute must be a string.',
+        ];
+    }
 }

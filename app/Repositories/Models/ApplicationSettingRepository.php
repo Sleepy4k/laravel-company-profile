@@ -4,7 +4,9 @@ namespace App\Repositories\Models;
 
 use App\Traits\SystemLog;
 use App\Traits\AppSetting;
+use App\Traits\UploadFile;
 use App\Enum\ReportLogType;
+use App\Enum\UploadFileType;
 use App\Models\ApplicationSetting;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\EloquentRepository;
@@ -13,7 +15,7 @@ use App\Contracts\Models\ApplicationSettingInterface;
 
 class ApplicationSettingRepository extends EloquentRepository implements ApplicationSettingInterface
 {
-    use SystemLog, AppSetting;
+    use SystemLog, AppSetting, UploadFile;
 
     /**
      * Base respository constructor
@@ -87,6 +89,10 @@ class ApplicationSettingRepository extends EloquentRepository implements Applica
     public function create(array $payload): ?Model
     {
         try {
+            if (array_key_exists('file', $payload)) {
+                $payload['value'] = $this->saveSingleFile(UploadFileType::IMAGE, $payload['file']);
+            }
+
             $model = $this->model->query()->create($payload);
 
             if ($this->isAppSettingCached()) {
@@ -114,6 +120,14 @@ class ApplicationSettingRepository extends EloquentRepository implements Applica
         try {
             $model = $this->findById($modelId);
 
+            if (array_key_exists('file', $payload) && !empty($payload['file'])) {
+                if (empty($model->value)) {
+                    $payload['value'] = $this->saveSingleFile(UploadFileType::IMAGE, $payload['file']);
+                } elseif (!empty($model->value) && $payload['file'] !== $model->value) {
+                    $payload['value'] = $this->updateSingleFile(UploadFileType::IMAGE, $payload['file'], $model->value);
+                }
+            }
+
             return $this->updateAppSetting($model->key, $payload);
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
@@ -131,7 +145,13 @@ class ApplicationSettingRepository extends EloquentRepository implements Applica
     public function deleteById(int $modelId): bool
     {
         try {
-            $result = $this->findById($modelId)->delete();
+            $model = $this->findById($modelId);
+
+            if (isset($model->value) && !empty($model->value)) {
+                $this->deleteFile(UploadFileType::IMAGE, $model->value);
+            }
+
+            $result = $model->delete();
 
             if ($this->isAppSettingCached()) {
                 cache()->forget('app_settings');

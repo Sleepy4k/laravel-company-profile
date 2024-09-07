@@ -109,6 +109,29 @@ class ApplicationSetting extends Model
     ];
 
     /**
+     * The attributes that should be searchable.
+     *
+     * @var array<int, string>
+     */
+    protected $searchable = [
+        'id',
+        'key',
+        'display',
+        'value',
+        'description',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    public function getSearchableFields(): array
+    {
+        return $this->searchable;
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

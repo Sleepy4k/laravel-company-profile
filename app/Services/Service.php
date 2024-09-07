@@ -3,37 +3,36 @@
 namespace App\Services;
 
 use App\Contracts\Models;
-use Illuminate\Database\Eloquent\Model;
 
 class Service
 {
     /**
-     * @var userInterface
+     * @var \App\Contracts\Models\UserInterface
      */
     protected $userInterface;
 
     /**
-     * @var roleInterface
+     * @var \App\Contracts\Models\RoleInterface
      */
     protected $roleInterface;
 
     /**
-     * @var languageInterface
+     * @var \App\Contracts\Models\LanguageInterface
      */
     protected $languageInterface;
 
     /**
-     * @var permissionInterface
+     * @var \App\Contracts\Models\PermissionInterface
      */
     protected $permissionInterface;
 
     /**
-     * @var applicationSettingInterface
+     * @var \App\Contracts\Models\ApplicationSettingInterface
      */
     protected $applicationSettingInterface;
 
     /**
-     * @var applicationSettingTypeInterface
+     * @var \App\Contracts\Models\ApplicationSettingTypeInterface
      */
     protected $applicationSettingTypeInterface;
 

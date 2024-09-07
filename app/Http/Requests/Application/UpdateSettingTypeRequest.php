@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Application;
 
 use App\Http\Requests\Request;
+use App\Rules\ApplicationSettingTypeCategory;
 
 class UpdateSettingTypeRequest extends Request
 {
@@ -24,6 +25,7 @@ class UpdateSettingTypeRequest extends Request
         return [
             'name' => ['required', 'string', 'max:255', 'unique:application_setting_types,name,' . $this->applicationSettingType->id],
             'description' => ['nullable', 'string', 'max:255'],
+            'category' => ['required', 'string', 'max:255', new ApplicationSettingTypeCategory],
         ];
     }
 }

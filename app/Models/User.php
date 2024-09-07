@@ -114,6 +114,27 @@ class User extends Authenticatable
     ];
 
     /**
+     * The attributes that should be searchable.
+     *
+     * @var array<int, string>
+     */
+    protected $searchable = [
+        'id',
+        'name',
+        'email',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    public function getSearchableFields(): array
+    {
+        return $this->searchable;
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
