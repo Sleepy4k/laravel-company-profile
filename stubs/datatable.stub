@@ -12,56 +12,6 @@ class {{ class }} extends DataTable
      * @return void
      */
     public function __construct() {
-        // Set Data Table Url
-        $this->datatableUrl = route('dashboard');
-
-        // Set Data Table Headers
-        $this->datatableHeaders = [
-            'id'
-        ];
-
-        // Set Data Table Columns
-        $this->datatableColumns = [
-            ['data' => 'id']
-        ];
-
-        // Set Data Table Model
-        $this->model = null;
-    }
-
-    /**
-     * Get Datatable Data
-     *
-     * @return Array
-     */
-    public function getData() {
-        return [
-            'url' => $this->datatableUrl,
-            'columns' => $this->datatableColumns,
-            'headers' => $this->datatableHeaders,
-        ];
-    }
-
-    /**
-     * Get datatables JSON Response
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function datatables() {
-        if ($this->model == null) return response()->json([
-            'data' => []
-        ]);
-
-        $datatables = datatables()
-            ->of($this->model->query())
-            ->addIndexColumn()
-            ->addColumn('action', function($row) {
-                $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">Edit</a>';
-                $btn = $btn . ' <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
-                return $btn;
-            })
-            ->toArray();
-
-        return response()->json($datatables);
+        // $this->interface = null
     }
 }
