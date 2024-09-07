@@ -16,6 +16,8 @@ class ApplicationSettingFactory extends Factory
      */
     public function definition(): array
     {
+        // Define the default application setting
+        // Do not change the order and the key or type_id
         return [
             [
                 'key' => 'app_name',
@@ -27,20 +29,11 @@ class ApplicationSettingFactory extends Factory
                 'updated_at' => now()
             ],
             [
-                'key' => 'app_description',
-                'display' => 'Application Description',
-                'value' => 'Best Company Profile',
-                'description' => 'Application description',
-                'type_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
                 'key' => 'app_logo',
                 'display' => 'Application Logo',
                 'value' => '',
                 'description' => 'Application logo',
-                'type_id' => 1,
+                'type_id' => 3,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -49,16 +42,7 @@ class ApplicationSettingFactory extends Factory
                 'display' => 'Application Favicon',
                 'value' => '',
                 'description' => 'Application favicon',
-                'type_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'key' => 'app_meta_title',
-                'display' => 'Application Meta Title',
-                'value' => 'Company Profile',
-                'description' => 'Application meta title',
-                'type_id' => 2,
+                'type_id' => 3,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
