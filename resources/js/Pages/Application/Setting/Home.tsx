@@ -14,7 +14,7 @@ interface IDeleteData {
     name: string;
 }
 
-export default function Home({ auth, app, data, queryParams = null }: PageProps<{ data: any, queryParams: any }>) {
+export default function Home({ auth, data, queryParams = null }: PageProps<{ data: any, queryParams: any }>) {
     const [mode, setMode] = useState<'table' | 'box' | null>(null);
     const [settingDeleteData, setSettingDeleteData] = useState<IDeleteData|null>(null);
     const [confirmingSettingDeletion, setConfirmingSettingDeletion] = useState(false);
@@ -109,7 +109,6 @@ export default function Home({ auth, app, data, queryParams = null }: PageProps<
 
     return (
         <AuthenticatedLayout
-            app={app}
             user={auth.user}
             title="Application"
             className={mode == 'box' ? 'max-w-full flex overflow-x-scroll' : ''}

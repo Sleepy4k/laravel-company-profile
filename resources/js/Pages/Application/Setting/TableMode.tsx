@@ -4,6 +4,7 @@ import PopOver from '@/Components/PopOver';
 import DataTable from "@/Components/DataTable";
 import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/DataTable/Heading";
+import { convertDateToLocaleString } from "@/utils/parse";
 
 interface ITableModeProps {
     data: any;
@@ -123,14 +124,14 @@ export default function TableMode({
             >
                 {data && data.data.map((item: any, index: number) => (
                     <tr key={index}>
-                        <td className="px-3 py-2">{item.id}</td>
-                        <td className="px-3 py-2">{item.key}</td>
-                        <td className="px-3 py-2">{item.display || '-'}</td>
-                        <td className="px-3 py-2">{item.value || '-'}</td>
-                        <td className="px-3 py-2">{item.description || '-'}</td>
-                        <td className="px-3 py-2">{item.type.name || '-'}</td>
-                        <td className="px-3 py-2">{item.created_at || '-'}</td>
-                        <td className="px-3 py-2">{item.updated_at || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.id}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.key}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.display || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.value || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.description || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.type.name || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{convertDateToLocaleString(item.created_at) || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{convertDateToLocaleString(item.updated_at) || '-'}</td>
                         <td className="px-3 py-2 text-nowrap">
                             <PopOver>
                                 <Link

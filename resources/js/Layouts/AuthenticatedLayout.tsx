@@ -1,5 +1,5 @@
+import { User } from '@/types';
 import NavLink from '@/Components/NavLink';
-import { AppSetting, User } from '@/types';
 import Dropdown from '@/Components/Dropdown';
 import { Head, Link } from '@inertiajs/react';
 import BreadCrumbs from './../Components/BreadCrumbs';
@@ -7,13 +7,12 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { useState, PropsWithChildren, ReactNode } from 'react';
 
-export default function Authenticated({ user, header, title, app, className = '', children }: PropsWithChildren<{ user: User, title: string, app: AppSetting, header?: ReactNode, className?: string }>) {
+export default function Authenticated({ user, header, title, className = '', children }: PropsWithChildren<{ user: User, title: string, header?: ReactNode, className?: string }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    const appName = app.name || import.meta.env.VITE_APP_NAME;
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <Head title={`${title} - ${appName}`} />
+            <Head title={title} />
 
             <nav className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

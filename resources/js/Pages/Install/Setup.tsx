@@ -4,7 +4,7 @@ import { useForm } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 import IDefaultConfigProps from '@/Interfaces/Install/DefaultConfigInterface';
 
-export default function Setup({ app, guessedUrl, defaultConfig, errors }: PageProps<{ guessedUrl: string, defaultConfig: IDefaultConfigProps }>) {
+export default function Setup({ guessedUrl, defaultConfig, errors }: PageProps<{ guessedUrl: string, defaultConfig: IDefaultConfigProps }>) {
     const { data, setData, post, processing, reset } = useForm({
         app_url: guessedUrl,
         app_name: defaultConfig.app_name,
@@ -20,13 +20,16 @@ export default function Setup({ app, guessedUrl, defaultConfig, errors }: PagePr
 
         post(route('install.setup.store'), {
             preserveScroll: true,
-            onSuccess: () => window.history.pushState({}, '', route('install.database')),
+            onSuccess: () => {
+                window.history.pushState({}, '', route('install.database'));
+                window.location.reload();
+            },
             onFinish: () => reset('database_password'),
         });
     };
 
     return (
-        <InstallationLayout step={3} errors={errors} title="Setup" app={app}>
+        <InstallationLayout step={3} errors={errors} title="Setup">
             <div className="mt-5 rounded-md bg-warning-50 p-4">
                 <div className="flex">
                     <div className="shrink-0">

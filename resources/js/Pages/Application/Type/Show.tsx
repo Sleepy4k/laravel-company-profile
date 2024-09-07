@@ -1,13 +1,13 @@
 import { PageProps } from "@/types";
 import { Link } from "@inertiajs/react";
 import TextInput from "@/Components/TextInput";
+import { capitalizeFirstLetter } from "@/utils/parse";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Show({ auth, data, app }: PageProps<{ data: any }>) {
+export default function Show({ auth, data }: PageProps<{ data: any }>) {
     return (
         <AuthenticatedLayout
-            app={app}
             user={auth.user}
             title="View Application Type"
             header={
@@ -38,6 +38,16 @@ export default function Show({ auth, data, app }: PageProps<{ data: any }>) {
                         disabled
                         id="description"
                         value={data.description}
+                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                    />
+                </div>
+
+                <div className="mt-4">
+                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                    <TextInput
+                        disabled
+                        id="category"
+                        value={capitalizeFirstLetter(data.category)}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>

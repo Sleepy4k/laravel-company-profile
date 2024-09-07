@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
 import { useEffect, useState } from "react";
+import { capitalizeFirstLetter } from "@/utils/parse";
 
 export default function BreadCrumbs() {
     const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
@@ -14,7 +15,7 @@ export default function BreadCrumbs() {
                 {breadcrumbs.map((breadcrumb, index) => {
                     const isFirst = index === 0;
                     const isNameNotWord = typeof breadcrumb !== 'string' || !/^[a-zA-Z]+$/.test(breadcrumb);
-                    const name = isNameNotWord ? breadcrumb : breadcrumb.charAt(0).toUpperCase() + breadcrumb.slice(1);
+                    const name = isNameNotWord ? breadcrumb : capitalizeFirstLetter(breadcrumb);
 
                     return (
                         <li key={index} className="inline">

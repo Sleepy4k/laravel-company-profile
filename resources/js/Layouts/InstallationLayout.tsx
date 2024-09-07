@@ -1,29 +1,27 @@
-import { AppSetting } from '@/types';
 import { Head } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 import Menu from '@/Components/Installer/Menu';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
 interface InstallationProps extends PropsWithChildren {
-    app: AppSetting
     title: string;
     step: number;
     errors: Record<string, any> | null;
 }
 
-export default function Installation({ children, errors, step, title, app }: InstallationProps) {
-    const appName = app.name || import.meta.env.VITE_APP_NAME;
+export default function Installation({ children, errors, step, title }: InstallationProps) {
+    const appName = document.head.querySelector('meta[name="base-title"]')?.getAttribute('content') || 'Laravel';
 
     return (
         <div id="app">
-            <Head title={`${title} - ${appName}`} />
+            <Head title={title} />
+
             <div className="flex min-h-screen flex-col justify-center bg-neutral-100 py-12 sm:px-6 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="mb-5 mt-5 text-center">
                         <ApplicationLogo className="mx-auto h-12 w-auto" />
                         <span>Welcome to {appName} Installer</span>
                     </div>
-
                 </div>
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-5xl">
                     <div className="border border-neutral-200 bg-white p-7 shadow-sm sm:rounded-lg">

@@ -5,9 +5,9 @@ import InstallationLayout from '@/Layouts/InstallationLayout';
 import IPHPDataListProps from '@/Interfaces/Install/PhpDataInterface';
 import IRequirementsProps from '@/Interfaces/Install/RequirementInterface';
 
-export default function Requirements({ app, errors, php, requirements }: PageProps<{ php: IPHPDataListProps, requirements: IRequirementsProps }>) {
+export default function Requirements({ errors, php, requirements }: PageProps<{ php: IPHPDataListProps, requirements: IRequirementsProps }>) {
     return (
-        <InstallationLayout step={1} errors={errors} title="Requirements" app={app}>
+        <InstallationLayout step={1} errors={errors} title="Requirements">
             <div className="p-3">
                 <h4 className="my-5 text-lg font-semibold text-neutral-800">PHP Version</h4>
                 <div className="flex flex-col">

@@ -7,7 +7,7 @@ export default function BoxMode({ data, mode, deleteSetting }: { data: any, mode
 
     return (
         <div className="flex justify-start px-4 pb-2 sm:px-6 ms-8 me-8 mb-5 space-x-8">
-            {data && data.map((item: any, col: number) => (
+            {data && data.data.map((item: any, col: number) => (
                 <div key={col} className='inline-flex h-[calc(100vh-15rem)] w-[20rem] flex-col overflow-x-hidden overflow-y-hidden rounded-lg bg-neutral-400/40 border border-neutral-300/40 align-top shadow'>
                     <div className='px-3 py-2.5'>
                         <div className='flex lg:flex-row flex-col items-center'>

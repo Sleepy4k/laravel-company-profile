@@ -8,7 +8,7 @@ import InputLabel from '@/Components/InputLabel';
 import { Link, useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Login({ app, status, canResetPassword }: PageProps<{ status?: string, canResetPassword: boolean }>) {
+export default function Login({ status, canResetPassword }: PageProps<{ status?: string, canResetPassword: boolean }>) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -24,7 +24,7 @@ export default function Login({ app, status, canResetPassword }: PageProps<{ sta
     };
 
     return (
-        <GuestLayout app={app} title="Log in">
+        <GuestLayout title="Log in">
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
             <form onSubmit={submit}>

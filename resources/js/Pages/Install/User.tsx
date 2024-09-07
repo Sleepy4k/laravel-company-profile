@@ -3,7 +3,7 @@ import { FormEventHandler } from 'react';
 import { useForm } from '@inertiajs/react';
 import InstallationLayout from '@/Layouts/InstallationLayout';
 
-export default function User({ app, errors }: PageProps) {
+export default function User({ errors }: PageProps) {
     const { data, setData, post, get, processing, reset } = useForm({
         name: '',
         email: '',
@@ -24,7 +24,7 @@ export default function User({ app, errors }: PageProps) {
     };
 
     return (
-        <InstallationLayout step={4} errors={errors} title="User" app={app}>
+        <InstallationLayout step={4} errors={errors} title="User">
             <div className="mt-5 rounded-md bg-warning-50 p-4">
                 <div className="flex">
                     <div className="shrink-0">
