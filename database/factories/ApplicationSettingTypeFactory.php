@@ -20,6 +20,7 @@ class ApplicationSettingTypeFactory extends Factory
         // Do not change the order
         return [
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Default',
                 'description' => 'Default application setting',
                 'category' => 'string',
@@ -27,6 +28,7 @@ class ApplicationSettingTypeFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Meta Tag',
                 'description' => 'Application meta tag setting',
                 'category' => 'string',
@@ -34,6 +36,7 @@ class ApplicationSettingTypeFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Logo',
                 'description' => 'Application logo setting',
                 'category' => 'file',

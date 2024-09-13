@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('language_lines', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('uuid')->unique();
             $table->string('group')->index();
             $table->string('key');
             $table->json('text');

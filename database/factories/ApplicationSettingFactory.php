@@ -20,6 +20,7 @@ class ApplicationSettingFactory extends Factory
         // Do not change the order and the key or type_id
         return [
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'key' => 'app_name',
                 'display' => 'Application Name',
                 'value' => 'Company Profile',
@@ -29,6 +30,7 @@ class ApplicationSettingFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'key' => 'app_logo',
                 'display' => 'Application Logo',
                 'value' => '',
@@ -38,6 +40,7 @@ class ApplicationSettingFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'key' => 'app_favicon',
                 'display' => 'Application Favicon',
                 'value' => '',
@@ -47,6 +50,7 @@ class ApplicationSettingFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'key' => 'app_meta_description',
                 'display' => 'Application Meta Description',
                 'value' => 'Best Company Profile',
@@ -56,6 +60,7 @@ class ApplicationSettingFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'key' => 'app_meta_keyword',
                 'display' => 'Application Meta Keyword',
                 'value' => 'company, profile, laravel, inertiajs',
@@ -65,6 +70,7 @@ class ApplicationSettingFactory extends Factory
                 'updated_at' => now()
             ],
             [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'key' => 'app_meta_author',
                 'display' => 'Application Meta Author',
                 'value' => 'Benjamin4k',

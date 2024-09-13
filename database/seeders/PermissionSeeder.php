@@ -24,6 +24,7 @@ class PermissionSeeder extends Seeder
 
             $permission = collect($permissions)->map(function ($name) {
                 return [
+                    'uuid' => \Illuminate\Support\Str::uuid(),
                     'name' => $name,
                     'guard_name' => 'web',
                     'created_at' => now(),

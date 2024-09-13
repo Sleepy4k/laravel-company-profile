@@ -23,6 +23,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'uuid' => \Illuminate\Support\Str::uuid(),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'password' => 'password',

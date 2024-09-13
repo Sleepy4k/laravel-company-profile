@@ -17,6 +17,7 @@ return new class extends Migration
 
         Schema::create('application_setting_types', function (Blueprint $table) use ($category) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->enum('category', $category);

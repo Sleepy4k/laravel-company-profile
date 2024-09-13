@@ -32,6 +32,7 @@ class RoleSeeder extends Seeder
                 }
 
                 Role::create([
+                    'uuid' => \Illuminate\Support\Str::uuid(),
                     'name' => $role,
                     'guard_name' => 'web',
                     'created_at' => now(),

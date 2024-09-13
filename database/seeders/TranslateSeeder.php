@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Translate;
 use Illuminate\Database\Seeder;
-use Spatie\TranslationLoader\LanguageLine;
 
 class TranslateSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class TranslateSeeder extends Seeder
      */
     public function run(): void
     {
-        if (LanguageLine::count() == 0) {
+        if (Translate::count() == 0) {
             $languages = config('translate.list');
 
             if (empty($languages)) {
@@ -20,12 +20,15 @@ class TranslateSeeder extends Seeder
             }
 
             $language = collect($languages)->map(function ($lang) {
+                $lang['uuid'] = \Illuminate\Support\Str::uuid();
                 $lang['text'] = json_encode($lang['text']);
+                $lang['created_at'] = now();
+                $lang['updated_at'] = now();
 
                 return $lang;
             });
 
-            LanguageLine::insert($language->toArray());
+            Translate::insert($language->toArray());
         }
     }
 }

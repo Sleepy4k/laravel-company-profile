@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('application_settings', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('key')->unique();
             $table->string('display');
             $table->text('value')->nullable();
