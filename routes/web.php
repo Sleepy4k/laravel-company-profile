@@ -1,9 +1,9 @@
 <?php
 
 use Inertia\Inertia;
+use App\Http\Controllers\Error;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
-use App\Http\Controllers\Error\FallbackController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -17,4 +17,4 @@ require __DIR__.'/auth.php';
 require __DIR__.'/install.php';
 require __DIR__.'/dashboard.php';
 
-Route::get('/{any}', FallbackController::class)->where('any', '.*');
+Route::fallback(Error\FallbackController::class);
