@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Models;
 
+use App\Models\Role;
 use App\Traits\SystemLog;
 use App\Enum\ReportLogType;
-use Spatie\Permission\Models\Role;
 use App\Contracts\Models\RoleInterface;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\EloquentRepository;

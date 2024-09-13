@@ -30,13 +30,14 @@ class MakeServiceCommand extends Command
     /**
      * Create a new file.
      *
-     * @param string $service
+     * @param string $namespace
+     * @param string $name
      * @param string $stub
      */
     protected function createFile(string $namespace, string $name, string $stub): void
     {
         // Make path to support sub directories
-        $dir = str_replace('App\Services', '', $namespace);
+        $dir = str_replace($this->namespace, '', $namespace);
         $dir = app_path('Services' . str_replace('/', '\\', $dir));
 
         // Create the directory if it does not exist

@@ -46,11 +46,29 @@ class EloquentRepository implements EloquentInterface
 
             if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
 
-            if (!empty($wheres)) $model->where(function ($query) use ($wheres) {
-                foreach ($wheres as $where) {
-                    $query->orWhere($where[0], $where[1], '%' . $where[2] . '%');
+            if (!empty($wheres)) {
+                $isOrCase = false;
+
+                foreach ($wheres as $key => $value) {
+                    if ($value[0] !== 'whereMode') continue;
+
+                    $isOrCase = $value[1] === 'or';
+                    unset($wheres[$key]);
                 }
-            });
+
+                if (!$isOrCase) $model->where($wheres);
+                else {
+                    $model->where(function ($query) use ($wheres) {
+                        foreach ($wheres as $key => $where) {
+                            if (count($where) === 2) {
+                                $query->orWhere($where[0], $where[1]);
+                            } else {
+                                $query->orWhere($where[0], $where[1], $where[2]);
+                            }
+                        }
+                    });
+                }
+            }
 
             if (!empty($roles)) $model->role($roles);
 
@@ -81,11 +99,29 @@ class EloquentRepository implements EloquentInterface
 
             if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
 
-            if (!empty($wheres)) $model->where(function ($query) use ($wheres) {
-                foreach ($wheres as $where) {
-                    $query->orWhere($where[0], $where[1], '%' . $where[2] . '%');
+            if (!empty($wheres)) {
+                $isOrCase = false;
+
+                foreach ($wheres as $key => $value) {
+                    if ($value[0] !== 'whereMode') continue;
+
+                    $isOrCase = $value[1] === 'or';
+                    unset($wheres[$key]);
                 }
-            });
+
+                if (!$isOrCase) $model->where($wheres);
+                else {
+                    $model->where(function ($query) use ($wheres) {
+                        foreach ($wheres as $key => $where) {
+                            if (count($where) === 2) {
+                                $query->orWhere($where[0], $where[1]);
+                            } else {
+                                $query->orWhere($where[0], $where[1], $where[2]);
+                            }
+                        }
+                    });
+                }
+            }
 
             if (!empty($roles)) $model->role($roles);
 
@@ -116,11 +152,29 @@ class EloquentRepository implements EloquentInterface
 
             if (!empty($orderBy)) $model->orderBy($orderBy, $latest ? 'desc' : 'asc');
 
-            if (!empty($wheres)) $model->where(function ($query) use ($wheres) {
-                foreach ($wheres as $where) {
-                    $query->orWhere($where[0], $where[1], '%' . $where[2] . '%');
+            if (!empty($wheres)) {
+                $isOrCase = false;
+
+                foreach ($wheres as $key => $value) {
+                    if ($value[0] !== 'whereMode') continue;
+
+                    $isOrCase = $value[1] === 'or';
+                    unset($wheres[$key]);
                 }
-            });
+
+                if (!$isOrCase) $model->where($wheres);
+                else {
+                    $model->where(function ($query) use ($wheres) {
+                        foreach ($wheres as $key => $where) {
+                            if (count($where) === 2) {
+                                $query->orWhere($where[0], $where[1]);
+                            } else {
+                                $query->orWhere($where[0], $where[1], $where[2]);
+                            }
+                        }
+                    });
+                }
+            }
 
             if (!empty($roles)) $model->role($roles);
 

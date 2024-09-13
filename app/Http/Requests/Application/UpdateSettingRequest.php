@@ -23,7 +23,7 @@ class UpdateSettingRequest extends Request
     public function rules(): array
     {
         return [
-            'key' => ['present', 'string', 'max:255', new ApplicationSettingKey, 'unique:application_settings,key,' . $this->applicationSetting->id],
+            'key' => ['present', 'string', 'max:255', new ApplicationSettingKey, 'unique:application_settings,key,' . $this->setting->id],
             'display' => ['present', 'string', 'max:255'],
             'value' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],

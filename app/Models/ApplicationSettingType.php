@@ -6,9 +6,12 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use ElipZis\Cacheable\Models\Traits\Cacheable;
+use App\Observers\ApplicationSettingTypeObserver;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([ApplicationSettingTypeObserver::class])]
 class ApplicationSettingType extends Model
 {
     use HasFactory, LogsActivity, Cacheable;
@@ -137,12 +140,23 @@ class ApplicationSettingType extends Model
     {
         return [
             'id' => 'int',
+            'uuid' => 'string',
             'name' => 'string',
             'description' => 'string',
             'category' => 'string',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
     }
 
     /**
@@ -174,7 +188,7 @@ class ApplicationSettingType extends Model
             'identifier' => 'id',
             //Do you need logging?
             'logging' => [
-                'enabled' => false,
+                'enabled' => !app()->environment('production'),
                 'level' => 'debug',
             ],
         ];

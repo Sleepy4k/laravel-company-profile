@@ -30,8 +30,9 @@ class SettingTypeService extends Service
     public function create(): array
     {
         $categories = SettingTypeCategory::toArray();
+        $backUrl = session()->get('application.setting.type.url') ?? route('application.type.index');
 
-        return compact('categories');
+        return compact('categories', 'backUrl');
     }
 
     /**
@@ -62,8 +63,9 @@ class SettingTypeService extends Service
     public function show(int $id): array
     {
         $data = $this->applicationSettingTypeInterface->findById($id);
+        $backUrl = session()->get('application.setting.type.url') ?? route('application.type.index');
 
-        return compact('data');
+        return compact('data', 'backUrl');
     }
 
     /**
@@ -77,8 +79,9 @@ class SettingTypeService extends Service
     {
         $categories = SettingTypeCategory::toArray();
         $setting = $this->applicationSettingTypeInterface->findById($id);
+        $backUrl = session()->get('application.setting.type.url') ?? route('application.type.index');
 
-        return compact('setting', 'categories');
+        return compact('setting', 'categories', 'backUrl');
     }
 
     /**

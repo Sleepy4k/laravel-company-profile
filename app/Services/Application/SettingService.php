@@ -3,6 +3,7 @@
 namespace App\Services\Application;
 
 use App\Services\Service;
+use App\Enum\DisplayModeType;
 use Illuminate\Support\Facades\Storage;
 use App\DataTables\Application\SettingDataTable;
 use App\Http\Resources\Application\SettingTypeBoxResource;
@@ -16,22 +17,25 @@ class SettingService extends Service
      */
     public function index(string $type): array
     {
+        // Convert the string to DisplayModeType enum
+        $type = DisplayModeType::fromValue($type);
+
         try {
             // if request had key 'type' with value 'box' or 'table'
             // then return the data in the format of box or table
             $data = null;
 
             // Set the data table if the type is not box
-            if ($type !== 'box') {
+            if ($type !== DisplayModeType::BOX) {
                 $dataTable = new SettingDataTable($this->applicationSettingInterface);
             }
 
             switch ($type) {
-            case 'box':
+            case DisplayModeType::BOX:
                 $data = $this->applicationSettingTypeInterface->all(['*'], ['settings']);
                 $data = SettingTypeBoxResource::collection($data);
                 break;
-            case 'table':
+            case DisplayModeType::TABLE:
                 $data = $dataTable->getData(10, ['*'], ['type']);
                 break;
             default:
@@ -55,8 +59,9 @@ class SettingService extends Service
     public function create(): array
     {
         $types = $this->applicationSettingTypeInterface->all(['id', 'name', 'category']);
+        $backUrl = session()->get('application.setting.url') ?? route('application.index', ['table']);
 
-        return compact('types');
+        return compact('types', 'backUrl');
     }
 
     /**
@@ -90,8 +95,9 @@ class SettingService extends Service
     public function show(int $id): array
     {
         $data = $this->applicationSettingInterface->findById($id, ['*'], ['type']);
+        $backUrl = session()->get('application.setting.url') ?? route('application.index', ['table']);
 
-        return compact('data');
+        return compact('data', 'backUrl');
     }
 
     /**
@@ -105,8 +111,9 @@ class SettingService extends Service
     {
         $types = $this->applicationSettingTypeInterface->all(['id', 'name', 'category']);
         $setting = $this->applicationSettingInterface->findById($id, ['*'], ['type']);
+        $backUrl = session()->get('application.setting.url') ?? route('application.index', ['table']);
 
-        return compact('types', 'setting');
+        return compact('types', 'setting', 'backUrl');
     }
 
     /**

@@ -30,9 +30,11 @@ class SettingController extends Controller
      */
     public function index(string $mode)
     {
-        Gate::authorize('viewAny', ApplicationSetting::class);
+        Gate::authorize('viewAny', [ApplicationSetting::class, $mode]);
 
         try {
+            session()->put('application.setting.url', request()->fullUrl());
+
             return Inertia::render('Application/Setting/Home', $this->service->index($mode));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
@@ -63,7 +65,9 @@ class SettingController extends Controller
         try {
             $this->service->store($request->validated());
 
-            return to_route('application.index', 'table');
+            return session()->has('application.setting.url')
+                ? redirect(session()->get('application.setting.url'))
+                : to_route('application.index', 'table');
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -72,12 +76,12 @@ class SettingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ApplicationSetting $applicationSetting)
+    public function show(ApplicationSetting $setting)
     {
-        Gate::authorize('view', $applicationSetting);
+        Gate::authorize('view', $setting);
 
         try {
-            return Inertia::render('Application/Setting/Show', $this->service->show($applicationSetting->id));
+            return Inertia::render('Application/Setting/Show', $this->service->show($setting->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -86,12 +90,12 @@ class SettingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ApplicationSetting $applicationSetting)
+    public function edit(ApplicationSetting $setting)
     {
-        Gate::authorize('edit', $applicationSetting);
+        Gate::authorize('edit', $setting);
 
         try {
-            return Inertia::render('Application/Setting/Edit', $this->service->edit($applicationSetting->id));
+            return Inertia::render('Application/Setting/Edit', $this->service->edit($setting->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -100,14 +104,16 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSettingRequest $request, ApplicationSetting $applicationSetting)
+    public function update(UpdateSettingRequest $request, ApplicationSetting $setting)
     {
-        Gate::authorize('update', $applicationSetting);
+        Gate::authorize('update', $setting);
 
         try {
-            $this->service->update($request->validated(), $applicationSetting->id);
+            $this->service->update($request->validated(), $setting->id);
 
-            return to_route('application.index', 'table');
+            return session()->has('application.setting.url')
+                ? redirect(session()->get('application.setting.url'))
+                : to_route('application.index', 'table');
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -116,14 +122,16 @@ class SettingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ApplicationSetting $applicationSetting)
+    public function destroy(ApplicationSetting $setting)
     {
-        Gate::authorize('delete', $applicationSetting);
+        Gate::authorize('delete', $setting);
 
         try {
-            $this->service->destroy($applicationSetting->id);
+            $this->service->destroy($setting->id);
 
-            return to_route('application.index', 'table');
+            return session()->has('application.setting.url')
+                ? redirect(session()->get('application.setting.url'))
+                : to_route('application.index', 'table');
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

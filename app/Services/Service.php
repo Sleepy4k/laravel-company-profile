@@ -7,6 +7,11 @@ use App\Contracts\Models;
 class Service
 {
     /**
+     * @var \App\Contracts\Models\LogInterface
+     */
+    protected $logInterface;
+
+    /**
      * @var \App\Contracts\Models\UserInterface
      */
     protected $userInterface;
@@ -39,6 +44,7 @@ class Service
     /**
      * Model contract constructor.
      *
+     * @param  \App\Contracts\Models\LogInterface  $logInterface
      * @param  \App\Contracts\Models\UserInterface  $userInterface
      * @param  \App\Contracts\Models\RoleInterface  $roleInterface
      * @param  \App\Contracts\Models\LanguageInterface  $languageInterface
@@ -47,6 +53,7 @@ class Service
      * @param  \App\Contracts\Models\ApplicationSettingTypeInterface  $applicationSettingTypeInterface
      */
     public function __construct(
+        Models\LogInterface $logInterface,
         Models\UserInterface $userInterface,
         Models\RoleInterface $roleInterface,
         Models\LanguageInterface $languageInterface,
@@ -54,6 +61,7 @@ class Service
         Models\ApplicationSettingInterface $applicationSettingInterface,
         Models\ApplicationSettingTypeInterface $applicationSettingTypeInterface
     ) {
+        $this->logInterface = $logInterface;
         $this->userInterface = $userInterface;
         $this->roleInterface = $roleInterface;
         $this->languageInterface = $languageInterface;

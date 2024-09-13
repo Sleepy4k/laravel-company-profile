@@ -152,6 +152,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
+    /**
      * The spatie log that setting log option.
      *
      * @var bool
@@ -180,7 +190,7 @@ class User extends Authenticatable
             'identifier' => 'id',
             //Do you need logging?
             'logging' => [
-                'enabled' => false,
+                'enabled' => !app()->environment('production'),
                 'level' => 'debug',
             ],
         ];

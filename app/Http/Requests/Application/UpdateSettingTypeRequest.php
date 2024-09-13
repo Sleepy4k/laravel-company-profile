@@ -23,7 +23,7 @@ class UpdateSettingTypeRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:application_setting_types,name,' . $this->applicationSettingType->id],
+            'name' => ['required', 'string', 'max:255', 'unique:application_setting_types,name,' . $this->type->id],
             'description' => ['nullable', 'string', 'max:255'],
             'category' => ['required', 'string', 'max:255', new ApplicationSettingTypeCategory],
         ];

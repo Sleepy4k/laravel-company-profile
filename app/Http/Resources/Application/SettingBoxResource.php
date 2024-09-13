@@ -15,7 +15,7 @@ class SettingBoxResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'uuid' => $this->uuid,
             'key' => $this->key,
             'name' => $this->display,
             'value' => $this->value,

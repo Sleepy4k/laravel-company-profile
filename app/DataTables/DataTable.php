@@ -51,24 +51,28 @@ class DataTable
     public function getData(int $paginate = 10, array $columns = ['*'], array $relations = [], array $wheres = [], string $orderBy = 'created_at', bool $latest = true): Collection|LengthAwarePaginator
     {
         try {
-            $search_data = request()->get('search') ?? [];
-            $sort_type = request()->get('sort_direction') ?? 'desc';
+            $search_data = request()->get('search') ?? null;
+            $sort_type = request()->get('sort_direction') ?? null;
             $sort_field = request()->get('sort_field') ?? 'created_at';
 
             if (isset($search_data) && !empty($search_data)) {
                 $filteredSearch = [];
+                $whereMode = ['whereMode', 'or'];
 
                 foreach ((array) $this->interface->getSearchableFields() as $field) {
-                    $filteredSearch[] = [$field, 'like', $search_data];
+                    $filteredSearch[] = [$field, 'like', '%'.$search_data.'%'];
                 }
 
+                $filteredSearch[] = $whereMode;
                 $search_data = $filteredSearch;
             } else {
                 $search_data = [];
             }
 
-            if ($sort_field && isset($sort_type)) {
-                return $this->interface->paginate($paginate, $columns, $relations, $search_data, $sort_field, $this->convertSortDirection($sort_type));
+            $wheres = array_merge($wheres, $search_data);
+
+            if ($sort_field && isset($sort_type) && !empty($sort_type)) {
+                return $this->interface->paginate($paginate, $columns, $relations, $wheres, $sort_field, $this->convertSortDirection($sort_type));
             }
 
             return $this->interface->paginate($paginate, $columns, $relations, $wheres, $orderBy, $latest);

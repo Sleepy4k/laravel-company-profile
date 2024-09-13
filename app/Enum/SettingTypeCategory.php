@@ -27,8 +27,8 @@ enum SettingTypeCategory: string
     public static function fromValue(string $value): SettingTypeCategory
     {
         return match ($value) {
-            self::STRING => self::STRING,
-            self::FILE => self::FILE,
+            'string' => self::STRING,
+            'file' => self::FILE,
             default => self::STRING,
         };
     }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,6 +31,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $user = auth('web')->user();
+
+        activity('auth')
+            ->event('login')
+            ->causedBy($user)
+            ->withProperties($request)
+            ->log('User ' . $user->name . ' successfully logged in');
 
         return redirect()->intended(route('dashboard.index', absolute: false));
     }
@@ -41,7 +47,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        $user = auth('web')->user();
+
+        activity('auth')
+            ->event('logout')
+            ->causedBy($user)
+            ->withProperties($request)
+            ->log('User ' . $user->name . ' successfully logged out');
+
+        auth('web')->logout();
 
         $request->session()->invalidate();
 

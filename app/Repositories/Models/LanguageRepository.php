@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Models;
 
+use App\Models\Translate;
 use App\Traits\SystemLog;
 use App\Enum\ReportLogType;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\EloquentRepository;
-use Spatie\TranslationLoader\LanguageLine;
 use App\Contracts\Models\LanguageInterface;
 
 class LanguageRepository extends EloquentRepository implements LanguageInterface
@@ -18,7 +18,7 @@ class LanguageRepository extends EloquentRepository implements LanguageInterface
      *
      * @param  Model  $model
      */
-    public function __construct(LanguageLine $model)
+    public function __construct(Translate $model)
     {
         $this->model = $model;
     }
@@ -84,5 +84,19 @@ class LanguageRepository extends EloquentRepository implements LanguageInterface
 
             return false;
         }
+    }
+
+    /**
+     * Get all searchable fields.
+     *
+     * @return int
+     */
+    public function getSearchableFields(): array
+    {
+        return [
+            'group',
+            'key',
+            'text',
+        ];
     }
 }

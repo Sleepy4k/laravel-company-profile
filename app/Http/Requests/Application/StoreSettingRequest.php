@@ -28,7 +28,7 @@ class StoreSettingRequest extends Request
             'value' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'type_id' => ['required', 'integer', 'exists:application_setting_types,id'],
-            'file' => ['required_if:type_id,3', 'image', 'mimes:jpeg,png,jpg', 'extensions:jpeg,png,jpg', 'max:4096', 'dimensions:min_width=100,min_height=100'],
+            'file' => ['exclude_unless:type_id,3', 'image', 'mimes:jpeg,png,jpg', 'extensions:jpeg,png,jpg', 'max:4096', 'dimensions:min_width=100,min_height=100'],
         ];
     }
 

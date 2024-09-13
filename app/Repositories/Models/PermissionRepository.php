@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Models;
 
+use App\Models\Permission;
 use App\Repositories\EloquentRepository;
-use Spatie\Permission\Models\Permission;
 use App\Contracts\Models\PermissionInterface;
 
 class PermissionRepository extends EloquentRepository implements PermissionInterface

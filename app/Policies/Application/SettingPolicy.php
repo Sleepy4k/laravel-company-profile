@@ -3,6 +3,7 @@
 namespace App\Policies\Application;
 
 use App\Models\User;
+use App\Enum\DisplayModeType;
 use App\Models\ApplicationSetting;
 
 class SettingPolicy
@@ -10,17 +11,19 @@ class SettingPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, string $mode): bool
     {
-        return $user->hasPermissionTo('application.index');
+        $isModeValid = in_array($mode, DisplayModeType::toArray());
+
+        return auth('web')->check() && $user->hasPermissionTo('application.index') && $isModeValid;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ApplicationSetting $applicationSetting): bool
+    public function view(User $user, ApplicationSetting $setting): bool
     {
-        return $user->hasPermissionTo('application.show');
+        return auth('web')->check() && $user->hasPermissionTo('application.show');
     }
 
     /**
@@ -28,7 +31,7 @@ class SettingPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('application.create');
+        return auth('web')->check() && $user->hasPermissionTo('application.create');
     }
 
     /**
@@ -36,7 +39,7 @@ class SettingPolicy
      */
     public function store(User $user): bool
     {
-        return $user->hasPermissionTo('application.store');
+        return auth('web')->check() && $user->hasPermissionTo('application.store');
     }
 
     /**
@@ -44,22 +47,22 @@ class SettingPolicy
      */
     public function edit(User $user): bool
     {
-        return $user->hasPermissionTo('application.edit');
+        return auth('web')->check() && $user->hasPermissionTo('application.edit');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ApplicationSetting $applicationSetting): bool
+    public function update(User $user, ApplicationSetting $setting): bool
     {
-        return $user->hasPermissionTo('application.update');
+        return auth('web')->check() && $user->hasPermissionTo('application.update');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ApplicationSetting $applicationSetting): bool
+    public function delete(User $user, ApplicationSetting $setting): bool
     {
-        return $user->hasPermissionTo('application.delete');
+        return auth('web')->check() && $user->hasPermissionTo('application.delete');
     }
 }

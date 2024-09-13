@@ -33,6 +33,8 @@ class SettingTypeController extends Controller
         Gate::authorize('viewAny', ApplicationSettingType::class);
 
         try {
+            session()->put('application.setting.type.url', request()->fullUrl());
+
             return Inertia::render('Application/Type/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
@@ -63,7 +65,9 @@ class SettingTypeController extends Controller
         try {
             $this->service->store($request->validated());
 
-            return to_route('application.type.index');
+            return session()->has('application.setting.type.url')
+                ? redirect(session()->get('application.setting.type.url'))
+                : to_route('application.type.index');
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -72,12 +76,12 @@ class SettingTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ApplicationSettingType $applicationSettingType)
+    public function show(ApplicationSettingType $type)
     {
-        Gate::authorize('view', $applicationSettingType);
+        Gate::authorize('view', $type);
 
         try {
-            return Inertia::render('Application/Type/Show', $this->service->show($applicationSettingType->id));
+            return Inertia::render('Application/Type/Show', $this->service->show($type->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -86,12 +90,12 @@ class SettingTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ApplicationSettingType $applicationSettingType)
+    public function edit(ApplicationSettingType $type)
     {
-        Gate::authorize('update', $applicationSettingType);
+        Gate::authorize('update', $type);
 
         try {
-            return Inertia::render('Application/Type/Edit', $this->service->edit($applicationSettingType->id));
+            return Inertia::render('Application/Type/Edit', $this->service->edit($type->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -100,14 +104,16 @@ class SettingTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSettingTypeRequest $request, ApplicationSettingType $applicationSettingType)
+    public function update(UpdateSettingTypeRequest $request, ApplicationSettingType $type)
     {
-        Gate::authorize('update', $applicationSettingType);
+        Gate::authorize('update', $type);
 
         try {
-            $this->service->update($request->validated(), $applicationSettingType->id);
+            $this->service->update($request->validated(), $type->id);
 
-            return to_route('application.type.index');
+            return session()->has('application.setting.type.url')
+                ? redirect(session()->get('application.setting.type.url'))
+                : to_route('application.type.index');
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -116,14 +122,16 @@ class SettingTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ApplicationSettingType $applicationSettingType)
+    public function destroy(ApplicationSettingType $type)
     {
-        Gate::authorize('delete', $applicationSettingType);
+        Gate::authorize('delete', $type);
 
         try {
-            $this->service->destroy($applicationSettingType->id);
+            $this->service->destroy($type->id);
 
-            return to_route('application.type.index');
+            return session()->has('application.setting.type.url')
+                ? redirect(session()->get('application.setting.type.url'))
+                : to_route('application.type.index');
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

@@ -21,7 +21,7 @@ class MakeDataTableCommand extends Command
     protected $description = 'Create a new DataTable class';
 
     /**
-     * The namespace of the service.
+     * The namespace of the data table.
      *
      * @var string
      */
@@ -30,13 +30,14 @@ class MakeDataTableCommand extends Command
     /**
      * Create a new file.
      *
-     * @param string $service
+     * @param string $namespace
+     * @param string $name
      * @param string $stub
      */
     protected function createFile(string $namespace, string $name, string $stub): void
     {
         // Make path to support sub directories
-        $dir = str_replace('App\DataTables', '', $namespace);
+        $dir = str_replace($this->namespace, '', $namespace);
         $dir = app_path('DataTables' . str_replace('/', '\\', $dir));
 
         // Create the directory if it does not exist
@@ -45,16 +46,16 @@ class MakeDataTableCommand extends Command
         $path = $dir . '\\' . $name . 'DataTable.php';
 
         if (file_exists($path)) {
-            $this->error('Service already exists!');
+            $this->error('Data Table already exists!');
 
             exit(1);
         }
 
-        $service = str_replace(['{{ namespace }}', '{{ class }}'], [$namespace, $name.'DataTable'], $stub);
+        $dataTable = str_replace(['{{ namespace }}', '{{ class }}'], [$namespace, $name.'DataTable'], $stub);
 
-        file_put_contents($path, $service);
+        file_put_contents($path, $dataTable);
 
-        $this->info('Service created successfully.');
+        $this->info('Data Table created successfully.');
     }
 
     /**
@@ -68,13 +69,13 @@ class MakeDataTableCommand extends Command
     }
 
     /**
-     * Create a new service class.
+     * Create a new data table class.
      *
      * @param string $name
      */
-    protected function createService(string $name): void
+    protected function createDataTable(string $name): void
     {
-        // If name already has the word service, remove it
+        // If name already has the word DataTable, remove it
         if (str_contains($name, 'DataTable')) {
             $name = str_replace('DataTable', '', $name);
         }
@@ -100,6 +101,6 @@ class MakeDataTableCommand extends Command
     {
         $name = $this->argument('name');
 
-        $this->createService($name);
+        $this->createDataTable($name);
     }
 }

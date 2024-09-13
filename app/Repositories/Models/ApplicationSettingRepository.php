@@ -118,9 +118,9 @@ class ApplicationSettingRepository extends EloquentRepository implements Applica
     public function update(int $modelId, array $payload): bool
     {
         try {
-            $model = $this->findById($modelId);
+            $model = $this->findById($modelId, ['*'], ['type']);
 
-            if (array_key_exists('file', $payload) && !empty($payload['file'])) {
+            if (array_key_exists('file', $payload) && !empty($payload['file']) && $model->type->category == 'file') {
                 if (empty($model->value)) {
                     $payload['value'] = $this->saveSingleFile(UploadFileType::IMAGE, $payload['file']);
                 } elseif (!empty($model->value) && $payload['file'] !== $model->value) {
@@ -145,9 +145,9 @@ class ApplicationSettingRepository extends EloquentRepository implements Applica
     public function deleteById(int $modelId): bool
     {
         try {
-            $model = $this->findById($modelId);
+            $model = $this->findById($modelId, ['*'], ['type']);
 
-            if (isset($model->value) && !empty($model->value)) {
+            if (isset($model->value) && !empty($model->value) && $model->type->category == 'file') {
                 $this->deleteFile(UploadFileType::IMAGE, $model->value);
             }
 

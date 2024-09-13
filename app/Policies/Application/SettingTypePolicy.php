@@ -12,15 +12,15 @@ class SettingTypePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('application.index');
+        return auth('web')->check() && $user->hasPermissionTo('application.index');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ApplicationSettingType $applicationSettingType): bool
+    public function view(User $user, ApplicationSettingType $type): bool
     {
-        return $user->hasPermissionTo('application.show');
+        return auth('web')->check() && $user->hasPermissionTo('application.show');
     }
 
     /**
@@ -28,7 +28,7 @@ class SettingTypePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('application.create');
+        return auth('web')->check() && $user->hasPermissionTo('application.create');
     }
 
     /**
@@ -36,7 +36,7 @@ class SettingTypePolicy
      */
     public function store(User $user): bool
     {
-        return $user->hasPermissionTo('application.store');
+        return auth('web')->check() && $user->hasPermissionTo('application.store');
     }
 
     /**
@@ -44,22 +44,22 @@ class SettingTypePolicy
      */
     public function edit(User $user): bool
     {
-        return $user->hasPermissionTo('application.edit');
+        return auth('web')->check() && $user->hasPermissionTo('application.edit');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ApplicationSettingType $applicationSettingType): bool
+    public function update(User $user, ApplicationSettingType $type): bool
     {
-        return $user->hasPermissionTo('application.update');
+        return auth('web')->check() && $user->hasPermissionTo('application.update');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ApplicationSettingType $applicationSettingType): bool
+    public function delete(User $user, ApplicationSettingType $type): bool
     {
-        return $user->hasPermissionTo('application.delete');
+        return auth('web')->check() && $user->hasPermissionTo('application.delete');
     }
 }
