@@ -14,11 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withEvents(discover: [
+        __DIR__.'/../app/Listeners',
+    ])
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('make:sitemap')->daily();
     })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            \App\Http\Middleware\HandleAppLanguage::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \App\Http\Middleware\PreventInstallationWhenInstalled::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
