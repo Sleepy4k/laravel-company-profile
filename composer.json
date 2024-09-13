@@ -15,7 +15,6 @@
         "spatie/laravel-image-optimizer": "^1.8",
         "spatie/laravel-permission": "^6.9",
         "spatie/laravel-sitemap": "^7.2",
-        "spatie/laravel-translatable": "^6.8",
         "spatie/laravel-translation-loader": "^2.8",
         "tightenco/ziggy": "^2.0"
     },
