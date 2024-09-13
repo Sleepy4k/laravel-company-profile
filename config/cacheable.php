@@ -10,7 +10,8 @@ return [
     'identifier' => 'id',
     //Do you need logging?
     'logging' => [
-        'enabled' => false,
+        'channel' => 'cacheable',
+        'enabled' => true,
         'level' => 'debug',
     ],
 ];

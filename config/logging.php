@@ -127,6 +127,21 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'query' => [
+            'driver' => 'daily',
+            'channels' => ['syslog'],
+            'path' => storage_path('logs/query.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+        ],
+
+        'cacheable' => [
+            'driver' => 'daily',
+            'channels' => ['syslog'],
+            'path' => storage_path('logs/cache.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+        ],
     ],
 
 ];

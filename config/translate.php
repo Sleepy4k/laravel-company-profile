@@ -220,7 +220,7 @@ return [
         ],
         [
             'group' => 'table',
-            'key' => 'lenght',
+            'key' => 'length',
             'text' => [
                 'id' => 'tampilkan _MENU_ data',
                 'en' => 'show _MENU_ data'
