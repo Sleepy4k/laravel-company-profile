@@ -14,7 +14,6 @@ Route::get('/', function () {
 });
 
 require __DIR__.'/auth.php';
-require __DIR__.'/install.php';
 require __DIR__.'/dashboard.php';
 
 Route::fallback(Error\FallbackController::class);

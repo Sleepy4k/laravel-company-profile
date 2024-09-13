@@ -10,23 +10,14 @@ use App\Http\Controllers\Install\PermissionController;
 use App\Http\Controllers\Install\RequirementController;
 use App\Http\Controllers\Install\StorageLinkController;
 
-Route::prefix('install')->group(function () {
-    Route::get('', RequirementController::class)->name('install.requirements');
-    Route::get('permissions', PermissionController::class)->name('install.permissions');
+Route::prefix('install')->as('install.')->group(function () {
+    Route::get('', RequirementController::class)->name('requirements');
+    Route::get('permissions', PermissionController::class)->name('permissions');
+    Route::get('database', DatabaseController::class)->name('database');
+    Route::get('finalize', FinalizeController::class)->name('finalize');
+    Route::get('finish', FinishedController::class)->name('finished');
+    Route::post('link', StorageLinkController::class)->name('link');
 
-    Route::resource('setup', SetupController::class)->only(['index', 'store'])->names([
-        'index' => 'install.setup',
-        'store' => 'install.setup.store',
-    ]);
-
-    Route::get('database', DatabaseController::class)->name('install.database');
-
-    Route::resource('user', UserController::class)->only(['index', 'store'])->names([
-        'index' => 'install.user',
-        'store' => 'install.user.store',
-    ]);
-
-    Route::get('finalize', FinalizeController::class)->name('install.finalize');
-    Route::get('finish', FinishedController::class)->name('install.finished');
-    Route::post('link', StorageLinkController::class)->name('install.link');
+    Route::resource('setup', SetupController::class)->only(['index', 'store'])->name('index', 'setup');
+    Route::resource('user', UserController::class)->only(['index', 'store'])->name('index', 'user');
 });
