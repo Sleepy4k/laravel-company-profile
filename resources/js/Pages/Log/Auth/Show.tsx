@@ -1,94 +1,81 @@
 import { PageProps } from "@/types";
 import { Link } from "@inertiajs/react";
-import { useEffect, useState } from "react";
 import TextInput from "@/Components/TextInput";
-import { convertDateToLocaleString } from "@/utils/parse";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { capitalizeFirstLetter, convertDateToLocaleString, convertObjectToString } from "@/utils/parse";
 
 export default function Show({ auth, data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
-    const [isFile, setIsFile] = useState(false);
-
-    useEffect(() => {
-        if (data.type.category === 'file') {
-            setIsFile(true);
-        }
-    }, []);
-
     return (
         <AuthenticatedLayout
             user={auth.user}
-            title="View Application"
+            title="View Authentication Log"
             header={
                 <ResponsiveHeader>
-                    <Link href={route('application.edit', data?.uuid || 0)} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
-                        Edit
-                    </Link>
                     <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Back
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
+            <div className="bg-white lg:w-[35rem] w-[20rem] mb-5 mx-auto px-6 py-4">
                 <div>
-                    <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
+                    <label htmlFor="id" className="block text-sm font-medium text-gray-700">ID</label>
                     <TextInput
                         disabled
-                        id="key"
-                        value={data.key}
+                        id="id"
+                        value={data.id}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="display" className="block text-sm font-medium text-gray-700">Display</label>
+                    <label htmlFor="event" className="block text-sm font-medium text-gray-700">Event</label>
                     <TextInput
                         disabled
-                        id="display"
-                        value={data.display}
+                        id="event"
+                        value={capitalizeFirstLetter(data.event)}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
-
-                {isFile ? (
-                    <div className="mt-4">
-                        <label htmlFor="file" className="block text-sm font-medium text-gray-700">File</label>
-                            <div className="mt-2 card bg-base-100 w-[15rem] shadow-xl">
-                                <figure>
-                                    <img src={data.value} alt="File Preview"/>
-                                </figure>
-                            </div>
-                    </div>
-                ) : (
-                    <div className="mt-4">
-                        <label htmlFor="value" className="block text-sm font-medium text-gray-700">Value</label>
-                        <TextInput
-                            disabled
-                            id="value"
-                            value={data.value}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                        />
-                    </div>
-                )}
 
                 <div className="mt-4">
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea
+                    <TextInput
                         disabled
                         id="description"
                         value={data.description}
-                        className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="type_id" className="block text-sm font-medium text-gray-700">Type</label>
+                    <label htmlFor="causer_type" className="block text-sm font-medium text-gray-700">Causer Type</label>
                     <TextInput
                         disabled
-                        id="type_id"
-                        value={data.type.name}
+                        id="causer_type"
+                        value={data.causer_type}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                    />
+                </div>
+
+                <div className="mt-4">
+                    <label htmlFor="causer_id" className="block text-sm font-medium text-gray-700">Causer Id</label>
+                    <TextInput
+                        disabled
+                        id="causer_id"
+                        value={data.causer_id}
+                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                    />
+                </div>
+
+                <div className="mt-4">
+                    <label htmlFor="properties" className="block text-sm font-medium text-gray-700">Properties</label>
+                    <textarea
+                        disabled
+                        id="properties"
+                        value={convertObjectToString(data.properties)}
+                        className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
 

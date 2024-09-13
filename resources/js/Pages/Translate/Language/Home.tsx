@@ -2,27 +2,26 @@ import Select from 'react-select';
 import { PageProps } from "@/types";
 import alert from "@/utils/sweet.alert";
 import { FormEventHandler } from "react";
-import TextInput from '@/Components/TextInput';
 import { Link, useForm } from "@inertiajs/react";
-import { capitalizeFirstLetter } from '@/utils/parse';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Create({ auth, categories, backUrl, errors }: PageProps<{ categories: string[], backUrl: string }>) {
+export default function Edit({ auth, translate, backUrl, errors, flash }: PageProps<{ translate: any, backUrl: string, flash: any }>) {
     const { data, setData, post, processing, reset, isDirty } = useForm({
-        name: '',
-        description: '',
-        category: '',
+        lang: translate.lang,
     });
+
+    console.log(translate.lang);
+
 
     const submit: FormEventHandler = (e: any) => {
         e.preventDefault();
 
-        post(route('application.type.store'), {
+        post(route('translate.language.store'), {
             onProgress: () => {
                 alert.fire({
                     title: 'Please wait...',
-                    text: 'We are updating the application setting type.',
+                    text: 'We are updating the translate.',
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -32,10 +31,10 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
                 });
             },
             onSuccess: () => {
-                reset('name', 'description', 'category');
+                reset('lang');
                 alert.fire({
                     title: 'Success',
-                    text: 'Application type has been created.',
+                    text: 'Translate has been updated.',
                     icon: 'success',
                 });
             },
@@ -59,7 +58,7 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
             cancelButtonText: 'No',
         }).then((result: any) => {
             if (result.isConfirmed) {
-                reset('name', 'description', 'category');
+                reset('lang');
                 alert.fire({
                     title: 'Success',
                     text: 'Form has been reset.',
@@ -69,10 +68,21 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
         });
     }
 
+    const getDefaultValue = (lang: string) => {
+        switch (lang) {
+            case 'en':
+                return { value: 'en', label: 'English' };
+            case 'id':
+                return { value: 'id', label: 'Indonesian' };
+            default:
+                return null;
+        }
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
-            title="Create Application Type"
+            title="Update Translation"
             header={
                 <ResponsiveHeader>
                     <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
@@ -82,51 +92,31 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
             }
         >
             <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
+                {flash && (
+                    <div className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative mb-5" role="alert">
+                        <strong className="font-bold">Info!</strong>
+                        <span className="block sm:inline">{` ${flash}`}</span>
+                    </div>
+                )}
+
                 <form onSubmit={submit} className="mb-5">
                     <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Key</label>
-                        <TextInput
-                            id="name"
-                            type="text"
-                            name="name"
-                            disabled={processing}
-                            value={data.name}
-                            placeholder='e.g. Meta Tag'
-                            onChange={(e) => setData('name', e.target.value)}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                        />
-                        {errors?.name && <p className="mt-2 text-sm text-danger-600">{errors.name}</p>}
-                    </div>
-
-                    <div className="mt-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            disabled={processing}
-                            value={data.description}
-                            placeholder='e.g. This is a meta tag'
-                            onChange={(e) => setData('description', e.target.value)}
-                            className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                        />
-                        {errors?.description && <p className="mt-2 text-sm text-danger-600">{errors.description}</p>}
-                    </div>
-
-                    <div className="mt-4">
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                        <label htmlFor="lang" className="block text-sm font-medium text-gray-700">Default Lang</label>
                         <Select
-                            id="category"
-                            name="category"
+                            id="lang"
+                            name="lang"
                             isClearable={true}
                             isSearchable={true}
                             isDisabled={processing}
+                            defaultValue={getDefaultValue(data.lang)}
                             className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                            options={categories.map((data: any) => {
-                                return { value: data, label: capitalizeFirstLetter(data) }
-                            })}
-                            onChange={(selected: any) => setData('category', selected?.value)}
+                            options={[
+                                { value: 'en', label: 'English' },
+                                { value: 'id', label: 'Indonesian' },
+                            ]}
+                            onChange={(selected: any) => setData('lang', selected?.value)}
                         />
-                        {errors?.category && <p className="mt-2 text-sm text-danger-600">{errors.category}</p>}
+                        {errors?.lang && <p className="mt-2 text-sm text-danger-600">{errors.lang}</p>}
                     </div>
 
                     <div className="flex items-center justify-end mt-8 gap-3">
@@ -134,7 +124,7 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
                             Reset
                         </button>
                         <button type="submit" disabled={processing} className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700">
-                            Create
+                            Update
                         </button>
                     </div>
                 </form>

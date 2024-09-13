@@ -34,14 +34,14 @@ export default function Authenticated({ user, header, title, className = '', chi
                                 <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                                     Blog
                                 </NavLink>
-                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
-                                    Translate
-                                </NavLink>
-                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
-                                    Log
-                                </NavLink>
                                 <NavLink href={route('application.index', { displayMode: 'table' })} active={route().current('application.index', { displayMode: 'table' }) || route().current('application.index', { displayMode: 'box' }) || route().current('application.type.index')}>
                                     Application
+                                </NavLink>
+                                <NavLink href={route('translate.index', { displayMode: 'table' })} active={route().current('translate.index', { displayMode: 'table' }) || route().current('translate.index', { displayMode: 'box' }) || route().current('translate.language.index')}>
+                                    Translate
+                                </NavLink>
+                                <NavLink href={route('log.index')} active={route().current('log.index') || route().current('log.auth.index') || route().current('log.model.index') || route().current('log.system.index') || route().current('log.query.index')}>
+                                    Log
                                 </NavLink>
                             </div>
                         </div>
@@ -122,14 +122,14 @@ export default function Authenticated({ user, header, title, className = '', chi
                         <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
                             Blog
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
-                            Translate
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
-                            Log
-                        </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('application.index', { displayMode: 'table' })} active={route().current('application.index', { displayMode: 'table' }) || route().current('application.index', { displayMode: 'box' }) || route().current('application.type.index')}>
                             Application
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('translate.index', { displayMode: 'table' })} active={route().current('translate.index', { displayMode: 'table' }) || route().current('translate.index', { displayMode: 'box' }) || route().current('translate.language.index')}>
+                            Translate
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('log.index')} active={route().current('log.index') || route().current('log.auth.index') || route().current('log.system.index') || route().current('log.model.index') || route().current('log.query.index')}>
+                            Log
                         </ResponsiveNavLink>
                     </div>
 

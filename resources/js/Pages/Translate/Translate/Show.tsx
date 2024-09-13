@@ -1,18 +1,17 @@
 import { PageProps } from "@/types";
 import { Link } from "@inertiajs/react";
-import TextInput from "@/Components/TextInput";
-import { capitalizeFirstLetter } from "@/utils/parse";
+import TextInput from '@/Components/TextInput';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Show({ auth, data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
+export default function Create({ auth, data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            title="View Application Type"
+            title="View Translation"
             header={
                 <ResponsiveHeader>
-                    <Link href={route('application.type.edit', data?.uuid || 0)} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('translate.edit', data?.uuid || 0)} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Edit
                     </Link>
                     <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
@@ -23,31 +22,45 @@ export default function Show({ auth, data, backUrl }: PageProps<{ data: any, bac
         >
             <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Key</label>
+                    <label htmlFor="group" className="block text-sm font-medium text-gray-700">Group</label>
                     <TextInput
                         disabled
-                        id="name"
-                        value={data.name}
+                        id="group"
+                        type="text"
+                        value={data.group}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea
+                    <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
+                    <TextInput
                         disabled
-                        id="description"
-                        value={data.description}
+                        id="key"
+                        type="text"
+                        value={data.key}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                    <label htmlFor="lang_id" className="block text-sm font-medium text-gray-700">Indonesian</label>
                     <TextInput
                         disabled
-                        id="category"
-                        value={capitalizeFirstLetter(data.category)}
+                        id="lang_id"
+                        type="text"
+                        value={data.text.id}
+                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                    />
+                </div>
+
+                <div className="mt-4">
+                    <label htmlFor="lang_en" className="block text-sm font-medium text-gray-700">English</label>
+                    <TextInput
+                        disabled
+                        id="lang_en"
+                        type="text"
+                        value={data.text.en}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>

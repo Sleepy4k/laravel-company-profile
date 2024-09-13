@@ -11,18 +11,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 interface IDeleteData {
     uuid: any;
     key: string;
-    name: string;
+    group: string;
 }
 
 export default function Home({ auth, data, queryParams = null }: PageProps<{ data: any, queryParams: any }>) {
     const [mode, setMode] = useState<'table' | 'box' | null>(null);
-    const [settingDeleteData, setSettingDeleteData] = useState<IDeleteData|null>(null);
-    const [confirmingSettingDeletion, setConfirmingSettingDeletion] = useState(false);
+    const [translateDeleteData, setTranslateDeleteData] = useState<IDeleteData|null>(null);
+    const [confirmingTranslateDeletion, setConfirmingTranslateDeletion] = useState(false);
 
     queryParams = queryParams || {};
 
     useEffect(() => {
-        // Get mode from url, if last url is /application/mode then set mode to box
+        // Get mode from url, if last url is /trasnlate/mode then set mode to box
         const url = window.location.href;
         const mode = url.split('/')[url.split('/').length - 1].split('?')[0];
 
@@ -30,13 +30,13 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
     }, []);
 
     const handleChangeMode = () => {
-        router.visit(route('application.index', { displayMode: mode == 'box' ? 'table' : 'box' }));
+        router.visit(route('translate.index', { displayMode: mode == 'box' ? 'table' : 'box' }));
     }
 
     const searchFieldChanged = (name: string, value: any) => {
         value ? queryParams[name] = value : delete queryParams[name];
 
-        router.get(route("application.index", { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
+        router.get(route("translate.index", { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
     };
 
     const sortChanged = (name: string) => {
@@ -51,17 +51,17 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
             queryParams.sort_direction = "asc";
         }
 
-        router.get(route("application.index", { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
+        router.get(route("translate.index", { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
     };
 
-    const deleteSetting = (data: any) => {
-        setConfirmingSettingDeletion(true);
-        setSettingDeleteData(data);
+    const deleteTranslate = (data: any) => {
+        setConfirmingTranslateDeletion(true);
+        setTranslateDeleteData(data);
     };
 
-    const closeModal = () => setConfirmingSettingDeletion(false);
+    const closeModal = () => setConfirmingTranslateDeletion(false);
 
-    const handleDeleteSetting = (e: any) => {
+    const handleDeleteTranslate = (e: any) => {
         e.preventDefault();
 
         const key = e.target.key.value;
@@ -77,8 +77,8 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
             return;
         }
 
-        // Check if key is not same with setting key
-        if (key !== settingDeleteData?.key) {
+        // Check if key is not same with translate key
+        if (key !== `${translateDeleteData?.group}.${translateDeleteData?.key}`) {
             closeModal();
             alert.fire({
                 title: 'Key is not same',
@@ -88,12 +88,12 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
             return;
         }
 
-        // Delete setting here
-        router.delete(route("application.destroy", settingDeleteData?.uuid || 0), {
+        // Delete translate here
+        router.delete(route("translate.destroy", translateDeleteData?.uuid || 0), {
             onProgress: () => {
                 alert.fire({
                     title: 'Please wait...',
-                    text: 'We are deleting the setting.',
+                    text: 'We are deleting the translate.',
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -106,7 +106,7 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
                 closeModal();
                 alert.fire({
                     title: 'Success',
-                    text: 'Setting has been deleted.',
+                    text: 'Translate has been deleted.',
                     icon: 'success',
                 });
             },
@@ -129,15 +129,15 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
         // If query params is empty, do nothing
         if (isQueryParamEmpty()) return;
 
-        router.get(route('application.index', { displayMode: mode == 'box' ? 'box' : 'table' }));
+        router.get(route('translate.index', { displayMode: mode == 'box' ? 'box' : 'table' }));
     }
 
-    const handleReload = () => router.get(route('application.index', { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
+    const handleReload = () => router.get(route('translate.index', { displayMode: mode == 'box' ? 'box' : 'table' }), queryParams);
 
     return (
         <AuthenticatedLayout
             user={auth.user}
-            title="Application"
+            title="Translation"
             className={mode == 'box' ? 'max-w-full flex overflow-x-scroll' : ''}
             header={
                 <ResponsiveHeader>
@@ -163,10 +163,10 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
                             d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                         </svg>
                     </label>
-                    <Link href={route('application.type.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
-                        Application Type
+                    <Link href={route('translate.language.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
+                        Change Language
                     </Link>
-                    <Link href={route('application.create')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('translate.create')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Create New
                     </Link>
                 </ResponsiveHeader>
@@ -179,22 +179,22 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
                 handleReset={handleReset}
                 searchFieldChanged={searchFieldChanged}
                 sortChanged={sortChanged}
-                deleteSetting={deleteSetting}
+                deleteTranslate={deleteTranslate}
                 queryParams={queryParams}
                 handleReload={handleReload}
             />
 
-            <BoxMode data={data} mode={mode} deleteSetting={deleteSetting} />
+            <BoxMode data={data} mode={mode} deleteTranslate={deleteTranslate} />
 
-            <Modal show={confirmingSettingDeletion} onClose={closeModal}>
-                <form className="p-6" onSubmit={handleDeleteSetting}>
+            <Modal show={confirmingTranslateDeletion} onClose={closeModal}>
+                <form className="p-6" onSubmit={handleDeleteTranslate}>
                     <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete {settingDeleteData?.name} setting?
+                        Are you sure you want to delete {translateDeleteData?.key} translate?
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        Once you delete this setting, all of its resources and data will be permanently deleted.
-                        Please enter this setting key (<b>{settingDeleteData?.key}</b>) to confirm you would like to permanently delete this setting.
+                        Once you delete this translate, all of its resources and data will be permanently deleted.
+                        Please enter this translate key (<b>{`${translateDeleteData?.group}.${translateDeleteData?.key}`}</b>) to confirm you would like to permanently delete this translate.
                     </p>
 
                     <div className="mt-6">

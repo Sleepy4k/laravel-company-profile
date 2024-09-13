@@ -7,10 +7,11 @@ import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import { FormEventHandler, useEffect, useState } from "react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Edit({ auth, setting, types, errors }: PageProps<{ setting: any, types: any }>) {
+export default function Edit({ auth, setting, types, backUrl, errors }: PageProps<{ setting: any, types: any, backUrl: string }>) {
     const [isFile, setIsFile] = useState(false);
     const [file, setFile] = useState<string|null>(null);
     const { data, setData, post, processing, reset, isDirty } = useForm({
+        _method: 'PUT',
         key: setting.key,
         display: setting.display,
         value: setting.value,
@@ -38,7 +39,7 @@ export default function Edit({ auth, setting, types, errors }: PageProps<{ setti
     const submit: FormEventHandler = (e: any) => {
         e.preventDefault();
 
-        post(route('application.update', setting?.id || 0) + '?_method=PUT', {
+        post(route('application.update', setting?.uuid || 0), {
             onProgress: () => {
                 alert.fire({
                     title: 'Please wait...',
@@ -104,7 +105,7 @@ export default function Edit({ auth, setting, types, errors }: PageProps<{ setti
             title="Update Application"
             header={
                 <ResponsiveHeader>
-                    <Link href={route('application.index', { displayMode: 'table' })} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
                         Back
                     </Link>
                 </ResponsiveHeader>
@@ -192,7 +193,7 @@ export default function Edit({ auth, setting, types, errors }: PageProps<{ setti
                             disabled={processing}
                             value={data.description}
                             onChange={(e) => setData('description', e.target.value)}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                         />
                         {errors?.description && <p className="mt-2 text-sm text-danger-600">{errors.description}</p>}
                     </div>

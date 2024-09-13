@@ -20,4 +20,8 @@ const capitalizeFirstLetter = (str: string) => {
     }
 }
 
-export { convertDateToLocaleString, capitalizeFirstLetter };
+const convertObjectToString = (obj: any) => {
+    return JSON.stringify(obj, null, 4);
+}
+
+export { convertDateToLocaleString, capitalizeFirstLetter, convertObjectToString };

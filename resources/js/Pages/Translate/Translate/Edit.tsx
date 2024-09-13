@@ -1,28 +1,27 @@
-import Select from 'react-select';
 import { PageProps } from "@/types";
 import alert from "@/utils/sweet.alert";
 import { FormEventHandler } from "react";
 import TextInput from '@/Components/TextInput';
 import { Link, useForm } from "@inertiajs/react";
-import { capitalizeFirstLetter } from '@/utils/parse';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Create({ auth, categories, backUrl, errors }: PageProps<{ categories: string[], backUrl: string }>) {
-    const { data, setData, post, processing, reset, isDirty } = useForm({
-        name: '',
-        description: '',
-        category: '',
+export default function Edit({ auth, translate, backUrl, errors }: PageProps<{ translate: any, backUrl: string }>) {
+    const { data, setData, patch, processing, reset, isDirty } = useForm({
+        key: translate.key,
+        group: translate.group,
+        lang_id: translate.text.id,
+        lang_en: translate.text.en,
     });
 
     const submit: FormEventHandler = (e: any) => {
         e.preventDefault();
 
-        post(route('application.type.store'), {
+        patch(route('translate.update', translate?.uuid || 0), {
             onProgress: () => {
                 alert.fire({
                     title: 'Please wait...',
-                    text: 'We are updating the application setting type.',
+                    text: 'We are updating the translate.',
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -32,10 +31,10 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
                 });
             },
             onSuccess: () => {
-                reset('name', 'description', 'category');
+                reset('key', 'group', 'lang_id', 'lang_en');
                 alert.fire({
                     title: 'Success',
-                    text: 'Application type has been created.',
+                    text: 'Translate has been updated.',
                     icon: 'success',
                 });
             },
@@ -59,7 +58,7 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
             cancelButtonText: 'No',
         }).then((result: any) => {
             if (result.isConfirmed) {
-                reset('name', 'description', 'category');
+                reset('key', 'group', 'lang_id', 'lang_en');
                 alert.fire({
                     title: 'Success',
                     text: 'Form has been reset.',
@@ -72,7 +71,7 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
     return (
         <AuthenticatedLayout
             user={auth.user}
-            title="Create Application Type"
+            title="Update Translation"
             header={
                 <ResponsiveHeader>
                     <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
@@ -83,50 +82,64 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
         >
             <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <form onSubmit={submit} className="mb-5">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Key</label>
+                <div>
+                        <label htmlFor="group" className="block text-sm font-medium text-gray-700">Group</label>
                         <TextInput
-                            id="name"
+                            id="group"
                             type="text"
-                            name="name"
+                            name="group"
                             disabled={processing}
-                            value={data.name}
-                            placeholder='e.g. Meta Tag'
-                            onChange={(e) => setData('name', e.target.value)}
+                            value={data.group}
+                            placeholder='e.g. todo'
+                            onChange={(e) => setData('group', e.target.value)}
                             className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                         />
-                        {errors?.name && <p className="mt-2 text-sm text-danger-600">{errors.name}</p>}
+                        {errors?.group && <p className="mt-2 text-sm text-danger-600">{errors.group}</p>}
                     </div>
 
                     <div className="mt-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea
-                            id="description"
-                            name="description"
+                        <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
+                        <TextInput
+                            id="key"
+                            type="text"
+                            name="key"
                             disabled={processing}
-                            value={data.description}
-                            placeholder='e.g. This is a meta tag'
-                            onChange={(e) => setData('description', e.target.value)}
-                            className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            value={data.key}
+                            placeholder='e.g. do.something'
+                            onChange={(e) => setData('key', e.target.value)}
+                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                         />
-                        {errors?.description && <p className="mt-2 text-sm text-danger-600">{errors.description}</p>}
+                        {errors?.key && <p className="mt-2 text-sm text-danger-600">{errors.key}</p>}
                     </div>
 
                     <div className="mt-4">
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-                        <Select
-                            id="category"
-                            name="category"
-                            isClearable={true}
-                            isSearchable={true}
-                            isDisabled={processing}
+                        <label htmlFor="lang_id" className="block text-sm font-medium text-gray-700">Indonesian</label>
+                        <TextInput
+                            id="lang_id"
+                            type="text"
+                            name="lang_id"
+                            disabled={processing}
+                            value={data.lang_id}
+                            placeholder='e.g. Memasak'
+                            onChange={(e) => setData('lang_id', e.target.value)}
                             className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                            options={categories.map((data: any) => {
-                                return { value: data, label: capitalizeFirstLetter(data) }
-                            })}
-                            onChange={(selected: any) => setData('category', selected?.value)}
                         />
-                        {errors?.category && <p className="mt-2 text-sm text-danger-600">{errors.category}</p>}
+                        {errors?.lang_id && <p className="mt-2 text-sm text-danger-600">{errors.lang_id}</p>}
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="lang_en" className="block text-sm font-medium text-gray-700">English</label>
+                        <TextInput
+                            id="lang_en"
+                            type="text"
+                            name="lang_en"
+                            disabled={processing}
+                            value={data.lang_en}
+                            placeholder='e.g. Cooking'
+                            onChange={(e) => setData('lang_en', e.target.value)}
+                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                        />
+                        {errors?.lang_en && <p className="mt-2 text-sm text-danger-600">{errors.lang_en}</p>}
                     </div>
 
                     <div className="flex items-center justify-end mt-8 gap-3">
@@ -134,7 +147,7 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
                             Reset
                         </button>
                         <button type="submit" disabled={processing} className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700">
-                            Create
+                            Update
                         </button>
                     </div>
                 </form>

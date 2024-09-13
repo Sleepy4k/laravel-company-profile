@@ -13,7 +13,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { capitalizeFirstLetter, convertDateToLocaleString } from '@/utils/parse';
 
 interface IDeleteData {
-    id: number;
+    uuid: any;
     key: string;
     name: string;
 }
@@ -80,9 +80,36 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
         }
 
         // Delete setting here
-        const id = settingDeleteData?.id || 0;
-        router.delete(route("application.type.destroy", id));
-        closeModal();
+        router.delete(route("application.type.destroy", settingDeleteData?.uuid || 0), {
+            onProgress: () => {
+                alert.fire({
+                    title: 'Please wait...',
+                    text: 'We are deleting the application setting type.',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        alert.showLoading();
+                    }
+                });
+            },
+            onSuccess: () => {
+                closeModal();
+                alert.fire({
+                    title: 'Success',
+                    text: 'Application setting type has been deleted.',
+                    icon: 'success',
+                });
+            },
+            onError: () => {
+                closeModal();
+                alert.fire({
+                    title: 'Error',
+                    text: 'Something went wrong. Please try again.',
+                    icon: 'error',
+                });
+            }
+        });
     }
 
     const isQueryParamEmpty = () => {
@@ -205,7 +232,7 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
                             <td className="px-3 py-2 text-nowrap">
                                 <PopOver>
                                     <Link
-                                        href={route('application.type.show', item.id)}
+                                        href={route('application.type.show', item.uuid)}
                                         className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                     >
                                         <div className='flex flex-row'>
@@ -214,7 +241,7 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
                                         </div>
                                     </Link>
                                     <Link
-                                        href={route('application.type.edit', item.id)}
+                                        href={route('application.type.edit', item.uuid)}
                                         className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                     >
                                         <div className='flex flex-row'>

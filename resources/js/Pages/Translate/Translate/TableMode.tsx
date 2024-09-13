@@ -4,7 +4,7 @@ import PopOver from '@/Components/PopOver';
 import DataTable from "@/Components/DataTable";
 import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/DataTable/Heading";
-import { convertDateToLocaleString } from "@/utils/parse";
+import { capitalizeFirstLetter, convertDateToLocaleString } from "@/utils/parse";
 
 interface ITableModeProps {
     data: any;
@@ -12,7 +12,7 @@ interface ITableModeProps {
     queryParams: any;
     searchFieldChanged: Function;
     sortChanged: (name: string) => void;
-    deleteSetting: Function;
+    deleteTranslate: Function;
     handleReset: () => void;
     isQueryParamEmpty: () => boolean;
     handleReload: () => void;
@@ -24,7 +24,7 @@ export default function TableMode({
     queryParams,
     searchFieldChanged,
     sortChanged,
-    deleteSetting,
+    deleteTranslate,
     handleReset,
     isQueryParamEmpty,
     handleReload,
@@ -71,6 +71,14 @@ export default function TableMode({
                         ID
                     </TableHeading>
                     <TableHeading
+                        name="group"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                    >
+                        Group
+                    </TableHeading>
+                    <TableHeading
                         name="key"
                         sort_field={queryParams.sort_field}
                         sort_direction={queryParams.sort_direction}
@@ -78,31 +86,23 @@ export default function TableMode({
                     >
                         Key
                     </TableHeading>
+                    <th className="px-3 py-2">Computed Key</th>
                     <TableHeading
-                        name="display"
+                        name="text"
                         sort_field={queryParams.sort_field}
                         sort_direction={queryParams.sort_direction}
                         sortChanged={sortChanged}
                     >
-                        Display As
+                        Indonesian
                     </TableHeading>
                     <TableHeading
-                        name="value"
+                        name="text"
                         sort_field={queryParams.sort_field}
                         sort_direction={queryParams.sort_direction}
                         sortChanged={sortChanged}
                     >
-                        Value
+                        English
                     </TableHeading>
-                    <TableHeading
-                        name="description"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                    >
-                        Description
-                    </TableHeading>
-                    <th className="px-3 py-2">Type</th>
                     <TableHeading
                         name="created_at"
                         sort_field={queryParams.sort_field}
@@ -125,17 +125,17 @@ export default function TableMode({
                 {data && data.data.map((item: any, index: number) => (
                     <tr key={index}>
                         <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.id}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{capitalizeFirstLetter(item.group)}</td>
                         <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.key}</td>
-                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.display || '-'}</td>
-                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.value || '-'}</td>
-                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.description || '-'}</td>
-                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.type.name || '-'}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{`${item.group}.${item.key}`}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.text.id}</td>
+                        <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{item.text.en}</td>
                         <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{convertDateToLocaleString(item.created_at) || '-'}</td>
                         <td className="px-3 py-2 max-w-[8vw] overflow-hidden">{convertDateToLocaleString(item.updated_at) || '-'}</td>
                         <td className="px-3 py-2 text-nowrap">
                             <PopOver>
                                 <Link
-                                    href={route('application.show', item.uuid)}
+                                    href={route('translate.show', item.uuid)}
                                     className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                 >
                                     <div className='flex flex-row'>
@@ -144,7 +144,7 @@ export default function TableMode({
                                     </div>
                                 </Link>
                                 <Link
-                                    href={route('application.edit', item.uuid)}
+                                    href={route('translate.edit', item.uuid)}
                                     className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                 >
                                     <div className='flex flex-row'>
@@ -154,7 +154,7 @@ export default function TableMode({
                                 </Link>
                                 <button
                                     type='button'
-                                    onClick={() => deleteSetting(item)}
+                                    onClick={() => deleteTranslate(item)}
                                     className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                 >
                                     <div className='flex flex-row'>
