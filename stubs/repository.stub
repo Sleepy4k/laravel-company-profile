@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Repositories\EloquentRepository;
+
+class {{ class }} extends EloquentRepository implements {{ interface }}
+{
+    /**
+     * Base respository constructor
+     *
+     * @param  Model  $model
+     */
+    public function __construct()
+    {
+        // $this->model = null;
+    }
+}

@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Contracts\EloquentInterface;
+
+interface {{ class }} extends EloquentInterface
+{
+    //
+}
