@@ -15,6 +15,7 @@ class UserObserver
      */
     public function creating(User $user)
     {
+        $user->uuid = \Illuminate\Support\Str::uuid();
         $user->password = Hash::make($user->password);
     }
 
