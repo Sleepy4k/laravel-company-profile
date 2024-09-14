@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\DisplayModeType;
 use App\Http\Controllers\Log;
 use App\Http\Controllers\RBAC;
 use App\Http\Controllers\Translate;
@@ -14,7 +15,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::prefix('application')->as('application.')->group(function () {
         Route::get('/{displayMode}', [Application\SettingController::class, 'index'])
             ->name('index')
-            ->where('displayMode', 'box|table');
+            ->where('displayMode', DisplayModeType::toWhereCase());
 
         Route::resource('/settings', Application\SettingController::class)
             ->except('index')
@@ -33,7 +34,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::prefix('translate')->as('translate.')->group(function () {
         Route::get('/{displayMode}', [Translate\TranslateController::class, 'index'])
             ->name('index')
-            ->where('displayMode', 'box|table');
+            ->where('displayMode', DisplayModeType::toWhereCase());
 
         Route::resource('/list', Translate\TranslateController::class)
             ->except('index')
@@ -46,7 +47,6 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 
     Route::prefix('rbac')->as('rbac.')->group(function () {
         Route::resources([
-            'users' => RBAC\UserController::class,
             'roles' => RBAC\RoleController::class,
             'permissions' => RBAC\PermissionController::class,
         ]);
