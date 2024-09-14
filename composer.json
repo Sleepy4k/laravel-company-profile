@@ -7,8 +7,8 @@
     "require": {
         "php": "^8.2",
         "elipzis/laravel-cacheable-model": "^0.4.1",
-        "inertiajs/inertia-laravel": "^1.0",
-        "laravel/framework": "11.21",
+        "inertiajs/inertia-laravel": "^1.3",
+        "laravel/framework": "11.23",
         "laravel/sanctum": "4.0",
         "laravel/tinker": "2.9",
         "spatie/laravel-activitylog": "^4.8",
@@ -16,7 +16,7 @@
         "spatie/laravel-permission": "^6.9",
         "spatie/laravel-sitemap": "^7.2",
         "spatie/laravel-translation-loader": "^2.8",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "2.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
