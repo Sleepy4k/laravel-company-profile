@@ -1,6 +1,5 @@
 <?php
 
-use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Console\Scheduling\Schedule;
@@ -20,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ])
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('make:sitemap')->daily();
+        $schedule->command('activitylog:clean')->daily();
     })
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
@@ -35,19 +35,17 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
-        //
         $middleware->redirectGuestsTo('/');
         $middleware->redirectUsersTo(function () {
             return route('dashboard.index');
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
             if (!$request->inertia()) return $response;
 
             if (!app()->environment(['local', 'testing'])) {
-                return Inertia::render('Error', [
+                return inertia('Error', [
                         'status' => $response->getStatusCode(),
                         'title' => trans('error.'.$response->getStatusCode().'.title'),
                         'description' => trans('error.'.$response->getStatusCode().'.description'),
