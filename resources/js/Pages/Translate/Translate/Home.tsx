@@ -6,6 +6,7 @@ import alert from '@/utils/sweet.alert';
 import { useEffect, useState } from 'react';
 import { Link, router } from '@inertiajs/react';
 import ResponsiveHeader from '@/Components/ResponsiveHeader';
+import ChangeDisplayMode from '@/Components/ChangeDisplayMode';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 interface IDeleteData {
@@ -141,32 +142,11 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
             className={mode == 'box' ? 'max-w-full flex overflow-x-scroll' : ''}
             header={
                 <ResponsiveHeader>
-                    <label className="swap swap-rotate relative lg:py-2 py-1 lg:px-3 px-1">
-                        <input type="checkbox" title='change mode for display data' className='hidden' onChange={handleChangeMode} checked={mode == 'box'} />
-                        <svg
-                            className="swap-off fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512">
-                            <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                        </svg>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            className="swap-on inline-block stroke-current">
-                            <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-                        </svg>
-                    </label>
-                    <Link href={route('translate.language.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <ChangeDisplayMode onChange={handleChangeMode} checked={mode == 'box'} />
+                    <Link href={route('translate.language.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Change Language
                     </Link>
-                    <Link href={route('translate.create')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('translate.create')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Create New
                     </Link>
                 </ResponsiveHeader>
@@ -188,11 +168,11 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
 
             <Modal show={confirmingTranslateDeletion} onClose={closeModal}>
                 <form className="p-6" onSubmit={handleDeleteTranslate}>
-                    <h2 className="text-lg font-medium text-gray-900">
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-300">
                         Are you sure you want to delete {translateDeleteData?.key} translate?
                     </h2>
 
-                    <p className="mt-1 text-sm text-gray-600">
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                         Once you delete this translate, all of its resources and data will be permanently deleted.
                         Please enter this translate key (<b>{`${translateDeleteData?.group}.${translateDeleteData?.key}`}</b>) to confirm you would like to permanently delete this translate.
                     </p>

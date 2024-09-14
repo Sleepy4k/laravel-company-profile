@@ -8,37 +8,37 @@ export default function BoxMode({ data, mode, deleteTranslate }: { data: any, mo
     return (
         <div className="flex justify-start px-4 pb-2 sm:px-6 ms-8 me-8 mb-5 space-x-8">
             {data && data.map((item: any, col: number) => (
-                <div key={col} className='inline-flex h-[calc(100vh-15rem)] w-[20rem] flex-col overflow-x-hidden overflow-y-hidden rounded-lg bg-neutral-400/40 border border-neutral-300/40 align-top shadow'>
+                <div key={col} className='inline-flex h-[calc(100vh-15rem)] w-[20rem] flex-col overflow-x-hidden overflow-y-hidden rounded-lg bg-neutral-400/40 dark:bg-gray-800 border border-neutral-300/40 dark:border-gray-800 align-top shadow'>
                     <div className='px-3 py-2.5'>
                         <div className='flex lg:flex-row flex-col items-center'>
-                            <h5 className='font-medium text-neutral-800 text-sm'>{capitalizeFirstLetter(item.group)}</h5>
+                            <h5 className='font-medium text-neutral-800 text-sm dark:text-gray-300'>{capitalizeFirstLetter(item.group)}</h5>
                         </div>
                         <div className='flex lg:flex-row flex-col items-center text-sm'>
-                            <span className='text-neutral-600'>Translate for {capitalizeFirstLetter(item.group)}</span>
-                            <span className='mx-1 text-neutral-900'>-</span>
-                            <span className='text-neutral-700'>{item.translations.length} translate</span>
+                            <span className='text-neutral-600 dark:text-gray-400'>Translate for {capitalizeFirstLetter(item.group)}</span>
+                            <span className='mx-1 text-neutral-900 dark:text-gray-400'>-</span>
+                            <span className='text-neutral-700 dark:text-gray-400'>{item.translations.length} translate</span>
                         </div>
                     </div>
                     <div className='overflow-x-hidden overflow-y-auto'>
                         {item && item.translations.length > 0 && item.translations.map((translate: any, row: number) => (
-                            <div key={row} className='m-3 overflow-hidden whitespace-normal rounded-md bg-white shadow'>
+                            <div key={row} className='m-3 overflow-hidden whitespace-normal rounded-md bg-white dark:bg-gray-900 shadow'>
                                 <div className='button-hidden group px-4 py-2'>
                                     <div className='flex'>
                                         <div className='flex-grow overflow-hidden text-ellipsis whitespace-nowrap'>
-                                            <Link href={route('translate.show', translate.uuid)} className='overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-neutral-900 focus:outline-none hover:text-neutral-500'>
+                                            <Link href={route('translate.show', translate.uuid)} className='overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-neutral-900 focus:outline-none hover:text-neutral-500 dark:text-gray-300'>
                                                 <h3>{translate.key} ({translate.group}.{translate.key})</h3>
                                             </Link>
                                             <div className='mt-1 flex text-sm flex-grow overflow-hidden '>
-                                                <p className='text-neutral-500'>
+                                                <p className='text-neutral-500 dark:text-gray-400'>
                                                     ID: "{translate.text.id || '-'}"
                                                     <br />
                                                     EN: "{translate.text.en || '-'}"
                                                 </p>
                                             </div>
-                                            <p className='mt-1 text-xs text-neutral-700'>Last update {translate.updated_at || '-'}</p>
+                                            <p className='mt-1 text-xs text-neutral-700 dark:text-gray-500'>Last update {translate.updated_at || '-'}</p>
                                         </div>
                                         <div className='ms-2'>
-                                            <div className='flex flex-col items-center space-y-1'>
+                                            <div className='flex flex-col items-center space-y-1 dark:text-white'>
                                                 <PopOver>
                                                     <Link
                                                         href={route('translate.show', translate.uuid)}

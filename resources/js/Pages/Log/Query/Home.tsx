@@ -4,6 +4,7 @@ import PopOver from '@/Components/PopOver';
 import DataTable from "@/Components/DataTable";
 import TextInput from "@/Components/TextInput";
 import { Link, router } from '@inertiajs/react';
+import CustomButton from '@/Components/CustomButton';
 import TableHeading from "@/Components/DataTable/Heading";
 import ResponsiveHeader from '@/Components/ResponsiveHeader';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -58,7 +59,7 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
             title="Query Log"
             header={
                 <ResponsiveHeader>
-                    <Link href={route('log.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('log.index')} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Back
                     </Link>
                 </ResponsiveHeader>
@@ -76,21 +77,21 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
                             onChange={debounce((e) => searchFieldChanged('search', e.target.value), 500)}
                         />
                         <div className="flex justify-end">
-                            <button
+                            <CustomButton
                                 type='button'
                                 disabled={isQueryParamEmpty()}
                                 className="btn btn-neutral ms-4 mt-4"
                                 onClick={handleReset}
                             >
                                 Reset
-                            </button>
-                            <button
+                            </CustomButton>
+                            <CustomButton
                                 type='button'
                                 className="btn btn-neutral ms-4 mt-4"
                                 onClick={handleReload}
                             >
                                 Reload
-                            </button>
+                            </CustomButton>
                         </div>
                     </>}
                     header={<>

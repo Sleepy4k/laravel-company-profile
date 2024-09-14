@@ -3,6 +3,7 @@ import { Link } from "@inertiajs/react";
 import PopOver from '@/Components/PopOver';
 import DataTable from "@/Components/DataTable";
 import TextInput from "@/Components/TextInput";
+import CustomButton from "@/Components/CustomButton";
 import TableHeading from "@/Components/DataTable/Heading";
 import { capitalizeFirstLetter, convertDateToLocaleString } from "@/utils/parse";
 
@@ -44,21 +45,21 @@ export default function TableMode({
                         onChange={debounce((e) => searchFieldChanged('search', e.target.value), 500)}
                     />
                     <div className="flex justify-end">
-                        <button
+                        <CustomButton
                             type='button'
                             disabled={isQueryParamEmpty()}
                             className="btn btn-neutral ms-4 mt-4"
                             onClick={handleReset}
                         >
                             Reset
-                        </button>
-                        <button
+                        </CustomButton>
+                        <CustomButton
                             type='button'
                             className="btn btn-neutral ms-4 mt-4"
                             onClick={handleReload}
                         >
                             Reload
-                        </button>
+                        </CustomButton>
                     </div>
                 </>}
                 header={<>

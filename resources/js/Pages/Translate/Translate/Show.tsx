@@ -11,18 +11,18 @@ export default function Create({ auth, data, backUrl }: PageProps<{ data: any, b
             title="View Translation"
             header={
                 <ResponsiveHeader>
-                    <Link href={route('translate.edit', data?.uuid || 0)} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('translate.edit', data?.uuid || 0)} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Edit
                     </Link>
-                    <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={backUrl} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Back
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
+            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <div>
-                    <label htmlFor="group" className="block text-sm font-medium text-gray-700">Group</label>
+                    <label htmlFor="group" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Group</label>
                     <TextInput
                         disabled
                         id="group"
@@ -33,7 +33,7 @@ export default function Create({ auth, data, backUrl }: PageProps<{ data: any, b
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
+                    <label htmlFor="key" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Key</label>
                     <TextInput
                         disabled
                         id="key"
@@ -44,7 +44,7 @@ export default function Create({ auth, data, backUrl }: PageProps<{ data: any, b
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="lang_id" className="block text-sm font-medium text-gray-700">Indonesian</label>
+                    <label htmlFor="lang_id" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Indonesian</label>
                     <TextInput
                         disabled
                         id="lang_id"
@@ -55,7 +55,7 @@ export default function Create({ auth, data, backUrl }: PageProps<{ data: any, b
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="lang_en" className="block text-sm font-medium text-gray-700">English</label>
+                    <label htmlFor="lang_en" className="block text-sm font-medium text-gray-700 dark:text-gray-400">English</label>
                     <TextInput
                         disabled
                         id="lang_en"

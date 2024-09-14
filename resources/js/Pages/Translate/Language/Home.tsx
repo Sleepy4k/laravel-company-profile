@@ -5,14 +5,12 @@ import { FormEventHandler } from "react";
 import { Link, useForm } from "@inertiajs/react";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import CustomButton from '@/Components/CustomButton';
 
 export default function Edit({ auth, translate, backUrl, errors, flash }: PageProps<{ translate: any, backUrl: string, flash: any }>) {
     const { data, setData, post, processing, reset, isDirty } = useForm({
         lang: translate.lang,
     });
-
-    console.log(translate.lang);
-
 
     const submit: FormEventHandler = (e: any) => {
         e.preventDefault();
@@ -85,13 +83,13 @@ export default function Edit({ auth, translate, backUrl, errors, flash }: PagePr
             title="Update Translation"
             header={
                 <ResponsiveHeader>
-                    <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={backUrl} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Back
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
+            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 {flash && (
                     <div className="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded relative mb-5" role="alert">
                         <strong className="font-bold">Info!</strong>
@@ -101,7 +99,7 @@ export default function Edit({ auth, translate, backUrl, errors, flash }: PagePr
 
                 <form onSubmit={submit} className="mb-5">
                     <div>
-                        <label htmlFor="lang" className="block text-sm font-medium text-gray-700">Default Lang</label>
+                        <label htmlFor="lang" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Default Lang</label>
                         <Select
                             id="lang"
                             name="lang"
@@ -120,12 +118,12 @@ export default function Edit({ auth, translate, backUrl, errors, flash }: PagePr
                     </div>
 
                     <div className="flex items-center justify-end mt-8 gap-3">
-                        <button type="reset" onClick={handleReset} disabled={processing} className="bg-neutral-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-neutral-700">
+                        <CustomButton type="reset" onClick={handleReset} disabled={processing} className="bg-neutral-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-neutral-700 dark:opacity-35">
                             Reset
-                        </button>
-                        <button type="submit" disabled={processing} className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700">
+                        </CustomButton>
+                        <CustomButton type="submit" disabled={processing} className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700">
                             Update
-                        </button>
+                        </CustomButton>
                     </div>
                 </form>
             </div>

@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 const alert = Swal.mixin({
     customClass: {
         container: 'bg-base-100 dark:bg-base-800 text-base-content dark:text-base-100',
-        popup: 'bg-base-200 dark:bg-base-700 text-base-content dark:text-base-100',
+        popup: 'bg-base-200 dark:bg-gray-700 text-base-content dark:text-gray-300',
         title: 'text-base-content dark:text-neutral-100 text-lg font-semibold',
         closeButton: 'text-base-content dark:text-neutral-100 hover:text-base-200',
         htmlContainer: 'text-base-content dark:text-neutral-100 text-base',

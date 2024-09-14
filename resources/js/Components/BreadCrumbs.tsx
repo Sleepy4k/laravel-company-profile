@@ -10,7 +10,7 @@ export default function BreadCrumbs() {
     }, []);
 
     return (
-        <div className="breadcrumbs font-semibold lg:text-sm text-xs leading-tight">
+        <div className="breadcrumbs font-semibold lg:text-sm text-xs dark:text-gray-400 leading-tight">
             <ul>
                 {breadcrumbs.map((breadcrumb, index) => {
                     const isFirst = index === 0;

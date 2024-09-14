@@ -1,24 +1,44 @@
 import { PageProps } from '@/types';
+import alert from '@/utils/sweet.alert';
 import { FormEventHandler } from 'react';
-import Checkbox from '@/Components/Checkbox';
+import { useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import { Link, useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Login({ status, canResetPassword }: PageProps<{ status?: string, canResetPassword: boolean }>) {
+export default function Login({ status }: PageProps<{ status?: string }>) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
-        remember: false,
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route('login'), {
+            onProgress: () => {
+                alert.fire({
+                    title: 'Logging in...',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                });
+            },
+            onSuccess: () => {
+                alert.fire({
+                    title: 'Logged in!',
+                    icon: 'success',
+                });
+            },
+            onError: () => {
+                alert.fire({
+                    title: 'Whoops!',
+                    text: 'Something went wrong.',
+                    icon: 'error',
+                });
+            },
             onFinish: () => reset('password'),
         });
     };
@@ -61,27 +81,7 @@ export default function Login({ status, canResetPassword }: PageProps<{ status?:
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                        />
-                        <span className="ms-2 text-sm text-gray-600">Remember me</span>
-                    </label>
-                </div>
-
                 <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Log in
                     </PrimaryButton>
