@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Log;
 
-use Inertia\Inertia;
 use App\Policies\Log\SystemPolicy;
 use App\Services\Log\SystemService;
 use App\Http\Controllers\Controller;
@@ -33,7 +32,7 @@ class SystemController extends Controller
         try {
             session()->put('log.system.url', request()->fullUrl());
 
-            return Inertia::render('Log/System/Home', $this->service->index());
+            return inertia('Log/System/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -47,7 +46,7 @@ class SystemController extends Controller
         Gate::authorize('view', [SystemPolicy::class, $name]);
 
         try {
-            return Inertia::render('Log/System/Show', $this->service->show($name));
+            return inertia('Log/System/Show', $this->service->show($name));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

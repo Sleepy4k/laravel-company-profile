@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Application;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Models\ApplicationSettingType;
@@ -35,7 +34,7 @@ class SettingTypeController extends Controller
         try {
             session()->put('application.setting.type.url', request()->fullUrl());
 
-            return Inertia::render('Application/Type/Home', $this->service->index());
+            return inertia('Application/Type/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -49,7 +48,7 @@ class SettingTypeController extends Controller
         Gate::authorize('create', ApplicationSettingType::class);
 
         try {
-            return Inertia::render('Application/Type/Create', $this->service->create());
+            return inertia('Application/Type/Create', $this->service->create());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -81,7 +80,7 @@ class SettingTypeController extends Controller
         Gate::authorize('view', $type);
 
         try {
-            return Inertia::render('Application/Type/Show', $this->service->show($type->id));
+            return inertia('Application/Type/Show', $this->service->show($type->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -95,7 +94,7 @@ class SettingTypeController extends Controller
         Gate::authorize('update', $type);
 
         try {
-            return Inertia::render('Application/Type/Edit', $this->service->edit($type->id));
+            return inertia('Application/Type/Edit', $this->service->edit($type->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

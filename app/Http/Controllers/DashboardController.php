@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use Inertia\Response;
 use App\Services\DashboardService;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -39,6 +38,6 @@ class DashboardController extends Controller implements HasMiddleware
      */
     public function __invoke(): Response
     {
-        return Inertia::render('Dashboard', $this->service->invoke());
+        return inertia('Dashboard', $this->service->invoke());
     }
 }

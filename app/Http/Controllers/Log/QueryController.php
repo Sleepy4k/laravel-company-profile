@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Log;
 
-use Inertia\Inertia;
 use App\Policies\Log\QueryPolicy;
 use App\Services\Log\QueryService;
 use App\Http\Controllers\Controller;
@@ -33,7 +32,7 @@ class QueryController extends Controller
         try {
             session()->put('log.query.url', request()->fullUrl());
 
-            return Inertia::render('Log/Query/Home', $this->service->index());
+            return inertia('Log/Query/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -47,7 +46,7 @@ class QueryController extends Controller
         Gate::authorize('view', [QueryPolicy::class, $name]);
 
         try {
-            return Inertia::render('Log/Query/Show', $this->service->show($name));
+            return inertia('Log/Query/Show', $this->service->show($name));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

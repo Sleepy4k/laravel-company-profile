@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Install;
 
-use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -32,7 +31,7 @@ class SetupController extends Controller
     public function index(): Response|RedirectResponse
     {
         try {
-            return Inertia::render('Install/Setup', $this->service->index());
+            return inertia('Install/Setup', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

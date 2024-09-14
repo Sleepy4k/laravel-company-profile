@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Log;
 
-use Inertia\Inertia;
 use App\Policies\Log\ModelPolicy;
 use App\Services\Log\ModelService;
 use App\Http\Controllers\Controller;
@@ -34,7 +33,7 @@ class ModelController extends Controller
         try {
             session()->put('log.model.url', request()->fullUrl());
 
-            return Inertia::render('Log/Model/Home', $this->service->index());
+            return inertia('Log/Model/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -48,7 +47,7 @@ class ModelController extends Controller
         Gate::authorize('view', ModelPolicy::class);
 
         try {
-            return Inertia::render('Log/Model/Show', $this->service->show($model));
+            return inertia('Log/Model/Show', $this->service->show($model));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

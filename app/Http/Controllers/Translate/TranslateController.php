@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Translate;
 
-use Inertia\Inertia;
 use App\Models\Translate;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -35,7 +34,7 @@ class TranslateController extends Controller
         try {
             session()->put('translate.translate.url', request()->fullUrl());
 
-            return Inertia::render('Translate/Translate/Home', $this->service->index($mode));
+            return inertia('Translate/Translate/Home', $this->service->index($mode));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -49,7 +48,7 @@ class TranslateController extends Controller
         Gate::authorize('create', Translate::class);
 
         try {
-            return Inertia::render('Translate/Translate/Create', $this->service->create());
+            return inertia('Translate/Translate/Create', $this->service->create());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -81,7 +80,7 @@ class TranslateController extends Controller
         Gate::authorize('view', $list);
 
         try {
-            return Inertia::render('Translate/Translate/Show', $this->service->show($list));
+            return inertia('Translate/Translate/Show', $this->service->show($list));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -95,7 +94,7 @@ class TranslateController extends Controller
         Gate::authorize('edit', $list);
 
         try {
-            return Inertia::render('Translate/Translate/Edit', $this->service->edit($list));
+            return inertia('Translate/Translate/Edit', $this->service->edit($list));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

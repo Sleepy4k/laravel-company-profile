@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Log;
 
-use Inertia\Inertia;
 use App\Policies\Log\AuthPolicy;
 use App\Services\Log\AuthService;
 use App\Http\Controllers\Controller;
@@ -34,7 +33,7 @@ class AuthController extends Controller
         try {
             session()->put('log.auth.url', request()->fullUrl());
 
-            return Inertia::render('Log/Auth/Home', $this->service->index());
+            return inertia('Log/Auth/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -48,7 +47,7 @@ class AuthController extends Controller
         Gate::authorize('view', AuthPolicy::class);
 
         try {
-            return Inertia::render('Log/Auth/Show', $this->service->show($auth));
+            return inertia('Log/Auth/Show', $this->service->show($auth));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

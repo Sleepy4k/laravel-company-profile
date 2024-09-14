@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -22,7 +21,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        return inertia('Profile/Edit', [
             'status' => session('status'),
         ]);
     }

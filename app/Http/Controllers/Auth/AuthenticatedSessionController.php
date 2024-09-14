@@ -2,25 +2,38 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Services\Auth\AuthenticatedSessionService;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * @var AuthenticatedSessionService
+     */
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(AuthenticatedSessionService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * Display the login view.
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
-        ]);
+        try {
+            return inertia('Auth/Login', $this->service->create());
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 
     /**
@@ -28,18 +41,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        try {
+            $request->authenticate();
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
-        $user = auth('web')->user();
+            $this->service->store($request->validated());
 
-        activity('auth')
-            ->event('login')
-            ->causedBy($user)
-            ->withProperties($request)
-            ->log('User ' . $user->name . ' successfully logged in');
-
-        return redirect()->intended(route('dashboard.index', absolute: false));
+            return redirect()->intended(route('dashboard.index', absolute: false));
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 
     /**
@@ -47,20 +58,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $user = auth('web')->user();
+        try {
+            $this->service->destroy();
 
-        activity('auth')
-            ->event('logout')
-            ->causedBy($user)
-            ->withProperties($request)
-            ->log('User ' . $user->name . ' successfully logged out');
+            $session = $request->session();
+            $session->invalidate();
+            $session->regenerateToken();
 
-        auth('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/');
+            return redirect('/');
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 }

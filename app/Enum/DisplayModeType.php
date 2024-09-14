@@ -31,4 +31,14 @@ enum DisplayModeType: string
             default => throw new \InvalidArgumentException("Invalid value: $value"),
         };
     }
+
+    /**
+     * Convert the enum to a where case
+     *
+     * @return string
+     */
+    public static function toWhereCase(): string
+    {
+        return implode('|', self::toArray());
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Application;
 
-use Inertia\Inertia;
 use App\Models\ApplicationSetting;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -35,7 +34,7 @@ class SettingController extends Controller
         try {
             session()->put('application.setting.url', request()->fullUrl());
 
-            return Inertia::render('Application/Setting/Home', $this->service->index($mode));
+            return inertia('Application/Setting/Home', $this->service->index($mode));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -49,7 +48,7 @@ class SettingController extends Controller
         Gate::authorize('create', ApplicationSetting::class);
 
         try {
-            return Inertia::render('Application/Setting/Create', $this->service->create());
+            return inertia('Application/Setting/Create', $this->service->create());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -81,7 +80,7 @@ class SettingController extends Controller
         Gate::authorize('view', $setting);
 
         try {
-            return Inertia::render('Application/Setting/Show', $this->service->show($setting->id));
+            return inertia('Application/Setting/Show', $this->service->show($setting->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
@@ -95,7 +94,7 @@ class SettingController extends Controller
         Gate::authorize('edit', $setting);
 
         try {
-            return Inertia::render('Application/Setting/Edit', $this->service->edit($setting->id));
+            return inertia('Application/Setting/Edit', $this->service->edit($setting->id));
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

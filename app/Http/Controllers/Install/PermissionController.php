@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Install;
 
-use Inertia\Inertia;
 use Inertia\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +30,7 @@ class PermissionController extends Controller
     public function __invoke(): Response|RedirectResponse
     {
         try {
-            return Inertia::render('Install/Permissions', $this->service->invoke());
+            return inertia('Install/Permissions', $this->service->invoke());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

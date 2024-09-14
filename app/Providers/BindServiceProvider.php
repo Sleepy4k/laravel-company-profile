@@ -21,6 +21,7 @@ class BindServiceProvider extends ServiceProvider
         $this->app->bind('App\Contracts\Models\PermissionInterface', 'App\Repositories\Models\PermissionRepository');
         $this->app->bind('App\Contracts\Models\ApplicationSettingInterface', 'App\Repositories\Models\ApplicationSettingRepository');
         $this->app->bind('App\Contracts\Models\ApplicationSettingTypeInterface', 'App\Repositories\Models\ApplicationSettingTypeRepository');
+        $this->app->bind('App\Contracts\Models\ApplicationSettingTypeInterface', 'App\Repositories\Models\ApplicationSettingTypeRepository');
     }
 
     /**

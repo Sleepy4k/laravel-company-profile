@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -28,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('web', function (Request $request) {
             return Limit::perMinute(30)->by(optional($request->user())->id ?: $request->ip())->response(function () use ($request) {
-                if ($request->inertia()) return Inertia::render('Error', ['status' => 429])
+                if ($request->inertia()) return inertia('Error', ['status' => 429])
                     ->toResponse($request)
                     ->setStatusCode(429);
 

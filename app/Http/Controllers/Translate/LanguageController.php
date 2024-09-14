@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Translate;
 
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\Translate\LanguagePolicy;
@@ -32,7 +31,7 @@ class LanguageController extends Controller
         Gate::authorize('viewAny', LanguagePolicy::class);
 
         try {
-            return Inertia::render('Translate/Language/Home', $this->service->index());
+            return inertia('Translate/Language/Home', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }

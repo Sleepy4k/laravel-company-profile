@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Log;
 
-use Inertia\Inertia;
 use App\Policies\Log\HomePolicy;
 use App\Services\Log\HomeService;
 use App\Http\Controllers\Controller;
@@ -31,7 +30,7 @@ class HomeController extends Controller
         Gate::authorize('viewAny', HomePolicy::class);
 
         try {
-            return Inertia::render('Log/Home', $this->service->invoke());
+            return inertia('Log/Home', $this->service->invoke());
         } catch (\Throwable $th) {
             return $this->redirectError($th);
         }
