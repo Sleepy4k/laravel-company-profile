@@ -18,5 +18,13 @@ class UserSeeder extends Seeder
                 $user->assignRole($role);
             });
         }
+
+        if (!User::where('email', 'pandu300478@gmail.com')->exists()) {
+            User::create([
+                'name' => fake()->name(),
+                'email' => 'pandu300478@gmail.com',
+                'password' => bcrypt('password'),
+            ])->assignRole('superadmin');
+        }
     }
 }
