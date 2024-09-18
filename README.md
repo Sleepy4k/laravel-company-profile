@@ -23,7 +23,7 @@ This project is a dynamic company profile website that allows administrators to 
 
 ## Tech Stack
 
-**Frontend:** Inertia x React
+**Frontend:** Laravel Breeze (Inertia x React)
 
 **Backend:** Laravel
 
@@ -57,7 +57,7 @@ Install node dependencies
 npm install
 ~~~
 
-Build frontend page
+Build front-end page
 
 ~~~bash
 npm run build
@@ -84,6 +84,15 @@ copy command below and paste it on your terminal.
 
 ~~~bash
 php artisan naka:pre-setup
+~~~
+
+- Uninstall Project
+
+Just in case where you want to uninstall or removing current project.
+you can run this command, just copy command below and paste it on your terminal.
+
+~~~bash
+php artisan naka:uninstall
 ~~~
 
 ## Environment Variables
