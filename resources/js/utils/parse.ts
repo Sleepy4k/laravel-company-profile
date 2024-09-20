@@ -20,8 +20,19 @@ const capitalizeFirstLetter = (str: string) => {
     }
 }
 
+const makeRowsFromContent = (content: any) => {
+    if (typeof content !== 'string') {
+        content = convertObjectToString(content);
+    }
+
+    const maxCharPerRow = 25;
+    const rows = content.length / maxCharPerRow;
+
+    return rows < 5 ? 5 : Math.ceil(rows);
+}
+
 const convertObjectToString = (obj: any) => {
     return JSON.stringify(obj, null, 4);
 }
 
-export { convertDateToLocaleString, capitalizeFirstLetter, convertObjectToString };
+export { convertDateToLocaleString, capitalizeFirstLetter, makeRowsFromContent, convertObjectToString };

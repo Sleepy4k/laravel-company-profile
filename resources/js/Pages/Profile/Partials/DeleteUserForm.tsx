@@ -4,8 +4,8 @@ import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import DangerButton from '@/Components/DangerButton';
-import { useRef, useState, FormEventHandler } from 'react';
 import SecondaryButton from '@/Components/SecondaryButton';
+import { useRef, useState, FormEventHandler } from 'react';
 
 export default function DeleteUserForm({ className = '' }: { className?: string }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
@@ -77,7 +77,7 @@ export default function DeleteUserForm({ className = '' }: { className?: string 
                             ref={passwordInput}
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
-                            className="mt-1 block w-3/4"
+                            className="mt-1 block w-3/4 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                             isFocused
                             placeholder="Password"
                         />

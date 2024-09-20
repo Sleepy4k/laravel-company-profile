@@ -7,8 +7,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {
     capitalizeFirstLetter,
     convertDateToLocaleString,
-    convertObjectToString,
-    makeRowsFromContent,
 } from "@/utils/parse";
 
 export default function Show({
@@ -17,9 +15,15 @@ export default function Show({
 }: PageProps<{ data: any; backUrl: string }>) {
     return (
         <AuthenticatedLayout
-            title={trans("page.log.auth.show.title", "View Authentication Log")}
+            title={trans("page.rbac.role.show.title", "View Role")}
             header={
                 <ResponsiveHeader>
+                    <Link
+                        href={route("rbac.roles.edit", data?.uuid || 0)}
+                        className="bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white"
+                    >
+                        Edit
+                    </Link>
                     <Link
                         href={backUrl}
                         className="bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white"
@@ -35,7 +39,7 @@ export default function Show({
                         htmlFor="id"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
-                        {trans("page.log.auth.field.id", "ID")}
+                        {trans("page.rbac.role.field.id", "ID")}
                     </label>
                     <TextInput
                         disabled
@@ -47,83 +51,34 @@ export default function Show({
 
                 <div className="mt-4">
                     <label
-                        htmlFor="event"
+                        htmlFor="name"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
-                        {trans("page.log.auth.field.event", "Event")}
+                        {trans("page.rbac.role.field.name", "Name")}
                     </label>
                     <TextInput
                         disabled
-                        id="event"
-                        value={capitalizeFirstLetter(data.event)}
+                        id="name"
+                        value={capitalizeFirstLetter(data.name)}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
                     />
                 </div>
 
                 <div className="mt-4">
                     <label
-                        htmlFor="description"
+                        htmlFor="guard_name"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
                         {trans(
-                            "page.log.auth.field.description",
-                            "Description"
+                            "page.rbac.role.field.guard_name",
+                            "Guard Name"
                         )}
                     </label>
                     <TextInput
                         disabled
-                        id="description"
-                        value={data.description}
+                        id="guard_name"
+                        value={capitalizeFirstLetter(data.guard_name)}
                         className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <label
-                        htmlFor="causer_type"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans(
-                            "page.log.auth.field.causer_type",
-                            "Causer Type"
-                        )}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="causer_type"
-                        value={data.causer_type}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <label
-                        htmlFor="causer_id"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.causer_id", "Causer Id")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="causer_id"
-                        value={data.causer_id}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <label
-                        htmlFor="properties"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.properties", "Properties")}
-                    </label>
-                    <textarea
-                        disabled
-                        id="properties"
-                        rows={makeRowsFromContent(data.properties)}
-                        value={convertObjectToString(data.properties)}
-                        className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                     />
                 </div>
 

@@ -7,7 +7,7 @@ import InputLabel from '@/Components/InputLabel';
 import { useForm, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function UpdateProfileInformation({ status, className = '' }: { status?: string, className?: string }) {
+export default function UpdateProfileInformation({ className = '' }: { className?: string }) {
     const user = usePage<PageProps>().props.auth.user;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({

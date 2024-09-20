@@ -15,7 +15,7 @@ interface IDeleteData {
     group: string;
 }
 
-export default function Home({ auth, data, queryParams = null }: PageProps<{ data: any, queryParams: any }>) {
+export default function Home({ data, queryParams = null }: PageProps<{ data: any, queryParams: any }>) {
     const [mode, setMode] = useState<'table' | 'box' | null>(null);
     const [translateDeleteData, setTranslateDeleteData] = useState<IDeleteData|null>(null);
     const [confirmingTranslateDeletion, setConfirmingTranslateDeletion] = useState(false);
@@ -137,7 +137,6 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Translation"
             className={mode == 'box' ? 'max-w-full flex overflow-x-scroll' : ''}
             header={
@@ -184,7 +183,7 @@ export default function Home({ auth, data, queryParams = null }: PageProps<{ dat
                             type="text"
                             name="key"
                             placeholder="Key"
-                            className="mt-1 block w-3/4"
+                            className="mt-1 block w-3/4 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                         />
                     </div>
 

@@ -6,7 +6,7 @@ import { convertDateToLocaleString } from "@/utils/parse";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Show({ auth, data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
+export default function Show({ data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
     const [isFile, setIsFile] = useState(false);
 
     useEffect(() => {
@@ -17,22 +17,21 @@ export default function Show({ auth, data, backUrl }: PageProps<{ data: any, bac
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="View Application"
             header={
                 <ResponsiveHeader>
-                    <Link href={route('application.edit', data?.uuid || 0)} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={route('application.edit', data?.uuid || 0)} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Edit
                     </Link>
-                    <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={backUrl} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Back
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
+            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <div>
-                    <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
+                    <label htmlFor="key" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Key</label>
                     <TextInput
                         disabled
                         id="key"
@@ -42,7 +41,7 @@ export default function Show({ auth, data, backUrl }: PageProps<{ data: any, bac
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="display" className="block text-sm font-medium text-gray-700">Display</label>
+                    <label htmlFor="display" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Display</label>
                     <TextInput
                         disabled
                         id="display"
@@ -53,7 +52,7 @@ export default function Show({ auth, data, backUrl }: PageProps<{ data: any, bac
 
                 {isFile ? (
                     <div className="mt-4">
-                        <label htmlFor="file" className="block text-sm font-medium text-gray-700">File</label>
+                        <label htmlFor="file" className="block text-sm font-medium text-gray-700 dark:text-gray-400">File</label>
                             <div className="mt-2 card bg-base-100 w-[15rem] shadow-xl">
                                 <figure>
                                     <img src={data.value} alt="File Preview"/>
@@ -62,7 +61,7 @@ export default function Show({ auth, data, backUrl }: PageProps<{ data: any, bac
                     </div>
                 ) : (
                     <div className="mt-4">
-                        <label htmlFor="value" className="block text-sm font-medium text-gray-700">Value</label>
+                        <label htmlFor="value" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Value</label>
                         <TextInput
                             disabled
                             id="value"
@@ -73,17 +72,17 @@ export default function Show({ auth, data, backUrl }: PageProps<{ data: any, bac
                 )}
 
                 <div className="mt-4">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Description</label>
                     <textarea
                         disabled
                         id="description"
                         value={data.description}
-                        className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                        className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                     />
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="type_id" className="block text-sm font-medium text-gray-700">Type</label>
+                    <label htmlFor="type_id" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Type</label>
                     <TextInput
                         disabled
                         id="type_id"

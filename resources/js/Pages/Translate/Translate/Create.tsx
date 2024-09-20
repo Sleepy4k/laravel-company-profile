@@ -7,7 +7,7 @@ import CustomButton from "@/Components/CustomButton";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Create({ auth, backUrl, errors }: PageProps<{ backUrl: string }>) {
+export default function Create({ backUrl, errors }: PageProps<{ backUrl: string }>) {
     const { data, setData, post, processing, reset, isDirty } = useForm({
         group: '',
         key: '',
@@ -71,7 +71,6 @@ export default function Create({ auth, backUrl, errors }: PageProps<{ backUrl: s
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Create Translation"
             header={
                 <ResponsiveHeader>

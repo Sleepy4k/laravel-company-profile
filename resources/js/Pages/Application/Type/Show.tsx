@@ -5,10 +5,9 @@ import { capitalizeFirstLetter } from "@/utils/parse";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Show({ auth, data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
+export default function Show({ data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="View Application Type"
             header={
                 <ResponsiveHeader>

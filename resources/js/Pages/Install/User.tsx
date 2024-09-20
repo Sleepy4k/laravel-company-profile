@@ -1,25 +1,25 @@
-import { PageProps } from '@/types';
-import { FormEventHandler } from 'react';
-import { useForm } from '@inertiajs/react';
-import InstallationLayout from '@/Layouts/InstallationLayout';
+import { PageProps } from "@/types";
+import { FormEventHandler } from "react";
+import { useForm } from "@inertiajs/react";
+import InstallationLayout from "@/Layouts/InstallationLayout";
 
 export default function User({ errors }: PageProps) {
-    const { data, setData, post, get, processing, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+    const { data, setData, post, processing, reset } = useForm({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('install.user.store'), {
+        post(route("install.user.store"), {
             preserveScroll: true,
-            onSuccess: () => window.location.replace(route('install.finalize')),
+            onSuccess: () => window.location.replace(route("install.finalize")),
             onFinish: () => {
-                reset('password', 'password_confirmation');
-            }
+                reset("password", "password_confirmation");
+            },
         });
     };
 
@@ -44,8 +44,11 @@ export default function User({ errors }: PageProps) {
                     </div>
                     <div className="ml-3">
                         <h3 className="text-sm font-medium text-warning-800">
-                            If you are submitted form and you are getting redirected to the same page, please click the "Install" button again.
-                            This is a known issue because of restarting server from changed env data and we are working on it.
+                            If you are submitted form and you are getting
+                            redirected to the same page, please click the
+                            "Install" button again. This is a known issue
+                            because of restarting server from changed env data
+                            and we are working on it.
                         </h3>
                     </div>
                 </div>
@@ -53,12 +56,20 @@ export default function User({ errors }: PageProps) {
 
             <form onSubmit={submit}>
                 <div className="p-3">
-                    <h5 className="my-5 text-lg font-semibold text-neutral-800">Configure Admin User</h5>
+                    <h5 className="my-5 text-lg font-semibold text-neutral-800">
+                        Configure Admin User
+                    </h5>
 
                     <div className="space-y-6 sm:space-y-5">
                         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-neutral-200 sm:pt-5">
-                            <label htmlFor="inputUserName" className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2">
-                                <span className="mr-1 text-sm text-danger-600">*</span>Name (Full Name)
+                            <label
+                                htmlFor="inputUserName"
+                                className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2"
+                            >
+                                <span className="mr-1 text-sm text-danger-600">
+                                    *
+                                </span>
+                                Name (Full Name)
                             </label>
                             <div className="mt-1 sm:col-span-2 sm:mt-0">
                                 <input
@@ -67,17 +78,29 @@ export default function User({ errors }: PageProps) {
                                     name="name"
                                     value={data.name}
                                     disabled={processing}
-                                    placeholder='Enter your full name'
-                                    className="block w-full rounded-md border border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                    onChange={(e) => setData('name', e.target.value)}
+                                    placeholder="Enter your full name"
+                                    className="block w-full rounded-md border border-neutral-300 dark:text-black shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                    onChange={(e) =>
+                                        setData("name", e.target.value)
+                                    }
                                 />
-                                {errors?.name && <p className="mt-2 text-sm text-danger-600">{errors.name}</p>}
+                                {errors?.name && (
+                                    <p className="mt-2 text-sm text-danger-600">
+                                        {errors.name}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
                         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-neutral-200 sm:pt-5">
-                            <label htmlFor="inputEmail" className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2">
-                                <span className="mr-1 text-sm text-danger-600">*</span>E-Mail Address
+                            <label
+                                htmlFor="inputEmail"
+                                className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2"
+                            >
+                                <span className="mr-1 text-sm text-danger-600">
+                                    *
+                                </span>
+                                E-Mail Address
                             </label>
                             <div className="mt-1 sm:col-span-2 sm:mt-0">
                                 <input
@@ -86,17 +109,29 @@ export default function User({ errors }: PageProps) {
                                     name="email"
                                     value={data.email}
                                     disabled={processing}
-                                    placeholder='Enter your email address that will be used for login'
-                                    className="block w-full rounded-md border border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                    onChange={(e) => setData('email', e.target.value)}
+                                    placeholder="Enter your email address that will be used for login"
+                                    className="block w-full rounded-md border border-neutral-300 dark:text-black shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                    onChange={(e) =>
+                                        setData("email", e.target.value)
+                                    }
                                 />
-                                {errors?.email && <p className="mt-2 text-sm text-danger-600">{errors.email}</p>}
+                                {errors?.email && (
+                                    <p className="mt-2 text-sm text-danger-600">
+                                        {errors.email}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
                         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-neutral-200 sm:pt-5">
-                            <label htmlFor="inputPassword" className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2">
-                                <span className="mr-1 text-sm text-danger-600">*</span>Password
+                            <label
+                                htmlFor="inputPassword"
+                                className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2"
+                            >
+                                <span className="mr-1 text-sm text-danger-600">
+                                    *
+                                </span>
+                                Password
                             </label>
                             <div className="mt-1 sm:col-span-2 sm:mt-0">
                                 <input
@@ -105,17 +140,29 @@ export default function User({ errors }: PageProps) {
                                     name="password"
                                     value={data.password}
                                     disabled={processing}
-                                    placeholder='Login password'
-                                    className="block w-full rounded-md border border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                    onChange={(e) => setData('password', e.target.value)}
+                                    placeholder="Login password"
+                                    className="block w-full rounded-md border border-neutral-300 dark:text-black shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                    onChange={(e) =>
+                                        setData("password", e.target.value)
+                                    }
                                 />
-                                {errors?.password && <p className="mt-2 text-sm text-danger-600">{errors.password}</p>}
+                                {errors?.password && (
+                                    <p className="mt-2 text-sm text-danger-600">
+                                        {errors.password}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
                         <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-neutral-200 sm:pt-5">
-                            <label htmlFor="inputPasswordConfirm" className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2">
-                                <span className="mr-1 text-sm text-danger-600">*</span>Confirm Password
+                            <label
+                                htmlFor="inputPasswordConfirm"
+                                className="block text-sm font-medium text-neutral-700 sm:mt-px sm:pt-2"
+                            >
+                                <span className="mr-1 text-sm text-danger-600">
+                                    *
+                                </span>
+                                Confirm Password
                             </label>
                             <div className="mt-1 sm:col-span-2 sm:mt-0">
                                 <input
@@ -124,18 +171,31 @@ export default function User({ errors }: PageProps) {
                                     name="password_confirmation"
                                     value={data.password_confirmation}
                                     disabled={processing}
-                                    placeholder='Confirm login password'
-                                    className="block w-full rounded-md border border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    placeholder="Confirm login password"
+                                    className="block w-full rounded-md border border-neutral-300 dark:text-black shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                                    onChange={(e) =>
+                                        setData(
+                                            "password_confirmation",
+                                            e.target.value
+                                        )
+                                    }
                                 />
-                                {errors?.password_confirmation && <p className="mt-2 text-sm text-danger-600">{errors.password_confirmation}</p>}
+                                {errors?.password_confirmation && (
+                                    <p className="mt-2 text-sm text-danger-600">
+                                        {errors.password_confirmation}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="-m-7 -mb-11 mt-6 rounded-b border-t border-neutral-200 bg-neutral-50 p-4 text-right">
-                    <button type="submit" disabled={processing} className="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 hover:bg-primary-700">
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 hover:bg-primary-700"
+                    >
                         Install
                     </button>
                 </div>

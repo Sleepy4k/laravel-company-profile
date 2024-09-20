@@ -6,7 +6,7 @@ export default function BreadCrumbs() {
     const [breadcrumbs, setBreadcrumbs] = useState<string[]>([]);
 
     useEffect(() => {
-        setBreadcrumbs(window.location.pathname.split('/').filter(Boolean));
+        setBreadcrumbs(window.location.pathname.split("/").filter(Boolean));
     }, []);
 
     return (
@@ -14,20 +14,26 @@ export default function BreadCrumbs() {
             <ul>
                 {breadcrumbs.map((breadcrumb, index) => {
                     const isFirst = index === 0;
-                    const isNameNotWord = typeof breadcrumb !== 'string' || !/^[a-zA-Z]+$/.test(breadcrumb);
-                    const name = isNameNotWord ? breadcrumb : capitalizeFirstLetter(breadcrumb);
+                    const isNameNotWord =
+                        typeof breadcrumb !== "string" ||
+                        !/^[a-zA-Z]+$/.test(breadcrumb);
+                    const name = isNameNotWord
+                        ? breadcrumb
+                        : capitalizeFirstLetter(breadcrumb);
 
                     return (
                         <li key={index} className="inline">
                             {isFirst ? (
-                                <Link href={route('dashboard.index')}>{name}</Link>
+                                <Link href={route("dashboard.index")}>
+                                    {name}
+                                </Link>
                             ) : (
                                 <span>{name}</span>
                             )}
                         </li>
-                    )
+                    );
                 })}
             </ul>
         </div>
-    )
+    );
 }

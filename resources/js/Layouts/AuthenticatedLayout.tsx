@@ -1,14 +1,26 @@
-import { User } from '@/types';
-import NavLink from '@/Components/NavLink';
-import Dropdown from '@/Components/Dropdown';
-import { Head, Link } from '@inertiajs/react';
-import BreadCrumbs from './../Components/BreadCrumbs';
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { useState, PropsWithChildren, ReactNode } from 'react';
+import { User } from "@/types";
+import NavLink from "@/Components/NavLink";
+import Dropdown from "@/Components/Dropdown";
+import { Head, Link, usePage } from "@inertiajs/react";
+import BreadCrumbs from "./../Components/BreadCrumbs";
+import ApplicationLogo from "@/Components/ApplicationLogo";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
+import { useState, PropsWithChildren, ReactNode } from "react";
 
-export default function Authenticated({ user, header, title, className = '', children }: PropsWithChildren<{ user: User, title: string, header?: ReactNode, className?: string }>) {
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+export default function Authenticated({
+    header,
+    title,
+    className = "",
+    children,
+}: PropsWithChildren<{
+    title: string;
+    header?: ReactNode;
+    className?: string;
+}>) {
+    const auth: any = usePage().props?.auth;
+    const user: User = auth?.user;
+    const [showingNavigationDropdown, setShowingNavigationDropdown] =
+        useState(false);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -25,22 +37,89 @@ export default function Authenticated({ user, header, title, className = '', chi
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                <NavLink
+                                    permission="dashboard.index"
+                                    href={route("dashboard.index")}
+                                    active={route().current("dashboard.index")}
+                                >
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                <NavLink
+                                    permission="gallery.index"
+                                    href={route("dashboard.index")}
+                                    active={route().current("dashboard.index")}
+                                >
                                     Gallery
                                 </NavLink>
-                                <NavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                                <NavLink
+                                    permission="blog.index"
+                                    href={route("dashboard.index")}
+                                    active={route().current("dashboard.index")}
+                                >
                                     Blog
                                 </NavLink>
-                                <NavLink href={route('application.index', { displayMode: 'table' })} active={route().current('application.index', { displayMode: 'table' }) || route().current('application.index', { displayMode: 'box' }) || route().current('application.type.index')}>
+                                <NavLink
+                                    permission="rbac.index"
+                                    href={route("rbac.index")}
+                                    active={
+                                        route().current("rbac.index") ||
+                                        route().current("rbac.roles.index") ||
+                                        route().current(
+                                            "rbac.permissions.index"
+                                        )
+                                    }
+                                >
+                                    RBAC
+                                </NavLink>
+                                <NavLink
+                                    permission="application.index"
+                                    href={route("application.index", {
+                                        displayMode: "table",
+                                    })}
+                                    active={
+                                        route().current("application.index", {
+                                            displayMode: "table",
+                                        }) ||
+                                        route().current("application.index", {
+                                            displayMode: "box",
+                                        }) ||
+                                        route().current(
+                                            "application.type.index"
+                                        )
+                                    }
+                                >
                                     Application
                                 </NavLink>
-                                <NavLink href={route('translate.index', { displayMode: 'table' })} active={route().current('translate.index', { displayMode: 'table' }) || route().current('translate.index', { displayMode: 'box' }) || route().current('translate.language.index')}>
+                                <NavLink
+                                    permission="translate.index"
+                                    href={route("translate.index", {
+                                        displayMode: "table",
+                                    })}
+                                    active={
+                                        route().current("translate.index", {
+                                            displayMode: "table",
+                                        }) ||
+                                        route().current("translate.index", {
+                                            displayMode: "box",
+                                        }) ||
+                                        route().current(
+                                            "translate.language.index"
+                                        )
+                                    }
+                                >
                                     Translate
                                 </NavLink>
-                                <NavLink href={route('log.index')} active={route().current('log.index') || route().current('log.auth.index') || route().current('log.model.index') || route().current('log.system.index') || route().current('log.query.index')}>
+                                <NavLink
+                                    permission="log.index"
+                                    href={route("log.index")}
+                                    active={
+                                        route().current("log.index") ||
+                                        route().current("log.auth.index") ||
+                                        route().current("log.model.index") ||
+                                        route().current("log.system.index") ||
+                                        route().current("log.query.index")
+                                    }
+                                >
                                     Log
                                 </NavLink>
                             </div>
@@ -74,8 +153,16 @@ export default function Authenticated({ user, header, title, className = '', chi
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button">
+                                        <Dropdown.Link
+                                            href={route("profile.edit")}
+                                        >
+                                            Profile
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("logout")}
+                                            method="post"
+                                            as="button"
+                                        >
                                             Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
@@ -87,19 +174,36 @@ export default function Authenticated({ user, header, title, className = '', chi
                             <button
                                 type="button"
                                 title='Toggle "showingNavigationDropdown"'
-                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
+                                onClick={() =>
+                                    setShowingNavigationDropdown(
+                                        (previousState) => !previousState
+                                    )
+                                }
                                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
                             >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <svg
+                                    className="h-6 w-6"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path
-                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                        className={
+                                            !showingNavigationDropdown
+                                                ? "inline-flex"
+                                                : "hidden"
+                                        }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
                                         d="M4 6h16M4 12h16M4 18h16"
                                     />
                                     <path
-                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                        className={
+                                            showingNavigationDropdown
+                                                ? "inline-flex"
+                                                : "hidden"
+                                        }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
@@ -111,24 +215,73 @@ export default function Authenticated({ user, header, title, className = '', chi
                     </div>
                 </div>
 
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
+                <div
+                    className={
+                        (showingNavigationDropdown ? "block" : "hidden") +
+                        " sm:hidden"
+                    }
+                >
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                        <ResponsiveNavLink
+                            href={route("dashboard.index")}
+                            active={route().current("dashboard.index")}
+                        >
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                        <ResponsiveNavLink
+                            href={route("dashboard.index")}
+                            active={route().current("dashboard.index")}
+                        >
                             Gallery
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('dashboard.index')} active={route().current('dashboard.index')}>
+                        <ResponsiveNavLink
+                            href={route("dashboard.index")}
+                            active={route().current("dashboard.index")}
+                        >
                             Blog
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('application.index', { displayMode: 'table' })} active={route().current('application.index', { displayMode: 'table' }) || route().current('application.index', { displayMode: 'box' }) || route().current('application.type.index')}>
+                        <ResponsiveNavLink
+                            href={route("application.index", {
+                                displayMode: "table",
+                            })}
+                            active={
+                                route().current("application.index", {
+                                    displayMode: "table",
+                                }) ||
+                                route().current("application.index", {
+                                    displayMode: "box",
+                                }) ||
+                                route().current("application.type.index")
+                            }
+                        >
                             Application
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('translate.index', { displayMode: 'table' })} active={route().current('translate.index', { displayMode: 'table' }) || route().current('translate.index', { displayMode: 'box' }) || route().current('translate.language.index')}>
+                        <ResponsiveNavLink
+                            href={route("translate.index", {
+                                displayMode: "table",
+                            })}
+                            active={
+                                route().current("translate.index", {
+                                    displayMode: "table",
+                                }) ||
+                                route().current("translate.index", {
+                                    displayMode: "box",
+                                }) ||
+                                route().current("translate.language.index")
+                            }
+                        >
                             Translate
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('log.index')} active={route().current('log.index') || route().current('log.auth.index') || route().current('log.system.index') || route().current('log.model.index') || route().current('log.query.index')}>
+                        <ResponsiveNavLink
+                            href={route("log.index")}
+                            active={
+                                route().current("log.index") ||
+                                route().current("log.auth.index") ||
+                                route().current("log.system.index") ||
+                                route().current("log.model.index") ||
+                                route().current("log.query.index")
+                            }
+                        >
                             Log
                         </ResponsiveNavLink>
                     </div>
@@ -138,12 +291,20 @@ export default function Authenticated({ user, header, title, className = '', chi
                             <div className="font-medium text-base text-gray-800 dark:text-gray-200">
                                 {user.name}
                             </div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                            <div className="font-medium text-sm text-gray-500">
+                                {user.email}
+                            </div>
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
-                            <ResponsiveNavLink method="post" href={route('logout')} as="button">
+                            <ResponsiveNavLink href={route("profile.edit")}>
+                                Profile
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                method="post"
+                                href={route("logout")}
+                                as="button"
+                            >
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
@@ -167,7 +328,7 @@ export default function Authenticated({ user, header, title, className = '', chi
                 </header>
             )}
 
-            <main className={`mt-[3vh] ${className}`}>{children}</main>
+            <main className={`py-12 ${className}`}>{children}</main>
         </div>
     );
 }

@@ -3,11 +3,11 @@ import { PageProps } from "@/types";
 import alert from "@/utils/sweet.alert";
 import { FormEventHandler } from "react";
 import { Link, useForm } from "@inertiajs/react";
+import CustomButton from '@/Components/CustomButton';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import CustomButton from '@/Components/CustomButton';
 
-export default function Edit({ auth, translate, backUrl, errors, flash }: PageProps<{ translate: any, backUrl: string, flash: any }>) {
+export default function Edit({ translate, backUrl, errors, flash }: PageProps<{ translate: any, backUrl: string, flash: any }>) {
     const { data, setData, post, processing, reset, isDirty } = useForm({
         lang: translate.lang,
     });
@@ -34,7 +34,7 @@ export default function Edit({ auth, translate, backUrl, errors, flash }: PagePr
                     title: 'Success',
                     text: 'Translate has been updated.',
                     icon: 'success',
-                });
+                }).then(() => location.reload());
             },
             onError: () => {
                 alert.fire({
@@ -79,7 +79,6 @@ export default function Edit({ auth, translate, backUrl, errors, flash }: PagePr
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Update Translation"
             header={
                 <ResponsiveHeader>
@@ -107,7 +106,8 @@ export default function Edit({ auth, translate, backUrl, errors, flash }: PagePr
                             isSearchable={true}
                             isDisabled={processing}
                             defaultValue={getDefaultValue(data.lang)}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            classNamePrefix="my-react-select"
+                            className="my-react-select-container"
                             options={[
                                 { value: 'en', label: 'English' },
                                 { value: 'id', label: 'Indonesian' },

@@ -1,5 +1,5 @@
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from "react";
 
 export default function TableHeading({
     name,
@@ -8,7 +8,13 @@ export default function TableHeading({
     sort_direction = null,
     sortChanged = () => {},
     children,
-}: PropsWithChildren<{ name: string, sortable?: boolean, sort_field?: string|null, sort_direction?: string|null, sortChanged?: (name: string) => void }>) {
+}: PropsWithChildren<{
+    name: string;
+    sortable?: boolean;
+    sort_field?: string | null;
+    sort_direction?: string | null;
+    sortChanged?: (name: string) => void;
+}>) {
     return (
         <th onClick={(e) => sortChanged(name)}>
             <div className="px-3 py-3 flex items-center justify-between gap-1 cursor-pointer">
@@ -18,17 +24,18 @@ export default function TableHeading({
                         <ChevronUpIcon
                             className={
                                 "w-4 " +
-                                (sort_field === name && sort_direction === "asc"
-                                ? "text-white"
-                                : "")
+                                (sort_field === name &&
+                                sort_direction === "desc"
+                                    ? "text-white dark:text-gray-900"
+                                    : "")
                             }
                         />
                         <ChevronDownIcon
                             className={
                                 "w-4 -mt-2 " +
-                                (sort_field === name && sort_direction === "desc"
-                                ? "text-white"
-                                : "")
+                                (sort_field === name && sort_direction === "asc"
+                                    ? "text-white dark:text-gray-900"
+                                    : "")
                             }
                         />
                     </div>

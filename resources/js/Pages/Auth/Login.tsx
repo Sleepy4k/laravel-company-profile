@@ -1,4 +1,5 @@
 import { PageProps } from '@/types';
+import trans from '@/utils/translate';
 import alert from '@/utils/sweet.alert';
 import { FormEventHandler } from 'react';
 import { useForm } from '@inertiajs/react';
@@ -9,6 +10,11 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function Login({ status }: PageProps<{ status?: string }>) {
+    const langList = {
+        'proccessing': trans('page.login.alert.proccessing'),
+        'success': trans('page.login.alert.success'),
+        'error': trans('page.login.alert.error'),
+    };
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -20,7 +26,7 @@ export default function Login({ status }: PageProps<{ status?: string }>) {
         post(route('login'), {
             onProgress: () => {
                 alert.fire({
-                    title: 'Logging in...',
+                    title: langList.proccessing,
                     icon: 'info',
                     showConfirmButton: false,
                     allowOutsideClick: false,
@@ -28,14 +34,14 @@ export default function Login({ status }: PageProps<{ status?: string }>) {
             },
             onSuccess: () => {
                 alert.fire({
-                    title: 'Logged in!',
+                    title: langList.success,
                     icon: 'success',
                 });
             },
             onError: () => {
                 alert.fire({
                     title: 'Whoops!',
-                    text: 'Something went wrong.',
+                    text: langList.error,
                     icon: 'error',
                 });
             },
@@ -47,11 +53,12 @@ export default function Login({ status }: PageProps<{ status?: string }>) {
         <GuestLayout title="Log in">
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} className='mt-4'>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value={ trans('page.login.input.email') } />
 
                     <TextInput
+                        required
                         id="email"
                         type="email"
                         name="email"
@@ -59,6 +66,7 @@ export default function Login({ status }: PageProps<{ status?: string }>) {
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
@@ -66,9 +74,10 @@ export default function Login({ status }: PageProps<{ status?: string }>) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value={ trans('page.login.input.password') } />
 
                     <TextInput
+                        required
                         id="password"
                         type="password"
                         name="password"
@@ -82,8 +91,8 @@ export default function Login({ status }: PageProps<{ status?: string }>) {
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                    <PrimaryButton className="ms-4 mt-2 mb-4" disabled={processing}>
+                        { trans('page.login.button.submit') }
                     </PrimaryButton>
                 </div>
             </form>

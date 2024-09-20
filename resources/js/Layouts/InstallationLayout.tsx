@@ -1,7 +1,7 @@
-import { Head } from '@inertiajs/react';
-import { PropsWithChildren } from 'react';
-import Menu from '@/Components/Installer/Menu';
-import ApplicationLogo from '@/Components/ApplicationLogo';
+import { Head } from "@inertiajs/react";
+import { PropsWithChildren } from "react";
+import Menu from "@/Components/Installer/Menu";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 interface InstallationProps extends PropsWithChildren {
     title: string;
@@ -9,8 +9,16 @@ interface InstallationProps extends PropsWithChildren {
     errors: Record<string, any> | null;
 }
 
-export default function Installation({ children, errors, step, title }: InstallationProps) {
-    const appName = document.head.querySelector('meta[name="base-title"]')?.getAttribute('content') || 'Laravel';
+export default function Installation({
+    children,
+    errors,
+    step,
+    title,
+}: InstallationProps) {
+    const appName =
+        document.head
+            .querySelector('meta[name="base-title"]')
+            ?.getAttribute("content") || "Laravel";
 
     return (
         <div id="app">
@@ -47,13 +55,18 @@ export default function Installation({ children, errors, step, title }: Installa
                                     </div>
                                     <div className="ml-3">
                                         <h3 className="text-sm font-medium text-warning-800">
-                                            There was an error with your submission
+                                            There was an error with your
+                                            submission
                                         </h3>
                                         <div className="mt-2 text-sm text-warning-700">
                                             <ul className="list-disc pl-5 space-y-1">
-                                                {Object.keys(errors).map((key) => (
-                                                    <li key={key}>{errors[key]}</li>
-                                                ))}
+                                                {Object.keys(errors).map(
+                                                    (key) => (
+                                                        <li key={key}>
+                                                            {errors[key]}
+                                                        </li>
+                                                    )
+                                                )}
                                             </ul>
                                         </div>
                                     </div>
@@ -61,7 +74,7 @@ export default function Installation({ children, errors, step, title }: Installa
                             </div>
                         )}
 
-                        { children }
+                        {children}
                     </div>
                 </div>
             </div>

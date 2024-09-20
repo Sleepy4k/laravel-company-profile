@@ -8,7 +8,7 @@ import { capitalizeFirstLetter } from '@/utils/parse';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Create({ auth, categories, backUrl, errors }: PageProps<{ categories: string[], backUrl: string }>) {
+export default function Create({ categories, backUrl, errors }: PageProps<{ categories: string[], backUrl: string }>) {
     const { data, setData, post, processing, reset, isDirty } = useForm({
         name: '',
         description: '',
@@ -71,7 +71,6 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Create Application Type"
             header={
                 <ResponsiveHeader>
@@ -120,7 +119,8 @@ export default function Create({ auth, categories, backUrl, errors }: PageProps<
                             isClearable={true}
                             isSearchable={true}
                             isDisabled={processing}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            classNamePrefix="my-react-select"
+                            className="my-react-select-container"
                             options={categories.map((data: any) => {
                                 return { value: data, label: capitalizeFirstLetter(data) }
                             })}

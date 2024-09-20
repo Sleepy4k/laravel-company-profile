@@ -18,7 +18,7 @@ interface IDeleteData {
     name: string;
 }
 
-export default function Home({ auth, data, queryParams }: PageProps<{ data: any, queryParams: any }>) {
+export default function Home({ data, queryParams }: PageProps<{ data: any, queryParams: any }>) {
     const [settingDeleteData, setSettingDeleteData] = useState<IDeleteData|null>(null);
     const [confirmingSettingDeletion, setConfirmingSettingDeletion] = useState(false);
 
@@ -127,7 +127,6 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Application Type"
             header={
                 <ResponsiveHeader>
@@ -284,7 +283,7 @@ export default function Home({ auth, data, queryParams }: PageProps<{ data: any,
                             type="text"
                             name="name"
                             placeholder="Name"
-                            className="mt-1 block w-3/4"
+                            className="mt-1 block w-3/4 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                         />
                     </div>
 

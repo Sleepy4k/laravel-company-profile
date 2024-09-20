@@ -1,8 +1,11 @@
-import { PropsWithChildren } from 'react';
-import { Head, Link } from '@inertiajs/react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
+import { PropsWithChildren } from "react";
+import { Head, Link } from "@inertiajs/react";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
-export default function Guest({ title, children }: PropsWithChildren<{ title: string }>) {
+export default function Guest({
+    title,
+    children,
+}: PropsWithChildren<{ title: string }>) {
     return (
         <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <Head title={title} />

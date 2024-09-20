@@ -9,7 +9,7 @@ import ResponsiveHeader from '@/Components/ResponsiveHeader';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { capitalizeFirstLetter, convertDateToLocaleString } from '@/utils/parse';
 
-export default function Show({ auth, data, queryParams, filename }: PageProps<{ data: any, queryParams: any, filename: string }>) {
+export default function Show({ data, queryParams, filename }: PageProps<{ data: any, queryParams: any, filename: string }>) {
     queryParams = queryParams || {};
 
     console.log(data);
@@ -51,7 +51,6 @@ export default function Show({ auth, data, queryParams, filename }: PageProps<{ 
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="System Log"
             header={
                 <ResponsiveHeader>

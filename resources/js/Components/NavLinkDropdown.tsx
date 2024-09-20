@@ -6,8 +6,8 @@ import {
     Dispatch,
     SetStateAction,
 } from "react";
-import { Link, InertiaLinkProps } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
+import { Link, InertiaLinkProps } from "@inertiajs/react";
 
 const DropDownContext = createContext<{
     open: boolean;
@@ -19,7 +19,7 @@ const DropDownContext = createContext<{
     toggleOpen: () => {},
 });
 
-const Dropdown = ({ children }: PropsWithChildren) => {
+const CustomDropdown = ({ children }: PropsWithChildren) => {
     const [open, setOpen] = useState(false);
 
     const toggleOpen = () => {
@@ -28,7 +28,7 @@ const Dropdown = ({ children }: PropsWithChildren) => {
 
     return (
         <DropDownContext.Provider value={{ open, setOpen, toggleOpen }}>
-            <div className="relative">{children}</div>
+            <div className="inline-flex items-center px-1 pt-1 text-sm font-medium relative">{children}</div>
         </DropDownContext.Provider>
     );
 };
@@ -77,7 +77,7 @@ const Content = ({
     }
 
     return (
-        <>
+        <div className="relative mt-[3vh]">
             <Transition
                 show={open}
                 enter="transition ease-out duration-200"
@@ -101,7 +101,7 @@ const Content = ({
                     </div>
                 </div>
             </Transition>
-        </>
+        </div>
     );
 };
 
@@ -123,8 +123,8 @@ const DropdownLink = ({
     );
 };
 
-Dropdown.Trigger = Trigger;
-Dropdown.Content = Content;
-Dropdown.Link = DropdownLink;
+CustomDropdown.Trigger = Trigger;
+CustomDropdown.Content = Content;
+CustomDropdown.Link = DropdownLink;
 
-export default Dropdown;
+export default CustomDropdown;

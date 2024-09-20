@@ -5,6 +5,8 @@ import DataTable from "@/Components/DataTable";
 import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/DataTable/Heading";
 import { convertDateToLocaleString } from "@/utils/parse";
+import CustomButton from "@/Components/CustomButton";
+import trans from '@/utils/translate';
 
 interface ITableModeProps {
     data: any;
@@ -39,26 +41,26 @@ export default function TableMode({
                     <TextInput
                         type="text"
                         name="search"
-                        placeholder="Search"
+                        placeholder={ trans('table.search') }
                         className="mt-4 ms-4 block lg:w-1/4"
                         onChange={debounce((e) => searchFieldChanged('search', e.target.value), 500)}
                     />
                     <div className="flex justify-end">
-                        <button
+                        <CustomButton
                             type='button'
                             disabled={isQueryParamEmpty()}
                             className="btn btn-neutral ms-4 mt-4"
                             onClick={handleReset}
                         >
                             Reset
-                        </button>
-                        <button
+                        </CustomButton>
+                        <CustomButton
                             type='button'
                             className="btn btn-neutral ms-4 mt-4"
                             onClick={handleReload}
                         >
                             Reload
-                        </button>
+                        </CustomButton>
                     </div>
                 </>}
                 header={<>

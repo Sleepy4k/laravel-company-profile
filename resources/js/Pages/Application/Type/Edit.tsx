@@ -8,7 +8,7 @@ import { capitalizeFirstLetter } from '@/utils/parse';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Edit({ auth, setting, categories, backUrl, errors }: PageProps<{ setting: any, categories: string[], backUrl: string }>) {
+export default function Edit({ setting, categories, backUrl, errors }: PageProps<{ setting: any, categories: string[], backUrl: string }>) {
     const { data, setData, patch, processing, reset, isDirty } = useForm({
         name: setting.name,
         description: setting.description,
@@ -71,7 +71,6 @@ export default function Edit({ auth, setting, categories, backUrl, errors }: Pag
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Update Application Type"
             header={
                 <ResponsiveHeader>
@@ -119,7 +118,8 @@ export default function Edit({ auth, setting, categories, backUrl, errors }: Pag
                             isSearchable={true}
                             isDisabled={processing}
                             defaultValue={{ value: setting.category, label: capitalizeFirstLetter(setting.category) }}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            classNamePrefix="my-react-select"
+                            className="my-react-select-container"
                             options={categories.map((data: any) => {
                                 return { value: data, label: capitalizeFirstLetter(data) }
                             })}

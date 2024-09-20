@@ -3,11 +3,11 @@ import alert from "@/utils/sweet.alert";
 import { FormEventHandler } from "react";
 import TextInput from '@/Components/TextInput';
 import { Link, useForm } from "@inertiajs/react";
+import CustomButton from "@/Components/CustomButton";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import CustomButton from "@/Components/CustomButton";
 
-export default function Edit({ auth, translate, backUrl, errors }: PageProps<{ translate: any, backUrl: string }>) {
+export default function Edit({ translate, backUrl, errors }: PageProps<{ translate: any, backUrl: string }>) {
     const { data, setData, patch, processing, reset, isDirty } = useForm({
         key: translate.key,
         group: translate.group,
@@ -71,7 +71,6 @@ export default function Edit({ auth, translate, backUrl, errors }: PageProps<{ t
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Update Translation"
             header={
                 <ResponsiveHeader>
@@ -83,7 +82,7 @@ export default function Edit({ auth, translate, backUrl, errors }: PageProps<{ t
         >
             <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <form onSubmit={submit} className="mb-5">
-                <div>
+                    <div>
                         <label htmlFor="group" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Group</label>
                         <TextInput
                             id="group"

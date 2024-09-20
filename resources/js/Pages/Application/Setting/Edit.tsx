@@ -3,11 +3,12 @@ import { PageProps } from "@/types";
 import alert from "@/utils/sweet.alert";
 import TextInput from '@/Components/TextInput';
 import { Link, useForm } from "@inertiajs/react";
+import CustomButton from '@/Components/CustomButton';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import { FormEventHandler, useEffect, useState } from "react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Edit({ auth, setting, types, backUrl, errors }: PageProps<{ setting: any, types: any, backUrl: string }>) {
+export default function Edit({ setting, types, backUrl, errors }: PageProps<{ setting: any, types: any, backUrl: string }>) {
     const [isFile, setIsFile] = useState(false);
     const [file, setFile] = useState<string|null>(null);
     const { data, setData, post, processing, reset, isDirty } = useForm({
@@ -101,20 +102,19 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="Update Application"
             header={
                 <ResponsiveHeader>
-                    <Link href={backUrl} className='bg-primary-700 py-2 px-3 text-white rounded shadow transition-all hover:bg-primary-700'>
+                    <Link href={backUrl} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
                         Back
                     </Link>
                 </ResponsiveHeader>
             }
         >
-            <div className="bg-white lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
+            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
                 <form onSubmit={submit} className="mb-5">
                     <div>
-                        <label htmlFor="key" className="block text-sm font-medium text-gray-700">Key</label>
+                        <label htmlFor="key" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Key</label>
                         <TextInput
                             id="key"
                             type="text"
@@ -128,7 +128,7 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
                     </div>
 
                     <div className="mt-4">
-                        <label htmlFor="display" className="block text-sm font-medium text-gray-700">Display</label>
+                        <label htmlFor="display" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Display</label>
                         <TextInput
                             id="display"
                             type="text"
@@ -143,7 +143,7 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
 
                     {isFile ? (
                         <div className="mt-4">
-                            <label htmlFor="file" className="block text-sm font-medium text-gray-700">File</label>
+                            <label htmlFor="file" className="block text-sm font-medium text-gray-700 dark:text-gray-400">File</label>
                             <TextInput
                                 id="file"
                                 type="file"
@@ -171,7 +171,7 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
                         </div>
                     ) : (
                         <div className="mt-4">
-                            <label htmlFor="value" className="block text-sm font-medium text-gray-700">Value</label>
+                            <label htmlFor="value" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Value</label>
                             <TextInput
                                 id="value"
                                 type="text"
@@ -186,20 +186,20 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
                     )}
 
                     <div className="mt-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Description</label>
                         <textarea
                             id="description"
                             name="description"
                             disabled={processing}
                             value={data.description}
                             onChange={(e) => setData('description', e.target.value)}
-                            className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
                         />
                         {errors?.description && <p className="mt-2 text-sm text-danger-600">{errors.description}</p>}
                     </div>
 
                     <div className="mt-4">
-                        <label htmlFor="type_id" className="block text-sm font-medium text-gray-700">Type</label>
+                        <label htmlFor="type_id" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Type</label>
                         <Select
                             id="type_id"
                             name="type_id"
@@ -207,7 +207,8 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
                             isSearchable={true}
                             isDisabled={processing}
                             defaultValue={{ value: setting.type_id, label: setting.type.name }}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
+                            classNamePrefix="my-react-select"
+                            className="my-react-select-container"
                             options={types.map((data: any) => {
                                 return { value: data.id, label: data.name }
                             })}
@@ -217,12 +218,12 @@ export default function Edit({ auth, setting, types, backUrl, errors }: PageProp
                     </div>
 
                     <div className="flex items-center justify-end mt-8 gap-3">
-                        <button type="reset" onClick={handleReset} disabled={processing} className="bg-neutral-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-neutral-700">
+                        <CustomButton type="reset" onClick={handleReset} disabled={processing} className="bg-neutral-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-neutral-700 dark:opacity-35">
                             Reset
-                        </button>
-                        <button type="submit" disabled={processing} className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700">
+                        </CustomButton>
+                        <CustomButton type="submit" disabled={processing} className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700">
                             Update
-                        </button>
+                        </CustomButton>
                     </div>
                 </form>
             </div>

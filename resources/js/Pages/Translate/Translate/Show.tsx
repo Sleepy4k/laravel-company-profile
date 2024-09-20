@@ -4,10 +4,9 @@ import TextInput from '@/Components/TextInput';
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Create({ auth, data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
+export default function Create({ data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
     return (
         <AuthenticatedLayout
-            user={auth.user}
             title="View Translation"
             header={
                 <ResponsiveHeader>
