@@ -46,6 +46,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     });
 
     Route::prefix('rbac')->as('rbac.')->group(function () {
+        Route::get('/', RBAC\HomeController::class)->name('index');
         Route::resources([
             'roles' => RBAC\RoleController::class,
             'permissions' => RBAC\PermissionController::class,
