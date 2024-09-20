@@ -12,6 +12,6 @@ class {{ class }} extends DataTable
      * @return void
      */
     public function __construct() {
-        // $this->interface = null
+        $this->interface = null;
     }
 }

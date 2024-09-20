@@ -20,7 +20,7 @@ class {{ class }}
      */
     public function view({{ user }} $user, {{ model }} ${{ modelVariable }}): bool
     {
-        //
+        return auth('web')->check();
     }
 
     /**
