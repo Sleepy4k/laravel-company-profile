@@ -31,6 +31,6 @@
         "@heroicons/react": "^2.1.5",
         "lodash.debounce": "^4.0.8",
         "react-select": "^5.8.0",
-        "sweetalert2": "^11.13.2"
+        "sweetalert2": "^11.14.0"
     }
 }
