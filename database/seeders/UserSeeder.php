@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             User::create([
                 'name' => fake()->name(),
                 'email' => 'pandu300478@gmail.com',
-                'password' => bcrypt('password'),
+                'password' => 'password',
             ])->assignRole('superadmin');
         }
     }
