@@ -156,6 +156,14 @@ return [
         ],
         [
             'group' => 'form',
+            'key' => 'button.reload',
+            'text' => [
+                'id' => 'Muat Ulang',
+                'en' => 'Reload'
+            ]
+        ],
+        [
+            'group' => 'form',
             'key' => 'button.back',
             'text' => [
                 'id' => 'Kembali',
@@ -254,8 +262,8 @@ return [
             'group' => 'table',
             'key' => 'search',
             'text' => [
-                'id' => 'mencari :',
-                'en' => 'search :'
+                'id' => 'Mencari',
+                'en' => 'Search'
             ]
         ],
         [
@@ -272,6 +280,14 @@ return [
             'text' => [
                 'id' => 'Sedang memuat...',
                 'en' => 'Loading...'
+            ]
+        ],
+        [
+            'group' => 'table',
+            'key' => 'actions',
+            'text' => [
+                'id' => 'Aksi',
+                'en' => 'Actions'
             ]
         ],
         [
@@ -1057,6 +1073,174 @@ return [
                 'id' => 'pesan-khusus.',
                 'en' => 'custom-message.'
             ]
-        ]
+        ],
+        [
+            'group' => 'popover',
+            'key' => 'view',
+            'text' => [
+                'id' => 'Lihat',
+                'en' => 'View'
+            ]
+        ],
+        [
+            'group' => 'popover',
+            'key' => 'edit',
+            'text' => [
+                'id' => 'Ubah',
+                'en' => 'Edit'
+            ]
+        ],
+        [
+            'group' => 'popover',
+            'key' => 'delete',
+            'text' => [
+                'id' => 'Hapus',
+                'en' => 'Delete'
+            ]
+        ],
+        [
+            'group' => 'popover',
+            'key' => 'empty.action',
+            'text' => [
+                'id' => 'Tidak ada aksi yang tersedia',
+                'en' => 'No action available'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'login.button.submit',
+            'text' => [
+                'id' => 'Masuk',
+                'en' => 'Sign In'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'login.input.email',
+            'text' => [
+                'id' => 'Alamat Surel',
+                'en' => 'Email Address'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'login.input.password',
+            'text' => [
+                'id' => 'Kata Sandi',
+                'en' => 'Password'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'login.alert.proccessing',
+            'text' => [
+                'id' => 'Sedang masuk...',
+                'en' => 'Logging in...'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'login.alert.success',
+            'text' => [
+                'id' => 'Berhasil masuk',
+                'en' => 'Successfully logged in'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'login.alert.error',
+            'text' => [
+                'id' => 'Gagal masuk. Silahkan coba lagi',
+                'en' => 'Failed to login. Please try again'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.title',
+            'text' => [
+                'id' => 'Riwayat Aktivitas',
+                'en' => 'Activity Log'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.description',
+            'text' => [
+                'id' => 'Pilih log yang ingin Anda lihat',
+                'en' => 'Choose which log you want to see'
+                ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.button',
+            'text' => [
+                'id' => 'Lihat Log',
+                'en' => 'View Log'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.auth.title',
+            'text' => [
+                'id' => 'Aktivitas Otentikasi',
+                'en' => 'Authentication Log'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.auth.description',
+            'text' => [
+                'id' => 'Lihat semua log otentikasi, termasuk masuk dan keluar',
+                'en' => 'See all authentication logs, including login and logout'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.model.title',
+            'text' => [
+                'id' => 'Log Model',
+                'en' => 'Model Log'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.model.description',
+            'text' => [
+                'id' => 'Lihat semua log model, termasuk pembuatan, pembaruan, dan penghapusan',
+                'en' => 'See all model logs, including create, update, and delete'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.system.title',
+            'text' => [
+                'id' => 'Log Sistem',
+                'en' => 'System Log'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.system.description',
+            'text' => [
+                'id' => 'Lihat semua log sistem, termasuk log harian untuk melihat kesalahan dan info',
+                'en' => 'See all system logs, including daily log for see any error and info'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.query.title',
+            'text' => [
+                'id' => 'Log Query',
+                'en' => 'Query Log'
+            ]
+        ],
+        [
+            'group' => 'page',
+            'key' => 'log.home.query.description',
+            'text' => [
+                'id' => 'Lihat semua log query, termasuk query yang dijalankan oleh aplikasi',
+                'en' => 'See all query logs, including query that run by application'
+            ]
+        ],
     ],
 ];
