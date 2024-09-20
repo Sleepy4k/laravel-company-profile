@@ -95,9 +95,7 @@ class RequirementsChecker
 
                 $results['results'][$type] = array_merge($results['results'][$type], $checks);
 
-                if ($this->determineIfFails($checks)) {
-                    $results['errors'] = true;
-                }
+                if ($this->determineIfFails($checks)) $results['errors'] = true;
                 break;
             case 'apache':
                 foreach ($requirements[$type] as $requirement) {

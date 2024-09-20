@@ -31,14 +31,10 @@ trait UploadFile
     protected function storageDisk(UploadFileType $type = UploadFileType::IMAGE)
     {
         try {
-            switch ($type) {
-            case UploadFileType::IMAGE:
-                return '/' . $this->baseDisk . '/' . UploadFileType::IMAGE->value . '/';
-                break;
-            default:
-                return '/' . $this->baseDisk . '/' . $this->unkownPath . '/';
-                break;
-            }
+            return match ($type) {
+                UploadFileType::IMAGE => '/' . $this->baseDisk . '/' . UploadFileType::IMAGE->value . '/',
+                default => '/' . $this->baseDisk . '/' . $this->unkownPath . '/',
+            };
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
             throw $th;
@@ -56,7 +52,6 @@ trait UploadFile
     {
         try {
             $optimizerChain = OptimizerChainFactory::create();
-
             $optimizerChain->optimize($file);
 
             return true;
@@ -79,14 +74,10 @@ trait UploadFile
         try {
             $name = request()->getSchemeAndHttpHost() . '/storage';
 
-            switch ($type) {
-            case UploadFileType::IMAGE:
-                $name .= '/' . UploadFileType::IMAGE->value . '/' . $file;
-                break;
-            default:
-                $name .= '/' . $this->unkownPath . '/' . $file;
-                break;
-            }
+            $name .= match ($type) {
+                UploadFileType::IMAGE => '/' . UploadFileType::IMAGE->value . '/' . $file,
+                default => '/' . $this->unkownPath . '/' . $file,
+            };
 
             return $name;
         } catch (\Throwable $th) {

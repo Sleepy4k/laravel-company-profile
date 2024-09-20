@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Install;
 
 use Inertia\Response;
+use App\Support\InstallationStep;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\RedirectResponse;
+use App\Policies\Install\SetupPolicy;
 use App\Services\Install\SetupService;
 use App\Http\Requests\Install\SetupStoreRequest;
 
@@ -16,11 +19,19 @@ class SetupController extends Controller
     private $service;
 
     /**
+     * The installation step.
+     *
+     * @var \App\Support\InstallationStep
+     */
+    protected $installationStep;
+
+    /**
      * Create a new controller instance.
      */
     public function __construct(SetupService $service)
     {
         $this->service = $service;
+        $this->installationStep = new InstallationStep('setup');
     }
 
     /**
@@ -30,7 +41,12 @@ class SetupController extends Controller
      */
     public function index(): Response|RedirectResponse
     {
+        $gate = Gate::inspect('viewAny', SetupPolicy::class);
+        if (!$gate->allowed()) return to_route('install.permissions');
+
         try {
+            $this->installationStep->markAsCompleted();
+
             return inertia('Install/Setup', $this->service->index());
         } catch (\Throwable $th) {
             return $this->redirectError($th);

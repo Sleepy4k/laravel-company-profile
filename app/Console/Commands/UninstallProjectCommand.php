@@ -38,8 +38,9 @@ class UninstallProjectCommand extends Command
      * @var array
      */
     protected $installedFileList = [
-        '.installed',
         '.lang',
+        '.steps',
+        '.installed',
     ];
 
     /**

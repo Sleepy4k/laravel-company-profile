@@ -18,26 +18,14 @@ trait SystemLog
     protected function sendReportLog(ReportLogType $type, string $message): bool
     {
         try {
-            switch ($type) {
-            case ReportLogType::DEBUG:
-                Log::debug($message);
-                break;
-            case ReportLogType::ERROR:
-                Log::error($message);
-                break;
-            case ReportLogType::ALERT:
-                Log::alert($message);
-                break;
-            case ReportLogType::INFO:
-                Log::info($message);
-                break;
-            case ReportLogType::WARNING:
-                Log::warning($message);
-                break;
-            default:
-                Log::info($message);
-                break;
-            }
+            match ($type) {
+                ReportLogType::DEBUG => Log::debug($message),
+                ReportLogType::ERROR => Log::error($message),
+                ReportLogType::ALERT => Log::alert($message),
+                ReportLogType::INFO => Log::info($message),
+                ReportLogType::WARNING => Log::warning($message),
+                default => Log::info($message),
+            };
 
             return true;
         } catch (\Throwable $th) {

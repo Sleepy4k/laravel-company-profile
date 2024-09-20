@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Log;
+namespace App\Services\RBAC;
 
 use App\Services\Service;
 

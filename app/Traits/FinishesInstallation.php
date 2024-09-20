@@ -23,6 +23,9 @@ trait FinishesInstallation
         if (!file_exists($path)) {
             $bytes = file_put_contents($path, 'Installed at: '.date('Y-m-d H:i:s').PHP_EOL.'Version: '.config('app.version', '1.0.0').PHP_EOL);
             return $bytes !== false;
+        } elseif (file_exists($path) && is_writable($path)) { // Prevent reinstallation failure due throwing exception when return is false
+            $bytes = file_put_contents($path, 'Reinstalled at: '.date('Y-m-d H:i:s').PHP_EOL.'Version: '.config('app.version', '1.0.0').PHP_EOL, FILE_APPEND);
+            return $bytes !== false;
         }
 
         return false;

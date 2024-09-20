@@ -20,9 +20,9 @@ class CrawlProfile extends BaseCrawlProfile
         $blacklisted = ['admin', 'dashboard'];
 
         foreach ($blacklisted as $path) {
-            if (str_contains($url->getPath(), $path)) {
-                return false;
-            }
+            if (!str_contains($url->getPath(), $path)) continue;
+
+            return false;
         }
 
         return true;

@@ -19,8 +19,7 @@ class TranslateResource extends JsonResource
             'group' => $this->group,
             'key' => $this->key,
             'text' => $this->text,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at->diffForHumans(),
         ];
     }
 }

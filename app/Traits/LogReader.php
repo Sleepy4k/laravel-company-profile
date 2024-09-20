@@ -23,18 +23,11 @@ trait LogReader
         $logs = [];
 
         try {
-            switch ($type) {
-            case LogReaderType::DAILY:
-                $files = glob(storage_path('logs/' . $channel . '-*.log'));
-                $files = array_reverse($files);
-                break;
-            case LogReaderType::SINGLE:
-                $files = glob(storage_path('logs/' . $channel . '.log'));
-                break;
-            default:
-                $files = glob(storage_path('logs/' . $channel . '.log'));
-                break;
-            }
+            $files = match ($type) {
+                LogReaderType::DAILY => glob(storage_path('logs/' . $channel . '-*.log')),
+                LogReaderType::SINGLE => glob(storage_path('logs/' . $channel . '.log')),
+                default => glob(storage_path('logs/' . $channel . '.log')),
+            };
 
             foreach ($files as $file) {
                 $name = explode("/", $file)[1];
@@ -112,18 +105,11 @@ trait LogReader
         $pattern = null;
 
         try {
-            switch ($type) {
-            case LogReaderType::DAILY:
-                $date = $date ?? formatDate(now(), 'Y-m-d');
-                $content = file_get_contents(storage_path('logs/' . $channel . '-' . $date . '.log'));
-                break;
-            case LogReaderType::SINGLE:
-                $content = file_get_contents(storage_path('logs/' . $channel . '.log'));
-                break;
-            default:
-                $content = file_get_contents(storage_path('logs/' . $channel . '.log'));
-                break;
-            }
+            $content = match ($type) {
+                LogReaderType::DAILY => file_get_contents(storage_path('logs/' . $channel . '-' . $date ?? formatDate(now(), 'Y-m-d') . '.log')),
+                LogReaderType::SINGLE => file_get_contents(storage_path('logs/' . $channel . '.log')),
+                default => file_get_contents(storage_path('logs/' . $channel . '.log')),
+            };
 
             $pattern = "/^\[(?<date>.*)\]\s(?<env>\w+)\.(?<type>\w+):(?<message>.*)/m";
 
