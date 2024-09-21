@@ -5,6 +5,7 @@ namespace App\Services\RBAC;
 use App\Models\Role;
 use App\Services\Service;
 use App\DataTables\RBAC\RoleDataTable;
+use App\Http\Resources\RBAC\PermissionResource;
 
 class RoleService extends Service
 {
@@ -29,9 +30,10 @@ class RoleService extends Service
      */
     public function create(): array
     {
+        $permissions = $this->getPermissions();
         $backUrl = session()->get('rbac.permission.url') ?? route('rbac.permissions.index');
 
-        return compact('backUrl');
+        return compact('permissions', 'backUrl');
     }
 
     /**
@@ -59,10 +61,11 @@ class RoleService extends Service
      */
     public function show(Role $role): array
     {
-        $data = $role;
+        $data = $role->load('permissions');
+        $permissions = $this->getPermissions();
         $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
 
-        return compact('data', 'backUrl');
+        return compact('data', 'permissions', 'backUrl');
     }
 
     /**
@@ -74,9 +77,11 @@ class RoleService extends Service
      */
     public function edit(Role $role): array
     {
+        $role->load('permissions');
+        $permissions = $this->getPermissions();
         $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
 
-        return compact('role', 'backUrl');
+        return compact('role', 'permissions', 'backUrl');
     }
 
     /**
@@ -110,5 +115,26 @@ class RoleService extends Service
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    /**
+     * Get permissions.
+     *
+     * @return array
+     */
+    protected function getPermissions(): array
+    {
+        $permissions = $this->permissionInterface->all();
+        $filteredPermissions = collect($permissions)->reduce(function ($result, object $item) {
+            $result[explode('.', $item->name)[0]][] = new PermissionResource($item);
+            return $result;
+        }, []);
+
+        return array_map(function ($group, $item) {
+            return [
+                'group' => $group,
+                'permissions' => $item,
+            ];
+        }, array_keys($filteredPermissions), $filteredPermissions);
     }
 }
