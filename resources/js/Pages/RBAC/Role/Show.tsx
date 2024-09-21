@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { PageProps } from "@/types";
 import trans from "@/utils/translate";
+import Modal from "@/Components/Modal";
 import { Link } from "@inertiajs/react";
 import TextInput from "@/Components/TextInput";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
@@ -11,8 +13,19 @@ import {
 
 export default function Show({
     data,
+    permissions,
     backUrl,
-}: PageProps<{ data: any; backUrl: string }>) {
+}: PageProps<{ data: any, permissions: any, backUrl: string }>) {
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [currentPermissions, setCurrentPermissions] = useState<string[]>([]);
+
+    const closeModal = () => setShowModal(false);
+
+    useEffect(() => {
+        const filteredData = data.permissions.map((permission: any) => permission.name);
+        setCurrentPermissions(filteredData);
+    }, []);
+
     return (
         <AuthenticatedLayout
             title={trans("page.rbac.role.show.title", "View Role")}
@@ -84,6 +97,22 @@ export default function Show({
 
                 <div className="mt-4">
                     <label
+                        htmlFor="permissions"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
+                    >
+                        Permissions
+                    </label>
+                    <button
+                        type="button"
+                        onClick={() => setShowModal(true)}
+                        className="mt-1 block w-full bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700"
+                    >
+                        Select Permissions
+                    </button>
+                </div>
+
+                <div className="mt-4">
+                    <label
                         htmlFor="created_at"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
@@ -112,6 +141,47 @@ export default function Show({
                     />
                 </div>
             </div>
+
+            <Modal show={showModal} onClose={closeModal}>
+                <div className="p-6 max-h-[calc(100vh-10rem)] overflow-y-auto">
+                    {permissions.map((data: any) => (
+                        <>
+                            <label
+                                htmlFor={data.group}
+                                className="block mt-5 text-sm font-medium text-gray-700 dark:text-gray-400"
+                            >
+                                {data.group.toUpperCase()}
+                            </label>
+                            <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                {data.permissions.map((permission: any) => (
+                                    <div
+                                        key={permission.id}
+                                        className="flex items-center"
+                                    >
+                                        <input
+                                            disabled
+                                            id={`permission-${permission.uuid}`}
+                                            type="checkbox"
+                                            name="permissions[]"
+                                            value={permission.name}
+                                            className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded"
+                                            {...(currentPermissions.includes(
+                                                permission.name
+                                            ) && { checked: true })}
+                                        />
+                                        <label
+                                            htmlFor={`permission-${permission.uuid}`}
+                                            className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
+                                        >
+                                            {permission.name}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ))}
+                </div>
+            </Modal>
         </AuthenticatedLayout>
     );
 }

@@ -1,20 +1,29 @@
 import { PageProps } from "@/types";
 import trans from "@/utils/translate";
+import Modal from "@/Components/Modal";
 import alert from "@/utils/sweet.alert";
-import { FormEventHandler } from "react";
 import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
 import CustomButton from "@/Components/CustomButton";
 import ResponsiveHeader from "@/Components/ResponsiveHeader";
+import { FormEventHandler, useEffect, useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 export default function Create({
+    permissions,
     backUrl,
     errors,
-}: PageProps<{ backUrl: string }>) {
-    const { data, setData, post, processing, reset, isDirty } = useForm({
+}: PageProps<{ permissions: any, backUrl: string }>) {
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [currentPermissions, setCurrentPermissions] = useState<string[]>([]);
+    const { data, setData, post, processing, reset, isDirty } = useForm<{
+        name: string;
+        guard_name: string;
+        permissions: string[];
+    }>({
         name: "",
         guard_name: "web",
+        permissions: [],
     });
 
     const submit: FormEventHandler = (e: any) => {
@@ -72,6 +81,24 @@ export default function Create({
                         });
                     }
                 });
+    };
+
+    const closeModal = () => setShowModal(false);
+
+    const handlePermissionChange = (e: any) => {
+        const { value } = e.target;
+
+        if (currentPermissions.includes(value)) {
+            const data = currentPermissions.filter(
+                (permission) => permission !== value
+            );
+            setCurrentPermissions(data);
+            setData("permissions", data);
+        } else {
+            const data = [...currentPermissions, value];
+            setCurrentPermissions(data);
+            setData("permissions", data);
+        }
     };
 
     return (
@@ -140,6 +167,22 @@ export default function Create({
                         )}
                     </div>
 
+                    <div className="mt-4">
+                        <label
+                            htmlFor="permissions"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-400"
+                        >
+                            Permissions
+                        </label>
+                        <button
+                            type="button"
+                            onClick={() => setShowModal(true)}
+                            className="mt-1 block w-full bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700"
+                        >
+                            Select Permissions
+                        </button>
+                    </div>
+
                     <div className="flex items-center justify-end mt-8 gap-3">
                         <CustomButton
                             type="reset"
@@ -159,6 +202,47 @@ export default function Create({
                     </div>
                 </form>
             </div>
+
+            <Modal show={showModal} onClose={closeModal}>
+                <div className="p-6 max-h-[calc(100vh-10rem)] overflow-y-auto">
+                    {permissions.map((data: any) => (
+                        <>
+                            <label
+                                htmlFor={data.group}
+                                className="block mt-5 text-sm font-medium text-gray-700 dark:text-gray-400"
+                            >
+                                {data.group.toUpperCase()}
+                            </label>
+                            <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                {data.permissions.map((permission: any) => (
+                                    <div
+                                        key={permission.id}
+                                        className="flex items-center"
+                                    >
+                                        <input
+                                            id={`permission-${permission.uuid}`}
+                                            type="checkbox"
+                                            name="permissions[]"
+                                            value={permission.name}
+                                            onChange={handlePermissionChange}
+                                            className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded"
+                                            {...(currentPermissions.includes(
+                                                permission.name
+                                            ) && { checked: true })}
+                                        />
+                                        <label
+                                            htmlFor={`permission-${permission.uuid}`}
+                                            className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
+                                        >
+                                            {permission.name}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ))}
+                </div>
+            </Modal>
         </AuthenticatedLayout>
     );
 }
