@@ -31,10 +31,16 @@ trait UploadFile
     protected function storageDisk(UploadFileType $type = UploadFileType::IMAGE)
     {
         try {
-            return match ($type) {
+            $path = match ($type) {
                 UploadFileType::IMAGE => '/' . $this->baseDisk . '/' . UploadFileType::IMAGE->value . '/',
                 default => '/' . $this->baseDisk . '/' . $this->unkownPath . '/',
             };
+
+            if (!Storage::exists(explode('/', $path)[2])) {
+                Storage::copy($this->baseDisk . '/index.html', $path . 'index.html');
+            }
+
+            return $path;
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
             throw $th;
