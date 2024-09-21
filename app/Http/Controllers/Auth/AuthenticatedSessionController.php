@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\RateLimiter;
 use App\Services\Auth\AuthenticatedSessionService;
 
 class AuthenticatedSessionController extends Controller
@@ -27,7 +28,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): Response
+    public function create(): Response|RedirectResponse
     {
         try {
             return inertia('Auth/Login', $this->service->create());
@@ -41,6 +42,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // If the user has too many login attempts, we will lock the user out
+        if (RateLimiter::remaining('login'.request()->ip(), config('auth.defaults.max_attempts'))) {
+            RateLimiter::increment('login'.request()->ip());
+        } else {
+            return back()->withErrors(['email' => 'Too many login attempts. Please try again later.']);
+        }
+
         try {
             $request->authenticate();
             $request->session()->regenerate();

@@ -3,6 +3,7 @@
 namespace App\Services\Auth;
 
 use App\Services\Service;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AuthenticatedSessionService extends Service
 {
@@ -14,8 +15,14 @@ class AuthenticatedSessionService extends Service
     public function create(): array
     {
         $status = session('status');
+        $rateLimiter = [
+            'max_attempts' => config('auth.defaults.max_attempts'),
+            'attempts' => RateLimiter::attempts('login'.request()->ip()),
+            'remaining' => RateLimiter::remaining('login'.request()->ip(), config('auth.defaults.max_attempts')),
+            'reset_at' => RateLimiter::availableIn('login'.request()->ip()),
+        ];
 
-        return compact('status');
+        return compact('status', 'rateLimiter');
     }
 
     /**
