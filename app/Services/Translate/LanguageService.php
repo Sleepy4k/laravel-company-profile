@@ -3,7 +3,6 @@
 namespace App\Services\Translate;
 
 use App\Services\Service;
-use Illuminate\Support\Facades\Artisan;
 
 class LanguageService extends Service
 {
@@ -17,10 +16,9 @@ class LanguageService extends Service
         $translate = [
             'lang' => app()->getLocale(),
         ];
-        $flash = session()->get('success') ?? session()->get('error');
         $backUrl = session()->get('translate.translate.url') ?? route('translate.index', ['table']);
 
-        return compact('backUrl', 'translate', 'flash');
+        return compact('backUrl', 'translate');
     }
 
     /**

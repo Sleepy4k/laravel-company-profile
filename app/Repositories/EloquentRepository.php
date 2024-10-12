@@ -29,6 +29,23 @@ class EloquentRepository implements EloquentInterface
     }
 
     /**
+     * Wrap into transaction.
+     *
+     * @param  callable  $callback
+     *
+     * @return mixed
+     */
+    public function wrapIntoTransaction(callable $callback): mixed
+    {
+        try {
+            return $this->model->getConnection()->transaction($callback);
+        } catch (\Throwable $th) {
+            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Get all models.
      *
      * @param  array  $columns
@@ -75,7 +92,6 @@ class EloquentRepository implements EloquentInterface
             return $model->get($columns);
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             return false;
         }
     }
@@ -128,7 +144,6 @@ class EloquentRepository implements EloquentInterface
             return $first ? $model->select($columns)->first() : $model->select($columns)->get();
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             return false;
         }
     }
@@ -181,7 +196,6 @@ class EloquentRepository implements EloquentInterface
             return $model->select($columns)->paginate($paginate);
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             abort(500, $th->getMessage());
         }
     }
@@ -197,7 +211,6 @@ class EloquentRepository implements EloquentInterface
             return $this->model->onlyTrashed()->get();
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             return false;
         }
     }
@@ -217,7 +230,6 @@ class EloquentRepository implements EloquentInterface
             return $this->model->select($columns)->with($relations)->findOrFail($modelId)->append($appends);
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             return false;
         }
     }
@@ -314,22 +326,16 @@ class EloquentRepository implements EloquentInterface
      * Create a model.
      *
      * @param  array  $payload
-     * @return Model
+     * @return Model|bool
      */
-    public function create(array $payload): ?Model
+    public function create(array $payload): Model|bool
     {
-        try {
+        $transaction = $this->wrapIntoTransaction(function () use ($payload) {
             $model = $this->model->query()->create($payload);
+            return $model->fresh();
+        });
 
-            return $model;
-        } catch (\Throwable $th) {
-            // If there is an error, and data is created, then delete the created data
-            if (isset($model)) $model->delete();
-
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
-            return false;
-        }
+        return $transaction;
     }
 
     /**
@@ -341,36 +347,26 @@ class EloquentRepository implements EloquentInterface
      */
     public function update(int $modelId, array $payload): bool
     {
-        try {
-            $model = $this->findById($modelId);
-            $model->update($payload);
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId, $payload) {
+            return $this->model->query()->findOrFail($modelId)->update($payload);
+        });
 
-            return $model;
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
-            return false;
-        }
+        return $transaction;
     }
 
     /**
      * Delete model by id.
      *
      * @param  int  $modelId
-     * @return Model
+     * @return bool
      */
     public function deleteById(int $modelId): bool
     {
-        try {
-            $model = $this->findById($modelId);
-            $model->delete();
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId) {
+            return $this->model->query()->findOrFail($modelId)->delete();
+        });
 
-            return $model;
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
-            return false;
-        }
+        return $transaction;
     }
 
     /**
@@ -394,7 +390,7 @@ class EloquentRepository implements EloquentInterface
      * Permanently delete model by id.
      *
      * @param  int  $modelId
-     * @return Model
+     * @return bool
      */
     public function permanentlyDeleteById(int $modelId): bool
     {
@@ -418,7 +414,6 @@ class EloquentRepository implements EloquentInterface
             return $this->model->count();
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             return 0;
         }
     }

@@ -81,7 +81,6 @@ class LogRepository extends EloquentRepository implements LogInterface
             return $model->select($columns)->paginate($paginate);
         } catch (\Throwable $th) {
             $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
             abort(500, $th->getMessage());
         }
     }

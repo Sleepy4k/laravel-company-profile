@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Observers\MenuObserver;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use ElipZis\Cacheable\Models\Traits\Cacheable;
-use App\Observers\ApplicationSettingTypeObserver;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
-#[ObservedBy([ApplicationSettingTypeObserver::class])]
-class ApplicationSettingType extends Model
+#[ObservedBy([MenuObserver::class])]
+class Menu extends Model
 {
     use HasFactory, LogsActivity, Cacheable;
 
@@ -42,7 +43,7 @@ class ApplicationSettingType extends Model
      *
      * @var string
      */
-    protected $table = 'application_setting_types';
+    protected $table = 'menus';
 
     /**
      * The primary key associated with the table.
@@ -79,8 +80,9 @@ class ApplicationSettingType extends Model
      */
     protected $fillable = [
         'name',
-        'description',
-        'category',
+        'order',
+        'parent_id',
+        'meta_id',
     ];
 
     /**
@@ -117,8 +119,6 @@ class ApplicationSettingType extends Model
     protected $searchable = [
         'id',
         'name',
-        'description',
-        'category',
     ];
 
     /**
@@ -140,23 +140,13 @@ class ApplicationSettingType extends Model
     {
         return [
             'id' => 'int',
-            'uuid' => 'string',
             'name' => 'string',
-            'description' => 'string',
-            'category' => 'string',
+            'order' => 'int',
+            'parent_id' => 'int',
+            'meta_id' => 'int',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'uuid';
     }
 
     /**
@@ -180,19 +170,29 @@ class ApplicationSettingType extends Model
      */
     public function getCacheableProperties(): array {
         $overrided = [
-            'prefix' => 'settingtypecache',
+            'prefix' => 'menucache',
         ];
 
         return array_merge(config('cacheable'), $overrided);
     }
 
     /**
-     * Get the application settings for the type.
+     * Get the meta associated with the menu.
      *
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function settings(): HasMany
+    public function meta(): BelongsTo
     {
-        return $this->hasMany(ApplicationSetting::class, 'type_id', 'id');
+        return $this->belongsTo(MenuMeta::class, 'meta_id', 'id');
+    }
+
+    /**
+     * Get the children associated with the menu.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Menu::class, 'parent_id', 'id');
     }
 }

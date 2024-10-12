@@ -48,6 +48,7 @@ class PermissionController extends Controller
 
             return inertia('Install/Permissions', $this->service->invoke());
         } catch (\Throwable $th) {
+            $this->installationStep->markAsNotCompleted();
             return $this->redirectError($th);
         }
     }

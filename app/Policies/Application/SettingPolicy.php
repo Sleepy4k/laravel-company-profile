@@ -15,7 +15,7 @@ class SettingPolicy
     {
         $isModeValid = in_array($mode, DisplayModeType::toArray());
 
-        return auth('web')->check() && $user->hasPermissionTo('application.index') && $isModeValid;
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.index') && $isModeValid;
     }
 
     /**
@@ -23,7 +23,7 @@ class SettingPolicy
      */
     public function view(User $user, ApplicationSetting $setting): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.show');
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.show');
     }
 
     /**
@@ -31,7 +31,7 @@ class SettingPolicy
      */
     public function create(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.create');
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class SettingPolicy
      */
     public function store(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.store');
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.store');
     }
 
     /**
@@ -47,7 +47,7 @@ class SettingPolicy
      */
     public function edit(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.edit');
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.edit');
     }
 
     /**
@@ -55,7 +55,7 @@ class SettingPolicy
      */
     public function update(User $user, ApplicationSetting $setting): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.update');
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.update');
     }
 
     /**
@@ -63,6 +63,6 @@ class SettingPolicy
      */
     public function delete(User $user, ApplicationSetting $setting): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.delete');
+        return auth('web')->check() && $user->hasPermissionTo('application.setting.delete');
     }
 }

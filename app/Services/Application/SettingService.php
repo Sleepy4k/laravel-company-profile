@@ -75,7 +75,11 @@ class SettingService extends Service
     {
         try {
             $this->applicationSettingInterface->create($request);
+
+            session()->flash('success', 'Data has been created successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to create.');
+
             // Remove the file if there is an error
             if (isset($filePath)) {
                 Storage::disk('public')->delete($filePath);
@@ -128,7 +132,11 @@ class SettingService extends Service
     {
         try {
             $this->applicationSettingInterface->update($id, $request);
+
+            session()->flash('success', 'Data has been updated successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to update.');
+
             throw $th;
         }
     }
@@ -144,7 +152,11 @@ class SettingService extends Service
     {
         try {
             $this->applicationSettingInterface->deleteById($id);
+
+            session()->flash('success', 'Data has been deleted successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to delete.');
+
             throw $th;
         }
     }

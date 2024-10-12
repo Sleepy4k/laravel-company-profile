@@ -9,6 +9,15 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 interface EloquentInterface
 {
     /**
+     * Wrap into transaction.
+     *
+     * @param  callable  $callback
+     *
+     * @return mixed
+     */
+    public function wrapIntoTransaction(callable $callback): mixed;
+
+    /**
      * Get all models.
      *
      * @param  array  $columns
@@ -124,9 +133,9 @@ interface EloquentInterface
      *
      * @param  array  $payload
      *
-     * @return Model
+     * @return Model|bool
      */
-    public function create(array $payload): ?Model;
+    public function create(array $payload): Model|bool;
 
     /**
      * Update existing model.

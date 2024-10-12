@@ -4,7 +4,6 @@ namespace App\Repositories\Models;
 
 use App\Models\User;
 use App\Traits\SystemLog;
-use App\Enum\ReportLogType;
 use App\Contracts\Models\UserInterface;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\EloquentRepository;
@@ -27,32 +26,26 @@ class UserRepository extends EloquentRepository implements UserInterface
      * Create a model.
      *
      * @param  array  $payload
-     * @return Model
+     * @return Model|bool
      */
-    public function create(array $payload): ?Model
+    public function create(array $payload): Model|bool
     {
-        try {
-            $role = null;
+        $role = null;
 
-            if (array_key_exists('role', $payload)) {
-                $role = $payload['role'];
-                unset($payload['role']);
-            }
+        if (array_key_exists('role', $payload)) {
+            $role = $payload['role'];
+            unset($payload['role']);
+        }
 
-            $model = $this->model->create($payload);
+        $transaction = $this->wrapIntoTransaction(function () use ($payload, $role) {
+            $model = $this->model->query()->create($payload);
 
             !empty($role) ? $model->assignRole($role) : $model->assignRole(config('permission.role.default'));
 
             return $model->fresh();
-        } catch (\Throwable $th) {
-            // If the user already created, delete the user
-            $user = $this->findByCustomId(['email' => $payload['email']], ['id']);
-            if ($user) $user->delete();
+        });
 
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
-            return false;
-        }
+        return $transaction;
     }
 
     /**
@@ -60,25 +53,23 @@ class UserRepository extends EloquentRepository implements UserInterface
      *
      * @param  int  $modelId
      * @param  array  $payload
-     * @return Model
+     * @return bool
      */
     public function update(int $modelId, array $payload): bool
     {
-        try {
-            if (array_key_exists('role', $payload)) {
-                $role = $payload['role'];
-                unset($payload['role']);
-            }
+        if (array_key_exists('role', $payload)) {
+            $role = $payload['role'];
+            unset($payload['role']);
+        }
 
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId, $payload, $role) {
             $model = $this->findById($modelId);
 
             if (!empty($role)) $model->syncRoles($role);
 
             return $model->update($payload);
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+        });
 
-            return false;
-        }
+        return $transaction;
     }
 }

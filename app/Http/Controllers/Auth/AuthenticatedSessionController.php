@@ -52,7 +52,14 @@ class AuthenticatedSessionController extends Controller
         try {
             $request->authenticate();
             $request->session()->regenerate();
+        } catch (\Throwable $th) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+                'password' => 'The provided credentials do not match our records.',
+            ]);
+        }
 
+        try {
             $this->service->store($request->validated());
 
             return redirect()->intended(route('dashboard.index', absolute: false));

@@ -4,7 +4,6 @@ namespace App\Repositories\Models;
 
 use App\Models\Role;
 use App\Traits\SystemLog;
-use App\Enum\ReportLogType;
 use App\Contracts\Models\RoleInterface;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\EloquentRepository;
@@ -27,26 +26,24 @@ class RoleRepository extends EloquentRepository implements RoleInterface
      * Create a model.
      *
      * @param  array  $payload
-     * @return Model
+     * @return Model|bool
      */
-    public function create(array $payload): ?Model
+    public function create(array $payload): Model|bool
     {
-        try {
+        $transaction = $this->wrapIntoTransaction(function () use ($payload) {
             if (array_key_exists('permissions', $payload)) {
                 $permission = $payload['permissions'];
                 unset($payload['permissions']);
             }
 
-            $model = $this->model->create($payload);
+            $model = $this->model->query()->create($payload);
 
             if (!empty($permission)) $model->syncPermissions($permission);
 
             return $model->fresh();
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+        });
 
-            return false;
-        }
+        return $transaction;
     }
 
     /**
@@ -54,11 +51,11 @@ class RoleRepository extends EloquentRepository implements RoleInterface
      *
      * @param  int  $modelId
      * @param  array  $payload
-     * @return Model
+     * @return bool
      */
     public function update(int $modelId, array $payload): bool
     {
-        try {
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId, $payload) {
             if (array_key_exists('permissions', $payload)) {
                 $permission = $payload['permissions'];
                 unset($payload['permissions']);
@@ -69,10 +66,26 @@ class RoleRepository extends EloquentRepository implements RoleInterface
             if (!empty($permission)) $model->syncPermissions($permission);
 
             return $model->update($payload);
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+        });
 
-            return false;
-        }
+        return $transaction;
+    }
+
+    /**
+     * Delete model by id.
+     *
+     * @param  int  $modelId
+     * @return Model
+     */
+    public function deleteById(int $modelId): bool
+    {
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId) {
+            $roleId = $this->model->query()->findOrFail($modelId);
+            $roleId->users()->update(['role_id' => config('permission.role.default')]);
+
+            return $roleId->delete();
+        });
+
+        return $transaction;
     }
 }

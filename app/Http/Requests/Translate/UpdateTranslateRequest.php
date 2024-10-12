@@ -23,7 +23,7 @@ class UpdateTranslateRequest extends Request
     {
         return [
             'group' => ['required', 'max:255', 'string'],
-            'key' => ['required', 'max:255', 'string', 'unique:language_lines,key,' . $this->list->id],
+            'key' => ['required', 'max:255', 'string', 'unique:language_lines,id,' . $this->list->id],
             'lang_id' => ['required', 'max:255', 'string'],
             'lang_en' => ['required', 'max:255', 'string']
         ];

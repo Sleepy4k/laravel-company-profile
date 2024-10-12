@@ -4,10 +4,13 @@ namespace App\Services\RBAC;
 
 use App\Services\Service;
 use App\Models\Permission;
+use App\Traits\GuardNameData;
 use App\DataTables\RBAC\PermissionDataTable;
 
 class PermissionService extends Service
 {
+    use GuardNameData;
+
     /**
      * Display a listing of the resource.
      *
@@ -29,9 +32,11 @@ class PermissionService extends Service
      */
     public function create(): array
     {
+        $guardList = $this->getGuardNameList();
+        $defaultGuard = $this->getDefaultGuardName();
         $backUrl = session()->get('rbac.permission.url') ?? route('rbac.permissions.index');
 
-        return compact('backUrl');
+        return compact('guardList', 'defaultGuard', 'backUrl');
     }
 
     /**
@@ -45,7 +50,11 @@ class PermissionService extends Service
     {
         try {
             $this->permissionInterface->create($request);
+
+            session()->flash('success', 'Data has been created successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to create.');
+
             throw $th;
         }
     }
@@ -74,9 +83,10 @@ class PermissionService extends Service
      */
     public function edit(Permission $permission): array
     {
+        $guardList = $this->getGuardNameList();
         $backUrl = session()->get('rbac.permission.url') ?? route('rbac.permissions.index');
 
-        return compact('permission', 'backUrl');
+        return compact('permission', 'guardList', 'backUrl');
     }
 
     /**
@@ -90,8 +100,17 @@ class PermissionService extends Service
     public function update(array $request, int $id): void
     {
         try {
-            $this->permissionInterface->update($id, $request);
+            $isSuccess = $this->permissionInterface->update($id, $request);
+
+            if (!$isSuccess) {
+                session()->flash('error', 'Something went wrong, when try to updating data');
+                return;
+            }
+
+            session()->flash('success', 'Data has been updated successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to update.');
+
             throw $th;
         }
     }
@@ -106,8 +125,17 @@ class PermissionService extends Service
     public function destroy(int $id): void
     {
         try {
-            $this->permissionInterface->deleteById($id);
+            $isSuccess = $this->permissionInterface->deleteById($id);
+
+            if (!$isSuccess) {
+                session()->flash('error', 'Something went wrong, when try to deleting data');
+                return;
+            }
+
+            session()->flash('success', 'Data has been deleted successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to delete.');
+
             throw $th;
         }
     }

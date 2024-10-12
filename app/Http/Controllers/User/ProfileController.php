@@ -21,9 +21,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return inertia('Profile/Edit', [
-            'status' => session('status'),
-        ]);
+        return inertia('Profile/Edit');
     }
 
     /**
@@ -31,11 +29,15 @@ class ProfileController extends Controller
      */
     public function update(UpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        try {
+            $request->user()->fill($request->validated());
+            $request->user()->save();
+            session()->flash('success', 'Profile updated successfully.');
 
-        $request->user()->save();
-
-        return to_route('profile.edit');
+            return to_route('profile.edit');
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 
     /**
@@ -43,16 +45,20 @@ class ProfileController extends Controller
      */
     public function destroy(DestroyRequest $request): RedirectResponse
     {
-        $request->validated();
-        $user = $request->user();
+        try {
+            $request->validated();
+            $user = $request->user();
 
-        Auth::logout();
+            Auth::logout();
 
-        $user->delete();
+            $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        return redirect('/');
+            return redirect('/');
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 }

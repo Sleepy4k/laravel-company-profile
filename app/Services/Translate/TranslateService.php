@@ -3,10 +3,10 @@
 namespace App\Services\Translate;
 
 use App\Services\Service;
+use App\Models\Translate;
 use App\Enum\DisplayModeType;
 use App\DataTables\Translate\TranslateDataTable;
 use App\Http\Resources\Translate\TranslateResource;
-use App\Models\Translate;
 
 class TranslateService extends Service
 {
@@ -87,7 +87,11 @@ class TranslateService extends Service
     {
         try {
             $this->languageInterface->create($request);
+
+            session()->flash('success', 'Data has been created successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to create.');
+
             throw $th;
         }
     }
@@ -132,7 +136,11 @@ class TranslateService extends Service
     {
         try {
             $this->languageInterface->update($id, $request);
+
+            session()->flash('success', 'Data has been updated successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to update.');
+
             throw $th;
         }
     }
@@ -148,7 +156,11 @@ class TranslateService extends Service
     {
         try {
             $this->languageInterface->deleteById($id);
+
+            session()->flash('success', 'Data has been deleted successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to delete.');
+
             throw $th;
         }
     }

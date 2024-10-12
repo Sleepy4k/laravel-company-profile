@@ -48,7 +48,11 @@ class SettingTypeService extends Service
             $request['category'] = SettingTypeCategory::fromValue($request['category'])->value;
 
             $this->applicationSettingTypeInterface->create($request);
+
+            session()->flash('success', 'Data has been created successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to create.');
+
             throw $th;
         }
     }
@@ -96,7 +100,11 @@ class SettingTypeService extends Service
     {
         try {
             $this->applicationSettingTypeInterface->update($id, $request);
+
+            session()->flash('success', 'Data has been updated successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to update.');
+
             throw $th;
         }
     }
@@ -112,7 +120,11 @@ class SettingTypeService extends Service
     {
         try {
             $this->applicationSettingTypeInterface->deleteById($id);
+
+            session()->flash('success', 'Data has been deleted successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to delete.');
+
             throw $th;
         }
     }

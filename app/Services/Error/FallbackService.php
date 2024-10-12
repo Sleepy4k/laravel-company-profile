@@ -20,7 +20,7 @@ class FallbackService extends Service
             $isFirstTime = Storage::fileMissing('.installed');
 
             $status = 404;
-            $home_url = url()->previous();
+            $home_url = url('/');
             $title = $isFirstTime ? 'Page not found' : trans('error.404.title');
             $description = $isFirstTime ? 'The page you are looking for does not exist.' : trans('error.404.description');
             $home = $isFirstTime ? 'Back to home' : trans('error.back_home');

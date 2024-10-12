@@ -49,6 +49,7 @@ class SetupController extends Controller
 
             return inertia('Install/Setup', $this->service->index());
         } catch (\Throwable $th) {
+            $this->installationStep->markAsNotCompleted();
             return $this->redirectError($th);
         }
     }

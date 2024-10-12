@@ -28,6 +28,5 @@ class UserObserver
     public function updated(User $user)
     {
         $user->password = Hash::make($user->password);
-        $user->updated_at = now();
     }
 }

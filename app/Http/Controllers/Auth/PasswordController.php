@@ -14,12 +14,18 @@ class PasswordController extends Controller
      */
     public function __invoke(PasswordRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $request->user()->update([
-            'password' => Hash::make($data['password']),
-        ]);
+            $request->user()->update([
+                'password' => Hash::make($data['password']),
+            ]);
 
-        return back();
+            session()->flash('success', 'Password updated successfully.');
+
+            return back();
+        } catch (\Throwable $th) {
+            return $this->redirectError($th);
+        }
     }
 }

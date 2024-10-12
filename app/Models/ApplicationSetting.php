@@ -184,19 +184,11 @@ class ApplicationSetting extends Model
      * @return array
      */
     public function getCacheableProperties(): array {
-        return [
-            //How long should cache last in general?
-            'ttl' => 300,
-            //By what should cache entries be prefixed?
+        $overrided = [
             'prefix' => 'settingcache',
-            //What is the identifying, unique column name?
-            'identifier' => 'id',
-            //Do you need logging?
-            'logging' => [
-                'enabled' => !app()->environment('production'),
-                'level' => 'debug',
-            ],
         ];
+
+        return array_merge(config('cacheable'), $overrided);
     }
 
     /**

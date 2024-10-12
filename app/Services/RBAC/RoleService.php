@@ -4,11 +4,14 @@ namespace App\Services\RBAC;
 
 use App\Models\Role;
 use App\Services\Service;
+use App\Traits\GuardNameData;
 use App\DataTables\RBAC\RoleDataTable;
 use App\Http\Resources\RBAC\PermissionResource;
 
 class RoleService extends Service
 {
+    use GuardNameData;
+
     /**
      * Display a listing of the resource.
      *
@@ -30,10 +33,12 @@ class RoleService extends Service
      */
     public function create(): array
     {
+        $guardList = $this->getGuardNameList();
         $permissions = $this->getPermissions();
-        $backUrl = session()->get('rbac.permission.url') ?? route('rbac.permissions.index');
+        $defaultGuard = $this->getDefaultGuardName();
+        $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
 
-        return compact('permissions', 'backUrl');
+        return compact('guardList', 'defaultGuard', 'permissions', 'backUrl');
     }
 
     /**
@@ -47,7 +52,11 @@ class RoleService extends Service
     {
         try {
             $this->roleInterface->create($request);
+
+            session()->flash('success', 'Data has been created successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to create.');
+
             throw $th;
         }
     }
@@ -78,10 +87,11 @@ class RoleService extends Service
     public function edit(Role $role): array
     {
         $role->load('permissions');
+        $guardList = $this->getGuardNameList();
         $permissions = $this->getPermissions();
         $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
 
-        return compact('role', 'permissions', 'backUrl');
+        return compact('role', 'guardList', 'permissions', 'backUrl');
     }
 
     /**
@@ -95,8 +105,17 @@ class RoleService extends Service
     public function update(array $request, int $id): void
     {
         try {
-            $this->roleInterface->update($id, $request);
+            $isSuccess = $this->roleInterface->update($id, $request);
+
+            if (!$isSuccess) {
+                session()->flash('error', 'Something went wrong, when try to updating data');
+                return;
+            }
+
+            session()->flash('success', 'Data has been updated successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to update.');
+
             throw $th;
         }
     }
@@ -111,8 +130,17 @@ class RoleService extends Service
     public function destroy(int $id): void
     {
         try {
-            $this->roleInterface->deleteById($id);
+            $isSuccess = $this->roleInterface->deleteById($id);
+
+            if (!$isSuccess) {
+                session()->flash('error', 'Something went wrong, when try to deleting data');
+                return;
+            }
+
+            session()->flash('success', 'Data has been deleted successfully.');
         } catch (\Throwable $th) {
+            session()->flash('error', 'Data failed to delete.');
+
             throw $th;
         }
     }

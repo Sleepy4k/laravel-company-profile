@@ -44,9 +44,11 @@ class RequirementController extends Controller
 
         try {
             $this->installationStep->markAsCompleted();
+            $data = $this->service->invoke();
 
             return inertia('Install/Requirements', $this->service->invoke());
         } catch (\Throwable $th) {
+            $this->installationStep->markAsNotCompleted();
             return $this->redirectError($th);
         }
     }

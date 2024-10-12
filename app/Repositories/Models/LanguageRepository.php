@@ -4,7 +4,6 @@ namespace App\Repositories\Models;
 
 use App\Models\Translate;
 use App\Traits\SystemLog;
-use App\Enum\ReportLogType;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\EloquentRepository;
 use App\Contracts\Models\LanguageInterface;
@@ -27,31 +26,28 @@ class LanguageRepository extends EloquentRepository implements LanguageInterface
      * Create a model.
      *
      * @param  array  $payload
-     * @return Model
+     * @return Model|bool
      */
-    public function create(array $payload): ?Model
+    public function create(array $payload): Model|bool
     {
-        try {
-            $payload['text'] = [];
+        $payload['text'] = [];
 
-            if (array_key_exists('lang_id', $payload) && array_key_exists('lang_en', $payload)) {
-                $payload['text'] = [
-                    'id' => $payload['lang_id'],
-                    'en' => $payload['lang_en']
-                ];
+        if (array_key_exists('lang_id', $payload) && array_key_exists('lang_en', $payload)) {
+            $payload['text'] = [
+                'id' => $payload['lang_id'],
+                'en' => $payload['lang_en']
+            ];
 
-                unset($payload['lang_id']);
-                unset($payload['lang_en']);
-            }
-
-            $model = $this->model->create($payload);
-
-            return $model->fresh();
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
-
-            return false;
+            unset($payload['lang_id']);
+            unset($payload['lang_en']);
         }
+
+        $transaction = $this->wrapIntoTransaction(function () use ($payload) {
+            $model = $this->model->query()->create($payload);
+            return $model->fresh();
+        });
+
+        return $transaction;
     }
 
     /**
@@ -59,31 +55,29 @@ class LanguageRepository extends EloquentRepository implements LanguageInterface
      *
      * @param  int  $modelId
      * @param  array  $payload
-     * @return Model
+     * @return bool
      */
     public function update(int $modelId, array $payload): bool
     {
-        try {
-            $payload['text'] = [];
+        $payload['text'] = [];
 
-            if (array_key_exists('lang_id', $payload) && array_key_exists('lang_en', $payload)) {
-                $payload['text'] = [
-                    'id' => $payload['lang_id'],
-                    'en' => $payload['lang_en']
-                ];
+        if (array_key_exists('lang_id', $payload) && array_key_exists('lang_en', $payload)) {
+            $payload['text'] = [
+                'id' => $payload['lang_id'],
+                'en' => $payload['lang_en']
+            ];
 
-                unset($payload['lang_id']);
-                unset($payload['lang_en']);
-            }
+            unset($payload['lang_id']);
+            unset($payload['lang_en']);
+        }
 
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId, $payload) {
             $model = $this->findById($modelId);
 
             return $model->update($payload);
-        } catch (\Throwable $th) {
-            $this->sendReportLog(ReportLogType::ERROR, $th->getMessage());
+        });
 
-            return false;
-        }
+        return $transaction;
     }
 
     /**

@@ -49,6 +49,7 @@ class UserController extends Controller
 
             return inertia('Install/User', $this->service->index());
         } catch (\Throwable $th) {
+            $this->installationStep->markAsNotCompleted();
             return $this->redirectError($th);
         }
     }

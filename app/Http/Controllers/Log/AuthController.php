@@ -44,7 +44,7 @@ class AuthController extends Controller
      */
     public function show(Activity $auth)
     {
-        Gate::authorize('view', AuthPolicy::class);
+        Gate::authorize('view', [AuthPolicy::class, $auth]);
 
         try {
             return inertia('Log/Auth/Show', $this->service->show($auth));

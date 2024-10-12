@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Spatie\Activitylog\LogOptions;
+use App\Observers\MenuMetaObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use ElipZis\Cacheable\Models\Traits\Cacheable;
-use App\Observers\ApplicationSettingTypeObserver;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
-#[ObservedBy([ApplicationSettingTypeObserver::class])]
-class ApplicationSettingType extends Model
+#[ObservedBy([MenuMetaObserver::class])]
+class MenuMeta extends Model
 {
     use HasFactory, LogsActivity, Cacheable;
 
@@ -42,7 +42,7 @@ class ApplicationSettingType extends Model
      *
      * @var string
      */
-    protected $table = 'application_setting_types';
+    protected $table = 'menu_metas';
 
     /**
      * The primary key associated with the table.
@@ -78,9 +78,13 @@ class ApplicationSettingType extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'description',
-        'category',
+        'translation_key',
+        'route',
+        'permission',
+        'parameters',
+        'active_routes',
+        'is_sortable',
+        'is_parent',
     ];
 
     /**
@@ -116,9 +120,11 @@ class ApplicationSettingType extends Model
      */
     protected $searchable = [
         'id',
-        'name',
-        'description',
-        'category',
+        'translation_key',
+        'route',
+        'permission',
+        'parameters',
+        'active_routes',
     ];
 
     /**
@@ -140,23 +146,16 @@ class ApplicationSettingType extends Model
     {
         return [
             'id' => 'int',
-            'uuid' => 'string',
-            'name' => 'string',
-            'description' => 'string',
-            'category' => 'string',
+            'translation_key' => 'string',
+            'route' => 'string',
+            'permission' => 'string',
+            'parameters' => 'string',
+            'active_routes' => 'string',
+            'is_sortable' => 'boolean',
+            'is_parent' => 'boolean',
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'uuid';
     }
 
     /**
@@ -180,19 +179,19 @@ class ApplicationSettingType extends Model
      */
     public function getCacheableProperties(): array {
         $overrided = [
-            'prefix' => 'settingtypecache',
+            'prefix' => 'menumetacache',
         ];
 
         return array_merge(config('cacheable'), $overrided);
     }
 
     /**
-     * Get the application settings for the type.
+     * Get the menu that owns the menu meta.
      *
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function settings(): HasMany
+    public function menu(): BelongsTo
     {
-        return $this->hasMany(ApplicationSetting::class, 'type_id', 'id');
+        return $this->belongsTo(Menu::class);
     }
 }

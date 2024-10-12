@@ -12,7 +12,7 @@ class SettingTypePolicy
      */
     public function viewAny(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.index');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.index');
     }
 
     /**
@@ -20,7 +20,7 @@ class SettingTypePolicy
      */
     public function view(User $user, ApplicationSettingType $type): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.show');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.show');
     }
 
     /**
@@ -28,7 +28,7 @@ class SettingTypePolicy
      */
     public function create(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.create');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.create');
     }
 
     /**
@@ -36,7 +36,7 @@ class SettingTypePolicy
      */
     public function store(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.store');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.store');
     }
 
     /**
@@ -44,7 +44,7 @@ class SettingTypePolicy
      */
     public function edit(User $user): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.edit');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.edit');
     }
 
     /**
@@ -52,7 +52,7 @@ class SettingTypePolicy
      */
     public function update(User $user, ApplicationSettingType $type): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.update');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.update');
     }
 
     /**
@@ -60,6 +60,6 @@ class SettingTypePolicy
      */
     public function delete(User $user, ApplicationSettingType $type): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('application.delete');
+        return auth('web')->check() && $user->hasPermissionTo('application.type.delete');
     }
 }

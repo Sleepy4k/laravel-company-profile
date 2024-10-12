@@ -3,14 +3,15 @@
 namespace App\Http\Middleware;
 
 use Inertia\Middleware;
-use App\Models\Translate;
 use App\Traits\AppSetting;
 use Illuminate\Http\Request;
+use App\Traits\DashboardMenu;
+use App\Traits\PageTranslate;
 use App\Http\Resources\User\AuthInertiaResource;
 
 class HandleInertiaRequests extends Middleware
 {
-    use AppSetting;
+    use AppSetting, PageTranslate, DashboardMenu;
 
     /**
      * The root template that is loaded on the first page visit.
@@ -46,9 +47,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? new AuthInertiaResource($request->user()?->loadMissing('roles.permissions')) : null,
             ],
-            'translations' => Translate::get(['group', 'key', 'text'])->mapWithKeys(function ($item) {
-                return [$item->group.'.'.$item->key => $item->text[app()->getLocale()] ?? $item->text['en']];
-            }),
+            'translations' => $this->getTranslations(),
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+            ],
+            'menus' => $this->getMenus($request),
         ];
     }
 }

@@ -48,6 +48,7 @@ class FinishedController extends Controller
 
             return inertia('Install/Finish', $this->service->invoke());
         } catch (\Throwable $th) {
+            $this->installationStep->markAsNotCompleted();
             return $this->redirectError($th);
         }
     }

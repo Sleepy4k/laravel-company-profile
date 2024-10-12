@@ -44,7 +44,7 @@ class ModelController extends Controller
      */
     public function show(Activity $model)
     {
-        Gate::authorize('view', ModelPolicy::class);
+        Gate::authorize('view', [ModelPolicy::class, $model]);
 
         try {
             return inertia('Log/Model/Show', $this->service->show($model));

@@ -3,6 +3,7 @@
 namespace App\Policies\Log;
 
 use App\Models\User;
+use Spatie\Activitylog\Models\Activity;
 
 class AuthPolicy
 {
@@ -17,8 +18,10 @@ class AuthPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user): bool
+    public function view(User $user, Activity $auth): bool
     {
-        return auth('web')->check() && $user->hasPermissionTo('log.auth.show');
+        $isLogNameValid = str_contains($auth->log_name, 'auth');
+
+        return auth('web')->check() && $user->hasPermissionTo('log.auth.show') && $isLogNameValid;
     }
 }

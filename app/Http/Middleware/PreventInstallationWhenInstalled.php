@@ -24,11 +24,29 @@ class PreventInstallationWhenInstalled
              */
             if (!$request->hasValidSignature()) {
                 if ($request->expectsJson()) return response()->json(['message' => 'Not Found'], 404);
-                abort(404);
+                return inertia('Error', [
+                    'status' => 404,
+                    'title' => 'Not Found',
+                    'description' => 'We are sorry, but the page you requested was not found',
+                    'home' => 'Back to home'
+                ])
+                ->toResponse($request)
+                ->setStatusCode(404);
             }
-        } elseif (file_exists(storage_path('.installed')) && $request->is('install*') ) {
+
+            return $next($request);
+        }
+
+        if (file_exists(storage_path('.installed')) && $request->is('install*') ) {
             if ($request->expectsJson()) return response()->json(['message' => 'Not Found'], 404);
-            abort(404);
+            return inertia('Error', [
+                'status' => 404,
+                'title' => 'Not Found',
+                'description' => 'We are sorry, but the page you requested was not found',
+                'home' => 'Back to home'
+            ])
+            ->toResponse($request)
+            ->setStatusCode(404);
         }
 
         return $next($request);
