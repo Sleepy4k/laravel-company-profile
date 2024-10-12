@@ -3,6 +3,38 @@
 return [
     'list' => [
         [
+            'group' => 'auth',
+            'key' => 'failed',
+            'text' => [
+                'id' => 'Kredensial ini tidak cocok dengan catatan kami.',
+                'en' => 'These credentials do not match our records.'
+            ]
+        ],
+        [
+            'group' => 'auth',
+            'key' => 'password',
+            'text' => [
+                'id' => 'Password yang diberikan salah.',
+                'en' => 'The provided password is incorrect.'
+            ]
+        ],
+        [
+            'group' => 'auth',
+            'key' => 'throttle',
+            'text' => [
+                'id' => 'Terlalu banyak upaya login. Silakan coba lagi dalam :detik detik.',
+                'en' => 'Too many login attempts. Please try again in :seconds seconds.'
+            ]
+        ],
+        [
+            'group' => 'error',
+            'key' => 'flash.message',
+            'text' => [
+                'id' => 'Ada :amount kesalahan dalam formulir Anda. Silakan periksa dan coba lagi',
+                'en' => 'There are :amount error(s) in your form. Please check and try again'
+            ]
+        ],
+        [
             'group' => 'error',
             'key' => 'back_home',
             'text' => [
@@ -1108,6 +1140,14 @@ return [
         ],
         [
             'group' => 'page',
+            'key' => 'login.welcome',
+            'text' => [
+                'id' => 'Selamat Datang!',
+                'en' => 'Welcome Back!'
+            ]
+        ],
+        [
+            'group' => 'page',
             'key' => 'login.button.submit',
             'text' => [
                 'id' => 'Masuk',
@@ -1132,26 +1172,18 @@ return [
         ],
         [
             'group' => 'page',
-            'key' => 'login.alert.proccessing',
+            'key' => 'login.alert.locked_out',
             'text' => [
-                'id' => 'Sedang masuk...',
-                'en' => 'Logging in...'
+                'id' => 'Terkunci selama :time detik',
+                'en' => 'Locked out for :time second(s)'
             ]
         ],
         [
             'group' => 'page',
-            'key' => 'login.alert.success',
+            'key' => 'login.alert.lock_warning',
             'text' => [
-                'id' => 'Berhasil masuk',
-                'en' => 'Successfully logged in'
-            ]
-        ],
-        [
-            'group' => 'page',
-            'key' => 'login.alert.error',
-            'text' => [
-                'id' => 'Gagal masuk. Silahkan coba lagi',
-                'en' => 'Failed to login. Please try again'
+                'id' => 'Kamu memiliki :attempt percobaan sebelum kamu terkunci',
+                'en' => 'You have :attempt attempt(s) left before you are locked out'
             ]
         ],
         [

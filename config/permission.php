@@ -212,8 +212,6 @@ return [
                 'user.update',
                 'user.delete',
 
-                'rbac.index',
-
                 'rbac.permission.index',
                 'rbac.permission.create',
                 'rbac.permission.store',
@@ -238,13 +236,21 @@ return [
                 'translate.update',
                 'translate.delete',
 
-                'application.index',
-                'application.create',
-                'application.store',
-                'application.show',
-                'application.edit',
-                'application.update',
-                'application.delete',
+                'application.setting.index',
+                'application.setting.create',
+                'application.setting.store',
+                'application.setting.show',
+                'application.setting.edit',
+                'application.setting.update',
+                'application.setting.delete',
+
+                'application.type.index',
+                'application.type.create',
+                'application.type.store',
+                'application.type.show',
+                'application.type.edit',
+                'application.type.update',
+                'application.type.delete',
 
                 'blog.index',
                 'blog.create',
@@ -261,8 +267,6 @@ return [
                 'gallery.edit',
                 'gallery.update',
                 'gallery.delete',
-
-                'log.index',
 
                 'log.auth.index',
                 'log.auth.show',
@@ -292,9 +296,9 @@ return [
                 'translate.show',
                 'translate.update',
 
-                'application.index',
-                'application.show',
-                'application.update',
+                'application.setting.index',
+                'application.setting.show',
+                'application.setting.update',
 
                 'gallery.index',
                 'gallery.create',
