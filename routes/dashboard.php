@@ -31,6 +31,9 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
 
+    Route::get('/blog', DashboardController::class)->name('blog.index');
+    Route::get('/gallery', DashboardController::class)->name('gallery.index');
+
     Route::prefix('translate')->as('translate.')->group(function () {
         Route::get('/{displayMode}', [Translate\TranslateController::class, 'index'])
             ->name('index')

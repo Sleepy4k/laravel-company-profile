@@ -10,7 +10,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('landing');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/dashboard.php';

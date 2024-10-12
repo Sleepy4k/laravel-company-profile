@@ -10,7 +10,7 @@ use App\Http\Controllers\Install\PermissionController;
 use App\Http\Controllers\Install\RequirementController;
 use App\Http\Controllers\Install\StorageLinkController;
 
-Route::prefix('install')->as('install.')->group(function () {
+Route::prefix('install')->as('install.')->middleware('prevent_installation')->group(function () {
     Route::get('', RequirementController::class)->name('requirements');
     Route::get('permissions', PermissionController::class)->name('permissions');
     Route::get('database', DatabaseController::class)->name('database');
