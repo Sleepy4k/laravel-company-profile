@@ -1,5 +1,6 @@
 *
 !app/
+!docker/
 !logs/
 !framework/
 !.gitignore
