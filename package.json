@@ -1,36 +1,39 @@
 {
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "start": "vite",
-        "dev": "vite",
-        "build": "tsc && vite build"
-    },
-    "devDependencies": {
-        "@headlessui/react": "^2.1.5",
-        "@inertiajs/react": "^1.0.0",
-        "@tailwindcss/forms": "^0.5.9",
-        "@types/jquery": "^3.5.30",
-        "@types/lodash.debounce": "^4.0.9",
-        "@types/node": "^22.5.4",
-        "@types/react": "^18.3.5",
-        "@types/react-dom": "^18.3.0",
-        "@vitejs/plugin-react": "^4.3.1",
-        "autoprefixer": "^10.4.20",
-        "axios": "^1.7.7",
-        "daisyui": "^4.12.10",
-        "laravel-vite-plugin": "^1.0.5",
-        "postcss": "^8.4.45",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "tailwindcss": "^3.4.10",
-        "typescript": "^5.5.4",
-        "vite": "^5.4.6"
-    },
-    "dependencies": {
-        "@heroicons/react": "^2.1.5",
-        "lodash.debounce": "^4.0.8",
-        "react-select": "^5.8.0",
-        "sweetalert2": "^11.14.0"
-    }
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.1.5",
+    "classnames": "^2.3.2",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.378.0",
+    "react": "^18.3.1",
+    "react-select": "^5.8.0",
+    "react-use": "^17.5.1"
+  },
+  "devDependencies": {
+    "@headlessui/react": "^2.1.5",
+    "@inertiajs/react": "^1.0.0",
+    "@sentry/browser": "^7.32.1",
+    "@tailwindcss/forms": "^0.5.9",
+    "@types/jquery": "^3.5.30",
+    "@types/lodash.debounce": "^4.0.9",
+    "@types/node": "^22.5.4",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.7.7",
+    "laravel-vite-plugin": "^1.0.5",
+    "postcss-import": "^15.1.0",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.6",
+    "ziggy-js": "^2.3.0"
+  }
 }
