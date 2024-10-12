@@ -1,167 +1,144 @@
-import { PageProps } from '@/types';
-import trans from '@/utils/translate';
-import alert from '@/utils/sweet.alert';
-import { FormEventHandler, useEffect, useState } from 'react';
-import { Link, useForm } from '@inertiajs/react';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
+import React, { useEffect, useState } from "react";
+import { useForm } from "@inertiajs/react";
+import Logo from "@/Components/Logo/Logo";
+import LoadingButton from "@/Components/Button/LoadingButton";
+import TextInput from "@/Components/Form/TextInput";
+import FieldGroup from "@/Components/Form/FieldGroup";
+import AuthLayout from "@/Layouts/AuthLayout";
+import { Link } from "@inertiajs/react";
+import FlashMessages from "@/Components/Messages/FlashMessages";
+import { PageProps } from "@/types";
+import trans from "@/utils/translate";
 
-interface CurrentPageProps extends PageProps {
-    status?: string;
-    rateLimiter: {
-        max_attempts: number;
-        attempts: number;
-        remaining: number;
-        reset_at: number;
-    };
-}
+type LoginPageProps = PageProps<{
+  rateLimiter: {
+    max_attempts: number;
+    attempts: number;
+    remaining: number;
+    reset_at: number;
+  };
+}>;
 
-export default function Login({ status, rateLimiter }: CurrentPageProps) {
-    const [unlockedAt, setUnlockedAt] = useState<number>(rateLimiter.reset_at);
-    const langList = {
-        'proccessing': trans('page.login.alert.proccessing'),
-        'success': trans('page.login.alert.success'),
-        'error': trans('page.login.alert.error'),
-    };
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-    });
+function LoginPage({ rateLimiter }: LoginPageProps) {
+  const [unlockedAt, setUnlockedAt] = useState<number>(rateLimiter.reset_at);
+  const { data, setData, errors, post, reset, processing } = useForm({
+    email: "",
+    password: "",
+  });
 
-    useEffect(() => {
-        setUnlockedAt(rateLimiter.reset_at);
-    }, [rateLimiter]);
+  useEffect(() => {
+    setUnlockedAt(rateLimiter.reset_at);
+  }, [rateLimiter]);
 
-    useEffect(() => {
-        const timeInterval = setInterval(() => {
-            setUnlockedAt((prev) => {
-                if (prev === 1) {
-                    rateLimiter.remaining = rateLimiter.max_attempts;
-                    rateLimiter.attempts = 0;
-                    clearInterval(timeInterval);
-                    return 0;
-                }
-
-                return prev - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timeInterval);
-    }, [rateLimiter]);
-
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        if (rateLimiter.remaining === 0) {
-            alert.fire({
-                title: 'Whoops!',
-                text: 'You are locked out. Please try again later.',
-                icon: 'error',
-            });
-
-            return;
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      setUnlockedAt((prev) => {
+        if (prev === 1) {
+          rateLimiter.remaining = rateLimiter.max_attempts;
+          rateLimiter.attempts = 0;
+          clearInterval(timeInterval);
+          return 0;
         }
 
-        post(route('login'), {
-            onProgress: () => {
-                alert.fire({
-                    title: langList.proccessing,
-                    icon: 'info',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                });
-            },
-            onSuccess: () => {
-                alert.fire({
-                    title: langList.success,
-                    icon: 'success',
-                });
-            },
-            onError: () => {
-                alert.fire({
-                    title: 'Whoops!',
-                    text: langList.error,
-                    icon: 'error',
-                });
-            },
-            onFinish: () => reset('password'),
-        });
-    };
+        return prev - 1;
+      });
+    }, 1000);
 
-    return (
-        <GuestLayout title="Log in">
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+    return () => clearInterval(timeInterval);
+  }, [rateLimiter]);
 
-            <form onSubmit={submit} className='mt-4'>
-                <div>
-                    <InputLabel htmlFor="email" value={ trans('page.login.input.email') } />
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-                    <TextInput
-                        required
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
+    post(route("login"));
+  }
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+  return (
+    <div className="w-full max-w-md">
+      <Logo className="justify-center" height={50} logocolor='text-red-800 fill-current' />
+      <div className="mt-5">
+        <FlashMessages />
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-8 overflow-hidden bg-white rounded-lg shadow-xl"
+      >
+        <div className="px-10 py-12">
+          <h1 className="text-3xl font-bold text-center">
+            {trans("page.login.welcome", "Welcome Back!")}
+          </h1>
+          <div className="w-24 mx-auto mt-6 border-b-2" />
+          <div className="grid gap-6">
+            <FieldGroup
+              label={trans("page.login.input.email", "Email")}
+              name="email"
+              error={errors.email}
+            >
+              <TextInput
+                name="email"
+                type="email"
+                error={errors.email}
+                value={data.email}
+                onChange={(e) => setData("email", e.target.value)}
+                autoComplete="username"
+                disabled={rateLimiter.remaining === 0 || processing}
+              />
+            </FieldGroup>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value={ trans('page.login.input.password') } />
+            <FieldGroup
+              label={trans("page.login.input.password", "Password")}
+              name="password"
+              error={errors.password}
+            >
+              <TextInput
+                type="password"
+                error={errors.password}
+                value={data.password}
+                onChange={(e) => setData("password", e.target.value)}
+                autoComplete="current-password"
+                disabled={rateLimiter.remaining === 0 || processing}
+              />
+            </FieldGroup>
+          </div>
 
-                    <TextInput
-                        required
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    {rateLimiter.remaining === 0 ? (
-                        <PrimaryButton className="ms-4 mt-2 mb-4" disabled>
-                            Locked out
-                        </PrimaryButton>
-                    ) : (
-                        <PrimaryButton className="ms-4 mt-2 mb-4" disabled={processing}>
-                            { trans('page.login.button.submit') }
-                        </PrimaryButton>
-                    )}
-                </div>
-
-                {/* Add warning for x attempts login */}
-                {rateLimiter.remaining > 0 && rateLimiter.remaining < 4 && (
-                    <div className="mt-4">
-                        <p className="text-sm text-red-600">
-                            {`Warning: You have ${rateLimiter.remaining} login attempts remaining before you are locked out.`}
-                        </p>
-                    </div>
-                )}
-
-                {/* Inform about reset lockdown at */}
-                {rateLimiter.remaining === 0 && (
-                    <div className="mt-4">
-                        <p className="text-sm text-red-600">
-                            {`You are locked out. Please try again in ${unlockedAt} ${unlockedAt > 1 ? 'seconds' : 'second'}.`}
-                        </p>
-                    </div>
-                )}
-            </form>
-        </GuestLayout>
-    );
+          {rateLimiter.remaining > 0 && rateLimiter.remaining < 4 && (
+            <div className="mt-6 text-sm text-red-500">
+              {trans("page.login.alert.lock_warning", "Warning", [
+                rateLimiter.remaining,
+              ])}
+            </div>
+          )}
+        </div>
+        <div className="flex items-center justify-between px-10 py-4 bg-gray-100 border-t border-gray-200">
+          <Link className="hover:underline" href="/" tabIndex={-1}>
+            {trans("form.button.back", "Back")}
+          </Link>
+          {rateLimiter.remaining === 0 ? (
+            <div className="text-red-500">
+              {trans("page.login.alert.locked_out", "Locked Out", [unlockedAt])}
+            </div>
+          ) : (
+            <LoadingButton
+              type="submit"
+              loading={processing}
+              className="btn-indigo"
+            >
+              {trans("page.login.button.submit", "Login")}
+            </LoadingButton>
+          )}
+        </div>
+      </form>
+    </div>
+  );
 }
+
+/**
+ * Persistent Layout (Inertia.js)
+ *
+ * [Learn more](https://inertiajs.com/pages#persistent-layouts)
+ */
+LoginPage.layout = (page: React.ReactNode) => (
+  <AuthLayout title="Login" children={page} />
+);
+
+export default LoginPage;

@@ -1,117 +1,153 @@
 import { PageProps } from "@/types";
-import trans from "@/utils/translate";
-import { Link } from "@inertiajs/react";
-import TextInput from "@/Components/TextInput";
-import ResponsiveHeader from "@/Components/ResponsiveHeader";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Link, router } from "@inertiajs/react";
+import { useState } from "react";
+import MainLayout from "@/Layouts/MainLayout";
+import FieldGroup from "@/Components/Form/FieldGroup";
+import TextInput from "@/Components/Form/TextInput";
+import DeleteButton from "@/Components/Button/DeleteButton";
+import Confirmation from "./partials/Confirmation";
 import {
-    capitalizeFirstLetter,
-    convertDateToLocaleString,
+  capitalizeFirstLetter,
+  convertDateToLocaleString,
 } from "@/utils/parse";
 
-export default function Show({
-    data,
-    backUrl,
-}: PageProps<{ data: any; backUrl: string }>) {
-    return (
-        <AuthenticatedLayout
-            title={trans("page.rbac.permission.show.title", "View Permission")}
-            header={
-                <ResponsiveHeader>
-                    <Link
-                        href={route("rbac.permissions.edit", data?.uuid || 0)}
-                        className="bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white"
-                    >
-                        Edit
-                    </Link>
-                    <Link
-                        href={backUrl}
-                        className="bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white"
-                    >
-                        {trans("form.button.back", "Back")}
-                    </Link>
-                </ResponsiveHeader>
-            }
-        >
-            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mb-5 mx-auto px-6 py-4">
-                <div>
-                    <label
-                        htmlFor="id"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.rbac.permission.field.id", "ID")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="id"
-                        value={data.id}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+type IDeleteData = {
+  uuid: any;
+  name: string;
+};
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.rbac.permission.field.name", "Name")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="name"
-                        value={capitalizeFirstLetter(data.name)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+function Show({ data, backUrl }: PageProps<{ backUrl: string; data: any }>) {
+  const [failed, setFailed] = useState(false);
+  const [permissionDeleteData, setPermissionDeleteData] =
+    useState<IDeleteData | null>(null);
+  const [confirmingPermissionDeletion, setConfirmingPermissionDeletion] =
+    useState(false);
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="guard_name"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans(
-                            "page.rbac.permission.field.guard_name",
-                            "Guard Name"
-                        )}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="guard_name"
-                        value={capitalizeFirstLetter(data.guard_name)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+  const deletePermission = (data: any) => {
+    setConfirmingPermissionDeletion(true);
+    setPermissionDeleteData(data);
+  };
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="created_at"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.created_at", "Created At")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="created_at"
-                        value={convertDateToLocaleString(data.created_at)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+  const closeModal = () => setConfirmingPermissionDeletion(false);
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="updated_at"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.updated_at", "Updated At")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="updated_at"
-                        value={convertDateToLocaleString(data.updated_at)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
-            </div>
-        </AuthenticatedLayout>
+  const handleDeletePermission = (e: any) => {
+    e.preventDefault();
+
+    const name = e.target.name.value;
+
+    // check if name is empty
+    if (!name) {
+      setFailed(true);
+      return;
+    }
+
+    // Check if name is not same with permission name
+    if (name !== permissionDeleteData?.name) {
+      setFailed(true);
+      return;
+    }
+
+    // Delete permission here
+    router.delete(
+      route("rbac.permissions.destroy", permissionDeleteData?.uuid || 0),
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          closeModal();
+        },
+        onError: () => {
+          closeModal();
+          setFailed(true);
+        },
+      }
     );
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6 lg:flex-row flex-col">
+        <h1 className="mb-8 text-3xl font-bold">
+          <Link
+            href={backUrl}
+            className="text-indigo-600 hover:text-indigo-700"
+          >
+            Permission
+          </Link>
+          <span className="font-medium text-indigo-600"> /</span> Show
+        </h1>
+        <div className="flex items-center lg:gap-5 gap-1 lg:flex-row flex-col">
+          <Link href={backUrl} className="btn btn-indigo focus:outline-none">
+            Back
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-3xl overflow-hidden bg-white rounded shadow">
+        <div className="grid gap-8 p-8 lg:grid-cols-1">
+          <FieldGroup label="ID" name="id">
+            <TextInput disabled name="id" value={data.id} />
+          </FieldGroup>
+
+          <FieldGroup label="Name" name="name">
+            <TextInput disabled name="name" value={data.name} />
+          </FieldGroup>
+
+          <FieldGroup label="Guard Name" name="guard_name">
+            <TextInput
+              disabled
+              name="guard_name"
+              value={capitalizeFirstLetter(data.guard_name)}
+            />
+          </FieldGroup>
+
+          <FieldGroup label="Created At" name="created_at">
+            <TextInput
+              disabled
+              name="created_at"
+              value={convertDateToLocaleString(data.created_at)}
+            />
+          </FieldGroup>
+
+          <FieldGroup label="Updated At" name="updated_at">
+            <TextInput
+              disabled
+              name="updated_at"
+              value={convertDateToLocaleString(data.updated_at)}
+            />
+          </FieldGroup>
+        </div>
+
+        <div className="flex items-center px-8 py-4 bg-gray-100 border-t border-gray-200">
+          <DeleteButton onDelete={() => deletePermission(data)}>
+            Delete Permission
+          </DeleteButton>
+          <Link
+            href={route("rbac.permissions.edit", data.uuid)}
+            className="ml-auto btn btn-indigo"
+          >
+            Edit Permission
+          </Link>
+        </div>
+      </div>
+
+      <Confirmation
+        isFailed={failed}
+        loadingState={false}
+        confirmingPermissionDeletion={confirmingPermissionDeletion}
+        permissionDeleteData={permissionDeleteData}
+        closeModal={closeModal}
+        handleDeletePermission={handleDeletePermission}
+      />
+    </div>
+  );
 }
+
+/**
+ * Persistent Layout (Inertia.js)
+ *
+ * [Learn more](https://inertiajs.com/pages#persistent-layouts)
+ */
+Show.layout = (page: React.ReactNode) => (
+  <MainLayout title="Show Permission" children={page} />
+);
+
+export default Show;

@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', __('Forbidden'))
+@section('title', 'Forbidden Access')
 @section('code', '403')
-@section('message', __($exception->getMessage() ?: 'Forbidden'))
+@section('description', config('app.debug') ? $exception->getMessage() : 'Forbidden Access due invalid credential or access')

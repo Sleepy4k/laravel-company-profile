@@ -1,165 +1,112 @@
 import { PageProps } from "@/types";
-import trans from "@/utils/translate";
-import alert from "@/utils/sweet.alert";
-import { FormEventHandler } from "react";
-import TextInput from "@/Components/TextInput";
 import { Link, useForm } from "@inertiajs/react";
-import CustomButton from "@/Components/CustomButton";
-import ResponsiveHeader from "@/Components/ResponsiveHeader";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { FormEventHandler } from "react";
+import MainLayout from "@/Layouts/MainLayout";
+import LoadingButton from "@/Components/Button/LoadingButton";
+import FieldGroup from "@/Components/Form/FieldGroup";
+import TextInput from "@/Components/Form/TextInput";
+import SelectInput from "@/Components/Form/SelectInput";
+import { capitalizeFirstLetter } from "@/utils/parse";
 
-export default function Edit({
-    permission,
-    backUrl,
-    errors,
-}: PageProps<{ permission: any; backUrl: string }>) {
-    const { data, setData, patch, processing, reset, isDirty } = useForm({
-        name: permission.name,
-        guard_name: permission.guard_name,
+type GuardNameProp = {
+  value: string;
+  label: string;
+};
+
+function Edit({
+  permission,
+  guardList,
+  backUrl,
+}: PageProps<{
+  permission: any;
+  guardList: GuardNameProp[];
+  backUrl: string;
+}>) {
+  const { data, setData, patch, processing, reset, errors } = useForm({
+    name: permission.name,
+    guard_name: permission.guard_name,
+  });
+
+  const handleSubmit: FormEventHandler = (e: any) => {
+    e.preventDefault();
+
+    patch(route("rbac.permissions.update", permission?.uuid || 0), {
+      onSuccess: () => reset(),
     });
+  };
 
-    const submit: FormEventHandler = (e: any) => {
-        e.preventDefault();
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6 lg:flex-row flex-col">
+        <h1 className="mb-8 text-3xl font-bold">
+          <Link
+            href={backUrl}
+            className="text-indigo-600 hover:text-indigo-700"
+          >
+            Permission
+          </Link>
+          <span className="font-medium text-indigo-600"> /</span> Update
+        </h1>
+        <div className="flex items-center lg:gap-5 gap-1 lg:flex-row flex-col">
+          <Link href={backUrl} className="btn btn-indigo focus:outline-none">
+            Back
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-3xl overflow-hidden bg-white rounded shadow">
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-8 p-8 lg:grid-cols-1">
+            <FieldGroup label="Name" name="name" error={errors.name}>
+              <TextInput
+                name="name"
+                error={errors.name}
+                value={data.name}
+                onChange={(e) => setData("name", e.target.value)}
+              />
+            </FieldGroup>
 
-        patch(route("rbac.permissions.update", permission?.uuid || 0), {
-            onProgress: () => {
-                alert.fire({
-                    title: "Please wait...",
-                    text: "We are updating the permission.",
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    didOpen: () => {
-                        alert.showLoading();
-                    },
-                });
-            },
-            onSuccess: () => {
-                reset("name", "guard_name");
-                alert.fire({
-                    title: "Success",
-                    text: "Permission has been updated.",
-                    icon: "success",
-                });
-            },
-            onError: () => {
-                alert.fire({
-                    title: "Error",
-                    text: "Something went wrong. Please try again.",
-                    icon: "error",
-                });
-            },
-        });
-    };
+            <FieldGroup
+              label="Display"
+              name="guard_name"
+              error={errors.guard_name}
+            >
+              <SelectInput
+                name="guard_name"
+                error={errors.guard_name}
+                options={guardList}
+                defaultValue={{
+                  value: data.guard_name,
+                  label: capitalizeFirstLetter(data.guard_name),
+                }}
+                onChange={(selected: any) =>
+                  setData("guard_name", selected?.value)
+                }
+              />
+            </FieldGroup>
+          </div>
 
-    const handleReset = () => {
-        if (isDirty)
-            alert
-                .fire({
-                    title: "Are you sure?",
-                    text: "You have unsaved changes. Are you sure you want to reset?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "No",
-                })
-                .then((result: any) => {
-                    if (result.isConfirmed) {
-                        reset("name", "guard_name");
-                        alert.fire({
-                            title: "Success",
-                            text: "Form has been reset.",
-                            icon: "success",
-                        });
-                    }
-                });
-    };
-
-    return (
-        <AuthenticatedLayout
-            title={trans("page.rbac.permission.edit.title", "Edit Permission")}
-            header={
-                <ResponsiveHeader>
-                    <Link
-                        href={backUrl}
-                        className="bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white"
-                    >
-                        Back
-                    </Link>
-                </ResponsiveHeader>
-            }
-        >
-            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
-                <form onSubmit={submit} className="mb-5">
-                    <div>
-                        <label
-                            htmlFor="name"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                            Name
-                        </label>
-                        <TextInput
-                            id="name"
-                            type="text"
-                            name="name"
-                            disabled={processing}
-                            value={data.name}
-                            placeholder="e.g. name"
-                            onChange={(e) => setData("name", e.target.value)}
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                        />
-                        {errors?.group && (
-                            <p className="mt-2 text-sm text-danger-600">
-                                {errors.group}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="mt-4">
-                        <label
-                            htmlFor="guard_name"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                            Guard Name
-                        </label>
-                        <TextInput
-                            id="guard_name"
-                            type="text"
-                            name="guard_name"
-                            disabled={processing}
-                            value={data.guard_name}
-                            placeholder="e.g. web"
-                            onChange={(e) =>
-                                setData("guard_name", e.target.value)
-                            }
-                            className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                        />
-                        {errors?.key && (
-                            <p className="mt-2 text-sm text-danger-600">
-                                {errors.key}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="flex items-center justify-end mt-8 gap-3">
-                        <CustomButton
-                            type="reset"
-                            onClick={handleReset}
-                            disabled={processing}
-                            className="bg-neutral-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-neutral-700 dark:opacity-35"
-                        >
-                            Reset
-                        </CustomButton>
-                        <CustomButton
-                            type="submit"
-                            disabled={processing}
-                            className="bg-primary-700 text-white py-2 px-3 rounded shadow transition-all hover:bg-primary-700"
-                        >
-                            Update
-                        </CustomButton>
-                    </div>
-                </form>
-            </div>
-        </AuthenticatedLayout>
-    );
+          <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">
+            <LoadingButton
+              loading={processing}
+              type="submit"
+              className="btn-indigo"
+            >
+              Update Permission
+            </LoadingButton>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
+
+/**
+ * Persistent Layout (Inertia.js)
+ *
+ * [Learn more](https://inertiajs.com/pages#persistent-layouts)
+ */
+Edit.layout = (page: React.ReactNode) => (
+  <MainLayout title="Update Permission" children={page} />
+);
+
+export default Edit;

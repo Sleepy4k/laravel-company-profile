@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', __('Page Expired'))
+@section('title', 'Session Expired')
 @section('code', '419')
-@section('message', __('Page Expired'))
+@section('description', 'Your session has expired. Please refresh and try again')

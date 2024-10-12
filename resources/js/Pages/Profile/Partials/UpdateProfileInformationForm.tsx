@@ -1,83 +1,82 @@
-import { PageProps } from '@/types';
-import { FormEventHandler } from 'react';
-import { Transition } from '@headlessui/react';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import { useForm, usePage } from '@inertiajs/react';
-import PrimaryButton from '@/Components/PrimaryButton';
+import { Auth } from "@/types";
+import { useForm, usePage } from "@inertiajs/react";
+import TextInput from "@/Components/Form/TextInput";
+import FieldGroup from "@/Components/Form/FieldGroup";
+import LoadingButton from "@/Components/Button/LoadingButton";
+import { capitalizeFirstLetter } from "@/utils/parse";
 
-export default function UpdateProfileInformation({ className = '' }: { className?: string }) {
-    const user = usePage<PageProps>().props.auth.user;
+export default function UpdateProfileInformationForm({
+  className = "",
+}: {
+  className?: string;
+}) {
+  const user = usePage<{ auth: Auth }>().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        name: user.name,
-        email: user.email,
-    });
+  const { data, setData, patch, errors, processing } = useForm({
+    name: user.name,
+    email: user.email,
+  });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-        patch(route('profile.update'));
-    };
+    patch(route("profile.update"));
+  };
 
-    return (
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
+  return (
+    <section className={className}>
+      <header>
+        <h2 className="text-lg font-medium text-gray-900">
+          Profile Information
+        </h2>
 
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Update your account's profile information and email address.
-                </p>
-            </header>
+        <p className="mt-1 text-sm text-gray-600">
+          Update your account's profile information and email address.
+        </p>
+      </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+      <form onSubmit={submit} className="mt-6 space-y-6">
+        <FieldGroup label="Name" name="name" error={errors.name}>
+          <TextInput
+            name="name"
+            value={data.name}
+            onChange={(e) => setData("name", e.target.value)}
+            required
+            autoComplete="name"
+          />
+        </FieldGroup>
 
-                    <TextInput
-                        id="name"
-                        className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                        isFocused
-                        autoComplete="name"
-                    />
+        <FieldGroup label="Email" name="email" error={errors.email}>
+          <TextInput
+            name="email"
+            type="email"
+            value={data.email}
+            onChange={(e) => setData("email", e.target.value)}
+            required
+            autoComplete="email"
+          />
+        </FieldGroup>
 
-                    <InputError className="mt-2" message={errors.name} />
-                </div>
+        <FieldGroup
+          label="Role (readonly)"
+          name="display_role"
+          error={errors.email}
+        >
+          <TextInput
+            disabled
+            name="display_role"
+            value={capitalizeFirstLetter(user.role || "user")}
+          />
+        </FieldGroup>
 
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                        autoComplete="username"
-                    />
-
-                    <InputError className="mt-2" message={errors.email} />
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                    </Transition>
-                </div>
-            </form>
-        </section>
-    );
+        <LoadingButton
+          type="submit"
+          className="btn-indigo"
+          loading={processing}
+        >
+          Update Profile
+        </LoadingButton>
+      </form>
+    </section>
+  );
 }

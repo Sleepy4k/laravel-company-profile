@@ -1,5 +1,5 @@
 @extends('errors::minimal')
 
-@section('title', __('Unauthorized'))
+@section('title', 'Unauthorized Request')
 @section('code', '401')
-@section('message', __('Unauthorized'))
+@section('description', 'Unauthorized Access due invalid credential or access')

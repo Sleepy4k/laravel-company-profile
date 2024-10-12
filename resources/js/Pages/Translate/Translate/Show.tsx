@@ -1,69 +1,138 @@
 import { PageProps } from "@/types";
-import { Link } from "@inertiajs/react";
-import TextInput from '@/Components/TextInput';
-import ResponsiveHeader from "@/Components/ResponsiveHeader";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Link, router } from "@inertiajs/react";
+import { useState } from "react";
+import MainLayout from "@/Layouts/MainLayout";
+import FieldGroup from "@/Components/Form/FieldGroup";
+import TextInput from "@/Components/Form/TextInput";
+import DeleteButton from "@/Components/Button/DeleteButton";
+import Confirmation from "./partials/Confirmation";
 
-export default function Create({ data, backUrl }: PageProps<{ data: any, backUrl: string }>) {
-    return (
-        <AuthenticatedLayout
-            title="View Translation"
-            header={
-                <ResponsiveHeader>
-                    <Link href={route('translate.edit', data?.uuid || 0)} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
-                        Edit
-                    </Link>
-                    <Link href={backUrl} className='bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white'>
-                        Back
-                    </Link>
-                </ResponsiveHeader>
-            }
-        >
-            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mx-auto px-6 py-4">
-                <div>
-                    <label htmlFor="group" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Group</label>
-                    <TextInput
-                        disabled
-                        id="group"
-                        type="text"
-                        value={data.group}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+type IDeleteData = {
+  uuid: any;
+  key: string;
+  group: string;
+};
 
-                <div className="mt-4">
-                    <label htmlFor="key" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Key</label>
-                    <TextInput
-                        disabled
-                        id="key"
-                        type="text"
-                        value={data.key}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+function Show({ data, backUrl }: PageProps<{ backUrl: string; data: any }>) {
+  const [failed, setFailed] = useState(false);
+  const [progress, setProgress] = useState(false);
+  const [translateDeleteData, setTranslateDeleteData] =
+    useState<IDeleteData | null>(null);
+  const [confirmingTranslateDeletion, setConfirmingTranslateDeletion] =
+    useState(false);
 
-                <div className="mt-4">
-                    <label htmlFor="lang_id" className="block text-sm font-medium text-gray-700 dark:text-gray-400">Indonesian</label>
-                    <TextInput
-                        disabled
-                        id="lang_id"
-                        type="text"
-                        value={data.text.id}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+  const deleteTranslate = (data: any) => {
+    setConfirmingTranslateDeletion(true);
+    setTranslateDeleteData(data);
+  };
 
-                <div className="mt-4">
-                    <label htmlFor="lang_en" className="block text-sm font-medium text-gray-700 dark:text-gray-400">English</label>
-                    <TextInput
-                        disabled
-                        id="lang_en"
-                        type="text"
-                        value={data.text.en}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
-            </div>
-        </AuthenticatedLayout>
-    );
+  const closeModal = () => setConfirmingTranslateDeletion(false);
+
+  const handleDeleteTranslate = (e: any) => {
+    e.preventDefault();
+
+    const key = e.target.key.value;
+
+    // check if key is empty
+    if (!key) {
+      setFailed(true);
+      return;
+    }
+
+    // Check if key is not same with translate key
+    if (key !== `${translateDeleteData?.group}.${translateDeleteData?.key}`) {
+      setFailed(true);
+      return;
+    }
+
+    // Delete translate here
+    router.delete(route("translate.destroy", translateDeleteData?.uuid || 0), {
+      preserveScroll: true,
+      onStart: () => {
+        setProgress(true);
+      },
+      onSuccess: () => {
+        closeModal();
+      },
+      onError: () => {
+        closeModal();
+        setFailed(true);
+      },
+      onFinish: () => {
+        setProgress(false);
+      }
+    });
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6 lg:flex-row flex-col">
+        <h1 className="mb-8 text-3xl font-bold">
+          <Link
+            href={backUrl}
+            className="text-indigo-600 hover:text-indigo-700"
+          >
+            Translate
+          </Link>
+          <span className="font-medium text-indigo-600"> /</span> Show
+        </h1>
+        <div className="flex items-center lg:gap-5 gap-1 lg:flex-row flex-col">
+          <Link href={backUrl} className="btn btn-indigo focus:outline-none">
+            Back
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-3xl overflow-hidden bg-white rounded shadow">
+        <div className="grid gap-8 p-8 lg:grid-cols-1">
+          <FieldGroup label="Group" name="group">
+            <TextInput disabled name="group" value={data.group} />
+          </FieldGroup>
+
+          <FieldGroup label="Key" name="key">
+            <TextInput disabled name="key" value={data.key} />
+          </FieldGroup>
+
+          <FieldGroup label="Indonesian" name="lang_id">
+            <TextInput disabled name="lang_id" value={data.text.id} />
+          </FieldGroup>
+
+          <FieldGroup label="English" name="lang_en">
+            <TextInput disabled name="lang_en" value={data.text.en} />
+          </FieldGroup>
+        </div>
+
+        <div className="flex items-center justify-end px-8 py-4 bg-gray-100 border-t border-gray-200">
+          <DeleteButton onDelete={() => deleteTranslate(data)}>
+            Delete Translate
+          </DeleteButton>
+          <Link
+            href={route("translate.edit", data.uuid)}
+            className="ml-auto btn btn-indigo"
+          >
+            Edit Translate
+          </Link>
+        </div>
+      </div>
+
+      <Confirmation
+        isFailed={failed}
+        loadingState={progress}
+        confirmingTranslateDeletion={confirmingTranslateDeletion}
+        translateDeleteData={translateDeleteData}
+        closeModal={closeModal}
+        handleDeleteTranslate={handleDeleteTranslate}
+      />
+    </div>
+  );
 }
+
+/**
+ * Persistent Layout (Inertia.js)
+ *
+ * [Learn more](https://inertiajs.com/pages#persistent-layouts)
+ */
+Show.layout = (page: React.ReactNode) => (
+  <MainLayout title="Show Translate" children={page} />
+);
+
+export default Show;

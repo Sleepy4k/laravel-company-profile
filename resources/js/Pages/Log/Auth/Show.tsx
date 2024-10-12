@@ -1,162 +1,110 @@
 import { PageProps } from "@/types";
-import trans from "@/utils/translate";
 import { Link } from "@inertiajs/react";
-import TextInput from "@/Components/TextInput";
-import ResponsiveHeader from "@/Components/ResponsiveHeader";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import MainLayout from "@/Layouts/MainLayout";
+import FieldGroup from "@/Components/Form/FieldGroup";
+import TextInput from "@/Components/Form/TextInput";
 import {
-    capitalizeFirstLetter,
-    convertDateToLocaleString,
-    convertObjectToString,
-    makeRowsFromContent,
+  capitalizeFirstLetter,
+  convertDateToLocaleString,
+  convertObjectToString,
+  makeRowsFromContent,
 } from "@/utils/parse";
+import TextArea from "@/Components/Form/TextArea";
+import DataCard from "@/Components/DataCard/DataCard";
 
-export default function Show({
-    data,
-    backUrl,
-}: PageProps<{ data: any; backUrl: string }>) {
-    return (
-        <AuthenticatedLayout
-            title={trans("page.log.auth.show.title", "View Authentication Log")}
-            header={
-                <ResponsiveHeader>
-                    <Link
-                        href={backUrl}
-                        className="bg-primary-700 lg:py-2 py-1 lg:px-3 px-2 text-white dark:text-gray-800 rounded shadow transition-all dark:bg-white hover:bg-primary-700 dark:hover:bg-white dark:focus:bg-white"
-                    >
-                        {trans("form.button.back", "Back")}
-                    </Link>
-                </ResponsiveHeader>
-            }
-        >
-            <div className="bg-white dark:bg-gray-800 lg:w-[35rem] w-[20rem] mb-5 mx-auto px-6 py-4">
-                <div>
-                    <label
-                        htmlFor="id"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.id", "ID")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="id"
-                        value={data.id}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+function Show({ data, backUrl }: PageProps<{ backUrl: string; data: any }>) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6 lg:flex-row flex-col">
+        <h1 className="mb-8 text-3xl font-bold">
+          <Link
+            href={backUrl}
+            className="text-indigo-600 hover:text-indigo-700"
+          >
+            Auth
+          </Link>
+          <span className="font-medium text-indigo-600"> /</span> Show
+        </h1>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="event"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.event", "Event")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="event"
-                        value={capitalizeFirstLetter(data.event)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+        <div className="flex items-center lg:gap-5 gap-1 lg:flex-row flex-col">
+          <Link href={backUrl} className="btn btn-indigo focus:outline-none">
+            Back
+          </Link>
+        </div>
+      </div>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="description"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans(
-                            "page.log.auth.field.description",
-                            "Description"
-                        )}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="description"
-                        value={data.description}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+      <DataCard>
+        <DataCard.Box>
+          <>
+            <FieldGroup label="Event" name="event">
+              <TextInput
+                disabled
+                name="event"
+                value={capitalizeFirstLetter(data.event)}
+              />
+            </FieldGroup>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="causer_type"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans(
-                            "page.log.auth.field.causer_type",
-                            "Causer Type"
-                        )}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="causer_type"
-                        value={data.causer_type}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+            <FieldGroup label="Description" name="description">
+              <TextInput disabled name="description" value={data.description} />
+            </FieldGroup>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="causer_id"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.causer_id", "Causer Id")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="causer_id"
-                        value={data.causer_id}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+            <FieldGroup label="Properties" name="properties">
+              <TextArea
+                disabled
+                name="properties"
+                rows={makeRowsFromContent(data.properties)}
+                value={convertObjectToString(data.properties)}
+              />
+            </FieldGroup>
+          </>
+        </DataCard.Box>
+        <DataCard.Box>
+          <>
+            <FieldGroup label="Causer Type" name="causer_type">
+              <TextInput
+                disabled
+                name="causer_type"
+                value={data.causer_type || "-"}
+              />
+            </FieldGroup>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="properties"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.properties", "Properties")}
-                    </label>
-                    <textarea
-                        disabled
-                        id="properties"
-                        rows={makeRowsFromContent(data.properties)}
-                        value={convertObjectToString(data.properties)}
-                        className="mt-1 block w-full h-fit shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300"
-                    />
-                </div>
+            <FieldGroup label="Causer ID" name="causer_id">
+              <TextInput
+                disabled
+                name="causer_id"
+                value={data.causer_id || "-"}
+              />
+            </FieldGroup>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="created_at"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.created_at", "Created At")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="created_at"
-                        value={convertDateToLocaleString(data.created_at)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
+            <FieldGroup label="Created At" name="created_at">
+              <TextInput
+                disabled
+                name="created_at"
+                value={convertDateToLocaleString(data.created_at)}
+              />
+            </FieldGroup>
 
-                <div className="mt-4">
-                    <label
-                        htmlFor="updated_at"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-400"
-                    >
-                        {trans("page.log.auth.field.updated_at", "Updated At")}
-                    </label>
-                    <TextInput
-                        disabled
-                        id="updated_at"
-                        value={convertDateToLocaleString(data.updated_at)}
-                        className="mt-1 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md"
-                    />
-                </div>
-            </div>
-        </AuthenticatedLayout>
-    );
+            <FieldGroup label="Updated At" name="updated_at">
+              <TextInput
+                disabled
+                name="updated_at"
+                value={convertDateToLocaleString(data.updated_at)}
+              />
+            </FieldGroup>
+          </>
+        </DataCard.Box>
+      </DataCard>
+    </div>
+  );
 }
+
+/**
+ * Persistent Layout (Inertia.js)
+ *
+ * [Learn more](https://inertiajs.com/pages#persistent-layouts)
+ */
+Show.layout = (page: React.ReactNode) => (
+  <MainLayout title="Show Authenticated Log" children={page} />
+);
+
+export default Show;
