@@ -12,7 +12,7 @@ class TranslateSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Translate::count() == 0) {
+        if (Translate::query()->withoutCache()->count() == 0) {
             $languages = config('translate.list');
 
             if (empty($languages)) {

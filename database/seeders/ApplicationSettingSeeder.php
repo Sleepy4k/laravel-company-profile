@@ -12,7 +12,7 @@ class ApplicationSettingSeeder extends Seeder
      */
     public function run(): void
     {
-        if (ApplicationSetting::count() == 0) {
+        if (ApplicationSetting::query()->withoutCache()->count() == 0) {
             $settings = ApplicationSetting::factory()->make();
 
             ApplicationSetting::insert($settings->toArray());

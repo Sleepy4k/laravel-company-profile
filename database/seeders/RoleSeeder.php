@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Role::count() == 0) {
+        if (Role::query()->withoutCache()->count() == 0) {
             app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
             $roles = config('permission.seeder.role');
