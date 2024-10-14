@@ -3,11 +3,11 @@
 use App\Enum\DisplayModeType;
 use App\Http\Controllers\Log;
 use App\Http\Controllers\RBAC;
+use App\Http\Controllers\Account;
 use App\Http\Controllers\Translate;
 use App\Http\Controllers\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\User\ProfileController;
 
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard.index');
@@ -25,17 +25,21 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
             ->names('type');
     });
 
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get('/profile', 'edit')->name('profile.edit');
-        Route::patch('/profile', 'update')->name('profile.update');
-        Route::delete('/profile', 'destroy')->name('profile.destroy');
+    Route::prefix('account')->group(function () {
+        Route::controller(Account\ProfileController::class)->prefix('profile')->group(function () {
+            Route::get('/', 'edit')->name('profile.edit');
+            Route::patch('/', 'update')->name('profile.update');
+            Route::delete('/', 'destroy')->name('profile.destroy');
+        });
+
+        Route::resource('/user', Account\UserController::class)
+            ->names('users');
     });
 
     Route::get('/blog', DashboardController::class)->name('blog.index');
     Route::get('/gallery', DashboardController::class)->name('gallery.index');
     Route::get('/menu', DashboardController::class)->name('menus.index');
     Route::get('/menu/meta', DashboardController::class)->name('menus.metas.index');
-    Route::get('/users', DashboardController::class)->name('users.index');
 
     Route::prefix('translate')->as('translate.')->group(function () {
         Route::get('/{displayMode}', [Translate\TranslateController::class, 'index'])
