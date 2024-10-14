@@ -38,7 +38,10 @@ function Create({
     e.preventDefault();
 
     post(route("application.store"), {
-      onSuccess: () => reset(),
+      onSuccess: () => {
+        reset();
+        window.location.reload();
+      },
     });
   };
 

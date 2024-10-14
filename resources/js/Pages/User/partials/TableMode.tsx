@@ -1,36 +1,36 @@
 import { Link } from "@inertiajs/react";
-import { convertDateToLocaleString } from "@/utils/parse";
+import { capitalizeFirstLetter, convertDateToLocaleString } from "@/utils/parse";
 import FilterBar from "@/Components/FilterBar/FilterBar";
 import Pagination from "@/Components/Pagination/Pagination";
 import Table from "@/Components/Table/Table";
 
 interface ITableModeProps {
   data: any;
-  mode: string | null;
+}
+
+type RoleData = {
+  uuid: string;
+  name: string;
+  guard_name: string;
 }
 
 type TableData = {
   uuid: string;
-  display: string;
-  value: string;
-  description: string;
-  type: {
-    name: string;
-  };
+  name: string;
+  email: string;
+  roles: RoleData[];
   created_at: string;
   updated_at: string;
 };
 
-export default function TableMode({ data, mode }: ITableModeProps) {
-  if (mode == null || mode !== "table") return null;
-
+export default function TableMode({ data }: ITableModeProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <FilterBar />
         <Link
           className="btn-indigo focus:outline-none"
-          href={route("application.create")}
+          href={route("users.create")}
         >
           <span>Create</span>
         </Link>
@@ -44,40 +44,22 @@ export default function TableMode({ data, mode }: ITableModeProps) {
             sortable: true,
           },
           {
-            label: "Key",
-            name: "key",
+            label: "Name",
+            name: "name",
             sortable: true,
             sticky: true,
           },
           {
-            label: "Display",
-            name: "display",
+            label: "Email",
+            name: "email",
             sortable: true,
-            renderCell(row) {
-              return row.display || "-";
-            },
           },
           {
-            label: "Value",
-            name: "value",
-            sortable: true,
+            label: "Role",
+            name: "role",
+            sortable: false,
             renderCell(row) {
-              return row.value || "-";
-            },
-          },
-          {
-            label: "Description",
-            name: "description",
-            sortable: true,
-            renderCell(row) {
-              return row.description || "-";
-            },
-          },
-          {
-            label: "Type",
-            name: "type",
-            renderCell(row) {
-              return row.type.name || "-";
+              return capitalizeFirstLetter(row.roles[0].name) || "-";
             },
           },
           {
@@ -99,7 +81,7 @@ export default function TableMode({ data, mode }: ITableModeProps) {
         ]}
         rows={data.data}
         getRowDetailsUrl={(row: TableData) =>
-          route("application.show", row.uuid)
+          route("users.show", row.uuid)
         }
       />
       <Pagination links={data.links} />

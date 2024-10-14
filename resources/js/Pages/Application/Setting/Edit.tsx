@@ -46,16 +46,17 @@ function Edit({
     e.preventDefault();
 
     post(route("application.update", setting?.uuid || 0), {
-      onSuccess: () => reset(),
+      onSuccess: () => {
+        reset();
+        window.location.reload();
+      },
     });
   };
 
   const handleFileChange = (e: any) => {
-    const selectedFile = e.target.files[0];
-
-    if (selectedFile) {
-      setData("file", selectedFile);
-      setFile(URL.createObjectURL(selectedFile));
+    if (e && (e != null || e != undefined)) {
+      setData("file", e);
+      setFile(URL.createObjectURL(e));
     }
   };
 

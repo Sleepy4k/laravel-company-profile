@@ -7,6 +7,7 @@ type PermissionsProps = {
   permissions: any;
   handlePermissionChange?: (e: any) => void;
   currentPermissions: any;
+  mergedPermissions?: any;
 };
 
 export default function Permissions({
@@ -16,6 +17,7 @@ export default function Permissions({
   permissions,
   handlePermissionChange = () => {},
   currentPermissions,
+  mergedPermissions = [],
 }: PermissionsProps) {
   const handleInputChange = (e: any) => {
     if (isDisabled) return;
@@ -26,6 +28,8 @@ export default function Permissions({
     <Modal show={showModal} onClose={closeModal}>
       <div className="p-6 max-h-[calc(100vh-10rem)] overflow-y-auto">
         {permissions.map((data: any) => {
+          if (!data?.permissions) return null;
+
           const filteredPermissions = data.permissions.filter(
             (permission: any) => currentPermissions.includes(permission.name)
           );
@@ -45,11 +49,13 @@ export default function Permissions({
               <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {data.permissions.map((permission: any) => {
                   if (
-                    !currentPermissions.includes(permission.name) &&
+                    !currentPermissions.includes(permission.name) && !mergedPermissions.includes(permission.name) &&
                     isDisabled
                   ) {
                     return null;
                   }
+
+                  const isMergedPermission = mergedPermissions.includes(permission.name);
 
                   return (
                     <div key={permission.id} className="flex items-center">
@@ -59,8 +65,8 @@ export default function Permissions({
                         name="permissions[]"
                         value={permission.name}
                         onChange={handleInputChange}
-                        disabled={isDisabled}
-                        checked={currentPermissions.includes(permission.name)}
+                        disabled={isDisabled || isMergedPermission}
+                        checked={currentPermissions.includes(permission.name) || isMergedPermission}
                         className="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-600 rounded"
                       />
                       <label
