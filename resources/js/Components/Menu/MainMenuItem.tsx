@@ -8,7 +8,7 @@ type MainMenuItemProps = {
   name: string;
   translate: string;
   parameter: string | null;
-  permission?: string[];
+  permission: string[];
   active_routes?: string[];
 };
 
@@ -20,7 +20,7 @@ export default function MainMenuItem({
   permission,
   active_routes,
 }: MainMenuItemProps) {
-  if (permission && !can(permission)) return null;
+  if (permission.length > 0 && !can(permission)) return null;
 
   const isActive = active_routes?.includes(route().current() as string);
 
