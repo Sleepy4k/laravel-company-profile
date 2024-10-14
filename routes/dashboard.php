@@ -33,6 +33,9 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 
     Route::get('/blog', DashboardController::class)->name('blog.index');
     Route::get('/gallery', DashboardController::class)->name('gallery.index');
+    Route::get('/menu', DashboardController::class)->name('menus.index');
+    Route::get('/menu/meta', DashboardController::class)->name('menus.metas.index');
+    Route::get('/users', DashboardController::class)->name('users.index');
 
     Route::prefix('translate')->as('translate.')->group(function () {
         Route::get('/{displayMode}', [Translate\TranslateController::class, 'index'])
