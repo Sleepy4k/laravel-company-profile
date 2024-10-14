@@ -57,7 +57,7 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'RBAC',
+                'name' => 'Account',
                 'order' => 0,
                 'parent_id' => null,
                 'meta_id' => 5,
@@ -66,7 +66,7 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Role',
+                'name' => 'Users',
                 'order' => 1,
                 'parent_id' => 5,
                 'meta_id' => 6,
@@ -75,7 +75,7 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Permission',
+                'name' => 'My Profile',
                 'order' => 2,
                 'parent_id' => 5,
                 'meta_id' => 7,
@@ -84,7 +84,7 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Application',
+                'name' => 'RBAC',
                 'order' => 0,
                 'parent_id' => null,
                 'meta_id' => 8,
@@ -93,7 +93,7 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Setting',
+                'name' => 'Role',
                 'order' => 1,
                 'parent_id' => 8,
                 'meta_id' => 9,
@@ -102,7 +102,7 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Setting Type',
+                'name' => 'Permission',
                 'order' => 2,
                 'parent_id' => 8,
                 'meta_id' => 10,
@@ -111,10 +111,64 @@ class MenuFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Application',
+                'order' => 0,
+                'parent_id' => null,
+                'meta_id' => 11,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Setting',
+                'order' => 1,
+                'parent_id' => 11,
+                'meta_id' => 12,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Setting Type',
+                'order' => 2,
+                'parent_id' => 11,
+                'meta_id' => 13,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Translate',
                 'order' => 3,
-                'parent_id' => 8,
-                'meta_id' => 11,
+                'parent_id' => 11,
+                'meta_id' => 14,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Menu',
+                'order' => 0,
+                'parent_id' => null,
+                'meta_id' => 15,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Menu',
+                'order' => 1,
+                'parent_id' => 15,
+                'meta_id' => 16,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Menu Meta',
+                'order' => 2,
+                'parent_id' => 15,
+                'meta_id' => 17,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -123,7 +177,7 @@ class MenuFactory extends Factory
                 'name' => 'Log',
                 'order' => 0,
                 'parent_id' => null,
-                'meta_id' => 12,
+                'meta_id' => 18,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -131,8 +185,8 @@ class MenuFactory extends Factory
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Authentication',
                 'order' => 1,
-                'parent_id' => 12,
-                'meta_id' => 13,
+                'parent_id' => 18,
+                'meta_id' => 19,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -140,8 +194,8 @@ class MenuFactory extends Factory
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Model',
                 'order' => 2,
-                'parent_id' => 12,
-                'meta_id' => 14,
+                'parent_id' => 18,
+                'meta_id' => 20,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -149,8 +203,8 @@ class MenuFactory extends Factory
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'System',
                 'order' => 3,
-                'parent_id' => 12,
-                'meta_id' => 15,
+                'parent_id' => 18,
+                'meta_id' => 21,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -158,8 +212,8 @@ class MenuFactory extends Factory
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Query',
                 'order' => 4,
-                'parent_id' => 12,
-                'meta_id' => 16,
+                'parent_id' => 18,
+                'meta_id' => 22,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

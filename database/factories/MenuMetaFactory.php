@@ -63,6 +63,39 @@ class MenuMetaFactory extends Factory
             ],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
+                'translation_key' => 'page.account.title',
+                'route' => null,
+                'permission' => null,
+                'parameters' => null,
+                'active_routes' => null,
+                'is_sortable' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'translation_key' => 'page.account.user.title',
+                'route' => 'users.index',
+                'permission' => 'account.user.index',
+                'parameters' => null,
+                'active_routes' => 'account.user.index, account.user.show, account.user.create, account.user.edit',
+                'is_sortable' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'translation_key' => 'page.account.profile.title',
+                'route' => 'profile.edit',
+                'permission' => null,
+                'parameters' => null,
+                'active_routes' => 'profile.edit',
+                'is_sortable' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
                 'translation_key' => 'page.rbac.title',
                 'route' => null,
                 'permission' => null,
@@ -134,6 +167,39 @@ class MenuMetaFactory extends Factory
                 'permission' => 'translate.index',
                 'parameters' => 'table',
                 'active_routes' => 'translate.index, translate.show, translate.create, translate.edit',
+                'is_sortable' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'translation_key' => 'page.menu.title',
+                'route' => null,
+                'permission' => null,
+                'parameters' => null,
+                'active_routes' => null,
+                'is_sortable' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'translation_key' => 'page.menu.menu.title',
+                'route' => 'menus.index',
+                'permission' => 'menu.menus.index',
+                'parameters' => null,
+                'active_routes' => 'menus.index, menus.show, menus.create, menus.edit',
+                'is_sortable' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'translation_key' => 'page.menu.meta.title',
+                'route' => 'menus.metas.index',
+                'permission' => 'menu.metas.index',
+                'parameters' => null,
+                'active_routes' => 'menus.metas.index, menus.metas.show, menus.metas.create, menus.metas.edit',
                 'is_sortable' => true,
                 'created_at' => now(),
                 'updated_at' => now()
