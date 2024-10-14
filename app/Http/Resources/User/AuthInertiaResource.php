@@ -21,9 +21,15 @@ class AuthInertiaResource extends JsonResource
             $this->mergeWhen($this->roles->isNotEmpty(), [
                 'role' => $this->roles->first()?->name ?? null,
                 'permissions' => $this->roles->flatMap(function ($role) {
-                    return $role->permissions->map(function ($permission) {
+                    $permissions = $role->permissions->map(function ($permission) {
                         return $permission->name;
                     });
+
+                    if ($this->permissions) {
+                        return $permissions->merge($this->permissions->pluck('name'));
+                    }
+
+                    return $permissions;
                 }),
             ]),
 

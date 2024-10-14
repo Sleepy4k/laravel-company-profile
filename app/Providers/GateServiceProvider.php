@@ -52,5 +52,7 @@ class GateServiceProvider extends ServiceProvider
 
         Gate::policy(\App\Models\Role::class, \App\Policies\RBAC\RolePolicy::class);
         Gate::policy(\App\Models\Permission::class, \App\Policies\RBAC\PermissionPolicy::class);
+
+        Gate::policy(\App\Models\User::class, \App\Policies\Account\UserPolicy::class);
     }
 }

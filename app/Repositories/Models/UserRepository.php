@@ -31,16 +31,24 @@ class UserRepository extends EloquentRepository implements UserInterface
     public function create(array $payload): Model|bool
     {
         $role = null;
+        $permissions = [];
 
         if (array_key_exists('role', $payload)) {
             $role = $payload['role'];
             unset($payload['role']);
         }
 
-        $transaction = $this->wrapIntoTransaction(function () use ($payload, $role) {
+        if (array_key_exists('permissions', $payload)) {
+            $permissions = $payload['permissions'];
+            unset($payload['permissions']);
+        }
+
+        $transaction = $this->wrapIntoTransaction(function () use ($payload, $role, $permissions) {
             $model = $this->model->query()->create($payload);
 
             !empty($role) ? $model->assignRole($role) : $model->assignRole(config('permission.role.default'));
+
+            !empty($permissions) && $model->syncPermissions($permissions);
 
             return $model->fresh();
         });
@@ -57,15 +65,25 @@ class UserRepository extends EloquentRepository implements UserInterface
      */
     public function update(int $modelId, array $payload): bool
     {
+        $role = null;
+        $permissions = [];
+
         if (array_key_exists('role', $payload)) {
             $role = $payload['role'];
             unset($payload['role']);
         }
 
-        $transaction = $this->wrapIntoTransaction(function () use ($modelId, $payload, $role) {
+        if (array_key_exists('permissions', $payload)) {
+            $permissions = $payload['permissions'];
+            unset($payload['permissions']);
+        }
+
+        $transaction = $this->wrapIntoTransaction(function () use ($modelId, $payload, $role, $permissions) {
             $model = $this->findById($modelId);
 
             if (!empty($role)) $model->syncRoles($role);
+
+            !empty($permissions) && $model->syncPermissions($permissions);
 
             return $model->update($payload);
         });

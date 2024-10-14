@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Services\RBAC;
+namespace App\Services\Account;
 
-use App\Models\Role;
 use App\Services\Service;
-use App\Traits\GuardNameData;
 use App\Traits\PermissionData;
-use App\DataTables\RBAC\RoleDataTable;
+use App\DataTables\User\UserDataTable;
+use App\Models\User;
 
-class RoleService extends Service
+class UserService extends Service
 {
-    use GuardNameData, PermissionData;
+    use PermissionData;
 
     /**
      * Display a listing of the resource.
@@ -19,9 +18,9 @@ class RoleService extends Service
      */
     public function index(): array
     {
-        $dataTable = new RoleDataTable($this->roleInterface);
-        $data = $dataTable->getData(10);
+        $dataTable = new UserDataTable($this->userInterface);
         $queryParams = request()->query() ?: null;
+        $data = $dataTable->getData(10, ['*'], ['roles']);
 
         return compact('data', 'queryParams');
     }
@@ -33,12 +32,11 @@ class RoleService extends Service
      */
     public function create(): array
     {
-        $guardList = $this->getGuardNameList();
+        $roles = $this->roleInterface->all(['id', 'name'], ['permissions:id,name']);
         $permissions = $this->getPermissions();
-        $defaultGuard = $this->getDefaultGuardName();
-        $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
+        $backUrl = session()->get('account.user.url') ?? route('users.index');
 
-        return compact('guardList', 'defaultGuard', 'permissions', 'backUrl');
+        return compact('roles', 'permissions', 'backUrl');
     }
 
     /**
@@ -51,7 +49,7 @@ class RoleService extends Service
     public function store(array $request): void
     {
         try {
-            $this->roleInterface->create($request);
+            $this->userInterface->create($request);
 
             session()->flash('success', 'Data has been created successfully.');
         } catch (\Throwable $th) {
@@ -64,15 +62,15 @@ class RoleService extends Service
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param User $user
      *
      * @return array
      */
-    public function show(Role $role): array
+    public function show(User $user): array
     {
-        $data = $role->load('permissions');
+        $data = $user->load(['roles', 'permissions']);
         $permissions = $this->getPermissions();
-        $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
+        $backUrl = session()->get('account.user.url') ?? route('users.index');
 
         return compact('data', 'permissions', 'backUrl');
     }
@@ -80,18 +78,18 @@ class RoleService extends Service
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param User $user
      *
      * @return array
      */
-    public function edit(Role $role): array
+    public function edit(User $user): array
     {
-        $role->load('permissions');
-        $guardList = $this->getGuardNameList();
+        $user = $user->load(['roles', 'permissions']);
+        $roles = $this->roleInterface->all(['id', 'name'], ['permissions:id,name']);
         $permissions = $this->getPermissions();
-        $backUrl = session()->get('rbac.role.url') ?? route('rbac.roles.index');
+        $backUrl = session()->get('account.user.url') ?? route('users.index');
 
-        return compact('role', 'guardList', 'permissions', 'backUrl');
+        return compact('user', 'roles', 'permissions', 'backUrl');
     }
 
     /**
@@ -105,12 +103,7 @@ class RoleService extends Service
     public function update(array $request, int $id): void
     {
         try {
-            $isSuccess = $this->roleInterface->update($id, $request);
-
-            if (!$isSuccess) {
-                session()->flash('error', 'Something went wrong, when try to updating data');
-                return;
-            }
+            $this->userInterface->update($id, $request);
 
             session()->flash('success', 'Data has been updated successfully.');
         } catch (\Throwable $th) {
@@ -130,12 +123,7 @@ class RoleService extends Service
     public function destroy(int $id): void
     {
         try {
-            $isSuccess = $this->roleInterface->deleteById($id);
-
-            if (!$isSuccess) {
-                session()->flash('error', 'Something went wrong, when try to deleting data');
-                return;
-            }
+            $this->userInterface->deleteById($id);
 
             session()->flash('success', 'Data has been deleted successfully.');
         } catch (\Throwable $th) {

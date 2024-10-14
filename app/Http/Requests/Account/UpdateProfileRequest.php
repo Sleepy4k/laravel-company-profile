@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\Account;
 
+use App\Models\User;
 use App\Http\Requests\Request;
+use Illuminate\Validation\Rule;
 
-class DestroyRequest extends Request
+class UpdateProfileRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +24,8 @@ class DestroyRequest extends Request
     public function rules(): array
     {
         return [
-            'password' => ['required', 'current_password']
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
     }
 }
