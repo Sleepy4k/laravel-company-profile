@@ -78,7 +78,7 @@ class MenuMetaFactory extends Factory
                 'route' => 'users.index',
                 'permission' => 'account.user.index',
                 'parameters' => null,
-                'active_routes' => 'account.user.index, account.user.show, account.user.create, account.user.edit',
+                'active_routes' => 'users.index, users.show, users.create, users.edit',
                 'is_sortable' => true,
                 'created_at' => now(),
                 'updated_at' => now()
