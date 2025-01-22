@@ -33,7 +33,7 @@
     "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.4",
-    "vite": "^5.4.6",
+    "vite": "^5.4.14",
     "ziggy-js": "^2.3.0"
   }
 }
